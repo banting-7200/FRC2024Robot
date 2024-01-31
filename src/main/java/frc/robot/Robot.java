@@ -12,8 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.io.File;
 import java.io.IOException;
 import swervelib.parser.SwerveParser;
-import frc.robot.subsystems.swervedrive.buttonSubsystem;
-import frc.robot.subsystems.swervedrive.buttonSubsystem.*;
+import frc.robot.subsystems.swervedrive.CreepSubsystem;
 import swervelib.*;
 
 /**
@@ -29,7 +28,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  public buttonSubsystem buttonSubsys;
+  public CreepSubsystem creepSubsystem;
 
   private Timer disabledTimer;
 
@@ -139,7 +138,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     try {
-      SwerveDrive swerveDrive = new SwerveParser(Filesystem.getDeployDirectory()).createSwerveDrive(buttonSubsys.getMaximumSpeed());
+      SwerveDrive swerveDrive = new SwerveParser(Filesystem.getDeployDirectory()).createSwerveDrive(creepSubsystem.getMaximumSpeed());
     } catch (IOException e) {
       e.printStackTrace();
     }

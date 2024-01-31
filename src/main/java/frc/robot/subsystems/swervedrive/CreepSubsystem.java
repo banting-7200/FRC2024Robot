@@ -1,7 +1,7 @@
 package frc.robot.subsystems.swervedrive;
 import frc.robot.RobotContainer;
 
-public class buttonSubsystem {
+public class CreepSubsystem {
     public static final double maxNormalSpeed = 14.5;
     public static final double creepSpeed = 5;
 

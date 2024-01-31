@@ -40,6 +40,8 @@ public class SwerveSubsystem extends SubsystemBase {
   /** Maximum speed of the robot in meters per second, used to limit acceleration. */
   public double maximumSpeed = Units.feetToMeters(14.5);
 
+  private double speedMultiplier = 1;
+
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
    *
@@ -127,6 +129,14 @@ public class SwerveSubsystem extends SubsystemBase {
         );
   }
 
+  public void setDriveSpeeds(boolean doCreep) {
+    if (doCreep) {
+      speedMultiplier = 0.7; // set creep speed
+    } else {
+      speedMultiplier = 1; // set regular speed
+    }
+  }
+
   /**
    * Get the path follower with events.
    *
@@ -189,8 +199,10 @@ public class SwerveSubsystem extends SubsystemBase {
     // this kind of control.
     return run(
         () -> {
-          double xInput = Math.pow(translationX.getAsDouble(), 3); // Smooth controll out
-          double yInput = Math.pow(translationY.getAsDouble(), 3); // Smooth controll out
+          double xInput =
+              Math.pow(translationX.getAsDouble() * speedMultiplier, 3); // Smooth controll out
+          double yInput =
+              Math.pow(translationY.getAsDouble() * speedMultiplier, 3); // Smooth controll out
           // Make the robot move
           driveFieldOriented(
               swerveDrive.swerveController.getTargetSpeeds(
@@ -220,8 +232,8 @@ public class SwerveSubsystem extends SubsystemBase {
           // Make the robot move
           driveFieldOriented(
               swerveDrive.swerveController.getTargetSpeeds(
-                  translationX.getAsDouble(),
-                  translationY.getAsDouble(),
+                  translationX.getAsDouble() * speedMultiplier,
+                  translationY.getAsDouble() * speedMultiplier,
                   rotation.getAsDouble() * Math.PI,
                   swerveDrive.getOdometryHeading().getRadians(),
                   swerveDrive.getMaximumVelocity()));
@@ -243,8 +255,10 @@ public class SwerveSubsystem extends SubsystemBase {
           // Make the robot move
           swerveDrive.drive(
               new Translation2d(
-                  Math.pow(translationX.getAsDouble(), 3) * swerveDrive.getMaximumVelocity(),
-                  Math.pow(translationY.getAsDouble(), 3) * swerveDrive.getMaximumVelocity()),
+                  Math.pow(translationX.getAsDouble() * speedMultiplier, 3)
+                      * swerveDrive.getMaximumVelocity(),
+                  Math.pow(translationY.getAsDouble() * speedMultiplier, 3)
+                      * swerveDrive.getMaximumVelocity()),
               Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity(),
               true,
               false);

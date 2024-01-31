@@ -14,6 +14,7 @@ import java.io.IOException;
 import swervelib.parser.SwerveParser;
 import frc.robot.subsystems.swervedrive.CreepSubsystem;
 import swervelib.*;
+import frc.robot.RobotContainer.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -138,7 +139,11 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     try {
-      SwerveDrive swerveDrive = new SwerveParser(Filesystem.getDeployDirectory()).createSwerveDrive(creepSubsystem.getMaximumSpeed());
+      if (RobotContainer.creepBoolean.get()) {
+        SwerveDrive swerveDrive = new SwerveParser(Filesystem.getDeployDirectory())
+            .createSwerveDrive(creepSubsystem.getMaximumSpeed());
+            System.out.println("YOOOO ITS WORKING");
+      }
     } catch (IOException e) {
       e.printStackTrace();
     }

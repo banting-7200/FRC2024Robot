@@ -121,7 +121,7 @@ public class RobotContainer {
   }
 
   public final static Supplier<Boolean> creepBoolean = () -> {
-    return driverXbox.getLeftBumper();
+    return driverXbox.getLeftTriggerAxis() > 0.5;
   };
 
   /**

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.LimelightDevice;
 import java.io.File;
 import java.io.IOException;
 import swervelib.parser.SwerveParser;
@@ -27,6 +28,8 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
 
   private Timer disabledTimer;
+
+  private LimelightDevice limelight;
 
   public Robot() {
     instance = this;
@@ -50,6 +53,8 @@ public class Robot extends TimedRobot {
     // stop
     // immediately when disabled, but then also let it be pushed more
     disabledTimer = new Timer();
+
+    limelight = new LimelightDevice();
   }
 
   /**
@@ -115,7 +120,19 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    if (limelight.getNoteData()) { // if note is detected
+    }
+
+    switch (limelight
+        .getTagData()) { // switch case for april tags, IDs 1-16 are used. returns -1 if no tag is
+        // detected.
+      case 1:
+        break;
+      default:
+        break;
+    }
+  }
 
   @Override
   public void testInit() {

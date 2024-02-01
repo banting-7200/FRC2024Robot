@@ -32,6 +32,11 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 2;
   }
 
+  public static final class Lights {
+    public static final int lightID = 0;
+    public static final int lightStringLength = 0;
+  }
+
   public static final class Drivebase {
 
     // Hold time on motor brakes when disabled

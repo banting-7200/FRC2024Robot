@@ -22,17 +22,18 @@ public class LimelightDevice {
     // apriltag. Returns -1 if no tag is detected.
     mainTable.getEntry("pipeline").setNumber(0);
 
-    boolean ttarget =
-        mainTable.getEntry("tv").getBoolean(false); // may have to be double then converted
+    double ttarget = mainTable.getEntry("tv").getDouble(0); // may have to be double then converted
     double tx = mainTable.getEntry("tx").getDouble(0);
     double ty = mainTable.getEntry("ty").getDouble(0);
     double ta = mainTable.getEntry("ta").getDouble(0);
     double tid = mainTable.getEntry("tid").getDouble(-1);
+    boolean tdetected = ttarget == 0 ? false : true;
 
-    SmartDashboard.putBoolean("AprilTag Detected", ttarget);
+    SmartDashboard.putBoolean("AprilTag Detected", tdetected);
     SmartDashboard.putNumber("Tag X", tx);
     SmartDashboard.putNumber("Tag Y", ty);
     SmartDashboard.putNumber("Tag Area", ta);
+    SmartDashboard.putNumber("AprilTag ID", tid);
 
     return (int) tid;
   }
@@ -41,17 +42,18 @@ public class LimelightDevice {
       getNoteData() { // posts limelight note pipelinedata to SmartDashboard & returns true if note
     // is detected
     mainTable.getEntry("pipeline").setNumber(1);
-    boolean ntarget =
-        mainTable.getEntry("tv").getBoolean(false); // may have to be double then converted
+
+    double ntarget = mainTable.getEntry("tv").getDouble(0); // may have to be double then converted
     double nx = mainTable.getEntry("tx").getDouble(0);
     double ny = mainTable.getEntry("ty").getDouble(0);
     double na = mainTable.getEntry("ta").getDouble(0);
+    boolean ndetected = ntarget == 0 ? false : true;
 
-    SmartDashboard.putBoolean("Note Detected", ntarget);
+    SmartDashboard.putBoolean("Note Detected", ndetected);
     SmartDashboard.putNumber("Note X", nx);
     SmartDashboard.putNumber("Note Y", ny);
     SmartDashboard.putNumber("Note Size", na);
 
-    return ntarget;
+    return ndetected;
   }
 }

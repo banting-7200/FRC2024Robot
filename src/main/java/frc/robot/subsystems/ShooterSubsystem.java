@@ -15,13 +15,17 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private DigitalInput noteSensor;
 
-    ShooterSubsystem() {
+    private ArmSubsystem arm;
+
+    ShooterSubsystem(ArmSubsystem _arm) {
         m_shoot = new TalonFX(Shooter.shooterID);
         m_intake = new TalonFX(Shooter.intakeID);
 
         noteSensor = new DigitalInput(Shooter.sensorPin);
 
-        //PID config
+        arm = _arm;
+
+        // PID config
         var slot0Configs = new Slot0Configs();
         slot0Configs.kV = Shooter.shooterF;// shoot motor feedfoward
         slot0Configs.kP = Shooter.shooterP;// shoot motor Proprotional
@@ -39,13 +43,17 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void spinIntakeToRPM(double targetRPM) {
-        m_velocity.Slot = 1;
-        m_intake.setControl(m_velocity.withVelocity(targetRPM / 60));// convert rpm to rps then apply
+        if (arm.isTucked() == false) {
+            m_velocity.Slot = 1;
+            m_intake.setControl(m_velocity.withVelocity(targetRPM / 60));// convert rpm to rps then apply
+        }
     }
 
     public void spinShootToRPM(double targetRPM) {
-        m_velocity.Slot = 0;
-        m_shoot.setControl(m_velocity.withVelocity(targetRPM / 60));// convert rpm to rps then apply
+        if (arm.isTucked() == false) {
+            m_velocity.Slot = 0;
+            m_shoot.setControl(m_velocity.withVelocity(targetRPM / 60));// convert rpm to rps then apply
+        }
     }
 
     public boolean hasNote() {

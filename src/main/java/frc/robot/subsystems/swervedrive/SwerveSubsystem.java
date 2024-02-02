@@ -43,6 +43,8 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public double maximumSpeed = Units.feetToMeters(14.5);
 
+  private double speedMultiplier = 1;
+
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
    *
@@ -130,11 +132,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void setDriveSpeeds(boolean doCreep) {
     if (doCreep) {
-      swerveDrive.setMaximumSpeed(Units.feetToMeters(5));//set creep speed
+      speedMultiplier = 0.7;//set creep speed
     } else {
-      swerveDrive.setMaximumSpeed(Units.feetToMeters(14.5));//set regular speed
+      speedMultiplier = 1;//set regular speed
     }
-    System.out.println("swerve max velocity: " + swerveDrive.getMaximumVelocity());
   }
 
   /**
@@ -196,8 +197,8 @@ public class SwerveSubsystem extends SubsystemBase {
     // swerveDrive.setHeadingCorrection(true); // Normally you would want heading
     // correction for this kind of control.
     return run(() -> {
-      double xInput = Math.pow(translationX.getAsDouble(), 3); // Smooth controll out
-      double yInput = Math.pow(translationY.getAsDouble(), 3); // Smooth controll out
+      double xInput = Math.pow(translationX.getAsDouble() * speedMultiplier, 3); // Smooth controll out
+      double yInput = Math.pow(translationY.getAsDouble() * speedMultiplier, 3); // Smooth controll out
       // Make the robot move
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(xInput, yInput,
           headingX.getAsDouble(),
@@ -221,8 +222,8 @@ public class SwerveSubsystem extends SubsystemBase {
     // correction for this kind of control.
     return run(() -> {
       // Make the robot move
-      driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(translationX.getAsDouble(),
-          translationY.getAsDouble(),
+      driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(translationX.getAsDouble() * speedMultiplier,
+          translationY.getAsDouble() * speedMultiplier,
           rotation.getAsDouble() * Math.PI,
           swerveDrive.getOdometryHeading().getRadians(),
           swerveDrive.getMaximumVelocity()));
@@ -245,8 +246,8 @@ public class SwerveSubsystem extends SubsystemBase {
       DoubleSupplier angularRotationX) {
     return run(() -> {
       // Make the robot move
-      swerveDrive.drive(new Translation2d(Math.pow(translationX.getAsDouble(), 3) * swerveDrive.getMaximumVelocity(),
-          Math.pow(translationY.getAsDouble(), 3) * swerveDrive.getMaximumVelocity()),
+      swerveDrive.drive(new Translation2d(Math.pow(translationX.getAsDouble() * speedMultiplier, 3) * swerveDrive.getMaximumVelocity(),
+          Math.pow(translationY.getAsDouble() * speedMultiplier, 3) * swerveDrive.getMaximumVelocity()),
           Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity(),
           true,
           false);

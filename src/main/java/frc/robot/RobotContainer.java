@@ -22,7 +22,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
-import java.util.function.Supplier;
+import java.util.function.BooleanSupplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -112,6 +112,10 @@ public class RobotContainer {
 
     new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
+    
+    Trigger t = new Trigger(creepBoolean);
+    t.onTrue(new InstantCommand(() -> drivebase.setDriveSpeeds(true))).onFalse(new InstantCommand(() -> drivebase.setDriveSpeeds(false)));
+
     new JoystickButton(driverXbox,
         2).whileTrue(
             Commands.deferredProxy(() -> drivebase.driveToPose(
@@ -120,7 +124,7 @@ public class RobotContainer {
     // InstantCommand(drivebase::lock, drivebase)));
   }
 
-  public final static Supplier<Boolean> creepBoolean = () -> {
+  public final static BooleanSupplier creepBoolean = () -> {
     return driverXbox.getLeftTriggerAxis() > 0.5;
   };
 

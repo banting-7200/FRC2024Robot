@@ -12,9 +12,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import java.io.File;
 import java.io.IOException;
 import swervelib.parser.SwerveParser;
-import frc.robot.subsystems.swervedrive.CreepSubsystem;
-import swervelib.*;
-import frc.robot.RobotContainer.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -29,7 +26,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  public CreepSubsystem creepSubsystem;
 
   private Timer disabledTimer;
 
@@ -137,16 +133,8 @@ public class Robot extends TimedRobot {
    * This function is called periodically during operator control.
    */
   @Override
-  public void teleopPeriodic() {
-    try {
-      if (RobotContainer.creepBoolean.get()) {
-        SwerveDrive swerveDrive = new SwerveParser(Filesystem.getDeployDirectory())
-            .createSwerveDrive(creepSubsystem.getMaximumSpeed());
-            System.out.println("YOOOO ITS WORKING");
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+  public void teleopPeriodic() 
+  {
   }
 
   @Override

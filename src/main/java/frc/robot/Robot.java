@@ -105,8 +105,6 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {}
 
-  boolean detectMode;
-
   @Override
   public void teleopInit() {
     // This makes sure that the autonomous stops running when
@@ -118,25 +116,28 @@ public class Robot extends TimedRobot {
     }
     m_robotContainer.setDriveMode();
     m_robotContainer.setMotorBrake(true);
-    detectMode = false; // sets to tag detection when teleop is started
+    limelight.setMode(1); // sets to tag detection when teleop is started
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    if (detectMode) { // note detection mode
-      if (limelight.getNoteData()) { // if note is detected
-      }
-    } else { // apriltag detection mode
-      switch (limelight
-          .getTagData()) { // switch case for april tags, IDs 1-16 are used. returns -1 if no tag is
-          // detected.
-        case 5: // if april tag 5 is detected
-          detectMode = true; // switches to note detection
-          break;
-        default:
-          break;
-      }
+    switch (limelight.mode) { // limelight detection modes
+      case 0: // apriltag detection mode
+        switch (limelight
+            .getTagData()) { // switch case for april tags, IDs 1-16 are used. returns -1 if no tag
+            // is detected.
+          case 5: // if april tag 5 is detected
+            limelight.setMode(0); // switches to note detection
+            break;
+          default:
+            break;
+        }
+        break;
+      case 1:
+        if (limelight.getNoteData()) { // if note is detected
+        }
+        break;
     }
   }
 

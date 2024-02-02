@@ -6,21 +6,27 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LimelightDevice {
   private NetworkTable mainTable;
+  public int mode;
 
   public LimelightDevice() { // initializes device
     mainTable =
         NetworkTableInstance.getDefault()
             .getTable("limelight"); // gets the network table with key "limelight"
+    mode = 0;
   }
 
   public void setLight(boolean on) { // toggles lights (true for on, false for off)
     mainTable.getEntry("ledMode").setNumber(on ? 3 : 1);
   }
 
+  public void setMode(int selection) {
+    mode = selection;
+    mainTable.getEntry("pipeline").setNumber(selection);
+  }
+
   public int
       getTagData() { // posts limelight apriltag pipeline data to SmartDashboard & returns id of
     // apriltag. Returns -1 if no tag is detected.
-    mainTable.getEntry("pipeline").setNumber(0);
 
     double ttarget = mainTable.getEntry("tv").getDouble(0); // may have to be double then converted
     double tx = mainTable.getEntry("tx").getDouble(0);
@@ -41,7 +47,6 @@ public class LimelightDevice {
   public boolean
       getNoteData() { // posts limelight note pipelinedata to SmartDashboard & returns true if note
     // is detected
-    mainTable.getEntry("pipeline").setNumber(1);
 
     double ntarget = mainTable.getEntry("tv").getDouble(0); // may have to be double then converted
     double nx = mainTable.getEntry("tx").getDouble(0);

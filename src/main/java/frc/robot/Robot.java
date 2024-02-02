@@ -79,6 +79,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.setMotorBrake(true);
     disabledTimer.reset();
     disabledTimer.start();
+    limelight.setLight(false);
   }
 
   @Override
@@ -117,6 +118,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.setDriveMode();
     m_robotContainer.setMotorBrake(true);
     limelight.setMode(1); // sets to tag detection when teleop is started
+    limelight.setLight(true);
   }
 
   /** This function is called periodically during operator control. */

@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -16,7 +17,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     private SolenoidActions shooterSolenoid = new SolenoidActions(Arm.shooterSolenoid);
 
-    ArmSubsystem() {
+    public ArmSubsystem() {
         leftArmMotor = new CANSparkMax(Arm.leftArmMotorID, MotorType.kBrushless);
         rightArmMotor = new CANSparkMax(Arm.rightArmMotorID, MotorType.kBrushless);
 
@@ -42,10 +43,18 @@ public class ArmSubsystem extends SubsystemBase {
         pidController.setD(d);
         pidController.setFF(f);
         pidController.setIZone(iz);
+        pidController.setOutputRange(Arm.pidOutputMin, Arm.pidOutputMax);
+        
+        int smartMotionSlot = Arm.smartMotionSlot;
+        pidController.setSmartMotionMaxVelocity(Arm.maxMotorVelocity, smartMotionSlot);
+        pidController.setSmartMotionMinOutputVelocity(Arm.minMotorVelocity, smartMotionSlot);
+        pidController.setSmartMotionMaxAccel(Arm.maxMotorAccel, smartMotionSlot);
+        pidController.setSmartMotionAllowedClosedLoopError(Arm.allowedPIDError, smartMotionSlot);
     }
 
     public void moveToAngle(double angle) {
-        // Todo: implement pid movement to angle
+        pidController.setReference(angle, CANSparkBase.ControlType.kSmartMotion);
+        System.out.println("motor angle: " + rightEncoder.getPosition());
     }
 
     public boolean isTucked() {

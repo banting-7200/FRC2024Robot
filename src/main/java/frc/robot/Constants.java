@@ -50,6 +50,15 @@ public final class Constants {
     public static final double d = 1;
     public static final double f = 1;
     public static final double iz = 1;
+
+    public static final double pidOutputMin = -1;
+    public static final double pidOutputMax = 1;
+
+    public static final int smartMotionSlot = 0;
+    public static final double maxMotorVelocity = 2000; //max motor velocity in rpm
+    public static final double minMotorVelocity = 0;
+    public static final double maxMotorAccel = 1500;
+    public static final double allowedPIDError = 0;
   }
 
   public static final class Drivebase {

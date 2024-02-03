@@ -38,11 +38,10 @@ public final class Constants {
   }
 
   public static final class Arm {
-    public static final int leftArmMotorID = 0;// update to an actual on robot value
-    public static final int rightArmMotorID = 1;// update to an actual on robot value
+    public static final int leftArmMotorID = 2;// Todo: update to an actual on robot value
+    public static final int rightArmMotorID = 1;// Todo: update to an actual on robot value
 
-    public static final Solenoid shooterSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);// update to an actual
-                                                                                                 // on robot value
+    public static final Solenoid shooterSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);// Todo: update to an actual on robot value
     // default arm pids
     // Todo: calibrate these
     public static final double p = 1;

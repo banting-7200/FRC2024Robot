@@ -6,9 +6,14 @@
           "open": true
         }
       },
+      "SPARK MAX [1]": {
+        "header": {
+          "open": true
+        }
+      },
       "SPARK MAX [2]": {
         "header": {
-          "open": false
+          "open": true
         }
       },
       "SPARK MAX [4]": {

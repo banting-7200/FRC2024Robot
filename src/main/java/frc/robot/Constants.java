@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import swervelib.math.Matter;
@@ -42,6 +43,8 @@ public final class Constants {
     public static final int rightArmMotorID = 1;// Todo: update to an actual on robot value
 
     public static final Solenoid shooterSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);// Todo: update to an actual on robot value
+    public static final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+    
     // default arm pids
     // Todo: calibrate these
     public static final double p = 1;

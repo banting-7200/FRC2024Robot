@@ -22,6 +22,10 @@ public class SolenoidActions {
         SOLENOID.set(true);
     } 
 
+    public void reportSolenoid(){
+        System.out.println("solenoid state: " + SOLENOID.get() + ", solenoid channel: " + SOLENOID.getChannel());
+    }
+
     public boolean getState(){
         return SOLENOID.get();
     }

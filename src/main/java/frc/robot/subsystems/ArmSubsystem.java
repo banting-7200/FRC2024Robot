@@ -5,8 +5,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.Arm;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -15,7 +15,7 @@ public class ArmSubsystem extends SubsystemBase {
     private RelativeEncoder rightEncoder;
     private SparkPIDController pidController;
 
-    private SolenoidActions shooterSolenoid = new SolenoidActions(Arm.shooterSolenoid);
+    SolenoidActions shooterSolenoidActions = new SolenoidActions(Constants.m_pH.makeSolenoid(Arm.s_Channel));
 
     public ArmSubsystem() {
         leftArmMotor = new CANSparkMax(Arm.leftArmMotorID, MotorType.kBrushless);
@@ -31,7 +31,8 @@ public class ArmSubsystem extends SubsystemBase {
         rightArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
         rightEncoder = rightArmMotor.getEncoder();
-        rightEncoder.setPositionConversionFactor(42);//Amount of ticks in a Neo encoder rotation unit. Converted for gravity feedfoward later on.
+        rightEncoder.setPositionConversionFactor(42);// Amount of ticks in a Neo encoder rotation unit. Converted for
+                                                     // gravity feedfoward later on.
         pidController = rightArmMotor.getPIDController();
         pidController.setFeedbackDevice(rightEncoder);
 
@@ -46,7 +47,7 @@ public class ArmSubsystem extends SubsystemBase {
         pidController.setFF(f);
         pidController.setIZone(iz);
         pidController.setOutputRange(Arm.pidOutputMin, Arm.pidOutputMax);
-        
+
         // Configure smart motion
         int smartMotionSlot = Arm.smartMotionSlot;
         pidController.setSmartMotionMaxVelocity(Arm.maxMotorVelocity, smartMotionSlot);
@@ -56,23 +57,26 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void moveToAngle(double angle) {
-        //Arbirtary feedfoward to account for gravity acting on the arm
-        int kMeasuredPosHorizontal = 840; //Default position measured when arm is horizontal from example. Todo: find the value for our arm.
-        double kTicksPerDegree = 42 / 360; //Todo: find the ammount of ticks per degree relative to all the gearboxes and factor that into the calculation.
+        // Arbirtary feedfoward to account for gravity acting on the arm
+        int kMeasuredPosHorizontal = 840; // Default position measured when arm is horizontal from example. Todo: find
+                                          // the value for our arm.
+        double kTicksPerDegree = 42 / 360; // Todo: find the ammount of ticks per degree relative to all the gearboxes
+                                           // and factor that into the calculation.
         double currentPos = rightEncoder.getPosition();
         double degrees = (currentPos - kMeasuredPosHorizontal) / kTicksPerDegree;
         double radians = java.lang.Math.toRadians(degrees);
         double cosineScalar = java.lang.Math.cos(radians);
-        
+
         double maxGravityFF = 0.07;// Todo: Find the best gravity feed foward for our arm
 
-        pidController.setReference(angle, CANSparkBase.ControlType.kSmartMotion, 0, maxGravityFF * cosineScalar);//Todo: find waht pidslot the pid is or find a way to apply arb feedfoward withput it
+        pidController.setReference(angle, CANSparkBase.ControlType.kSmartMotion, 0, maxGravityFF * cosineScalar);// Todo: find what pidslot the pid is or find a way to apply arb feedfoward without it
         System.out.println("motor angle: " + rightEncoder.getPosition());
     }
 
-    // ask felix if it would be better to keep solonoid action or integrate it all into arm subsystem
+    // ask felix if it would be better to keep solonoid action or integrate it all
+    // into arm subsystem
 
     public boolean isTucked() {
-        return !shooterSolenoid.getState();
+        return !shooterSolenoidActions.getState();
     }
 }

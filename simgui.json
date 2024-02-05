@@ -1,17 +1,12 @@
 {
   "HALProvider": {
     "Other Devices": {
+      "Compressor[0]": {
+        "header": {
+          "open": true
+        }
+      },
       "SPARK MAX [0]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [1]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [2]": {
         "header": {
           "open": true
         }

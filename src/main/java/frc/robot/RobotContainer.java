@@ -144,9 +144,9 @@ public class RobotContainer {
     // position.
     return drivebase.driveToPose(
         new Pose2d(
-            drivebase.getPose().getX() + limelight.getFakeTagPose().getX(),
-            drivebase.getPose().getY() + limelight.getFakeTagPose().getY(),
-            drivebase.getPose().getRotation().rotateBy(limelight.getFakeTagPose().getRotation())));
+            drivebase.getPose().getX() + limelight.getTagPose().getX(),
+            drivebase.getPose().getY() + limelight.getTagPose().getY(),
+            drivebase.getPose().getRotation().rotateBy(limelight.getTagPose().getRotation())));
   }
 
   public void setDriveMode() {

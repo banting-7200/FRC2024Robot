@@ -31,8 +31,7 @@ public class ArmSubsystem extends SubsystemBase {
         rightArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
         rightEncoder = rightArmMotor.getEncoder();
-        rightEncoder.setPositionConversionFactor(42);// Amount of ticks in a Neo encoder rotation unit. Converted for
-                                                     // gravity feedfoward later on.
+        rightEncoder.setPositionConversionFactor(42);// Amount of ticks in a Neo encoder rotation unit. Converted for gravity feedfoward later on.
         pidController = rightArmMotor.getPIDController();
         pidController.setFeedbackDevice(rightEncoder);
 

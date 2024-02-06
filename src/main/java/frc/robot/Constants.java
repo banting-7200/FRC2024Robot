@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import swervelib.math.Matter;
@@ -38,13 +39,14 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 2;
   }
 
+   public static final PneumaticHub m_pH = new PneumaticHub(1);
+
   public static final class Arm {
     public static final int leftArmMotorID = 2;// Todo: update to an actual on robot value
-    public static final int rightArmMotorID = 1;// Todo: update to an actual on robot value
+    public static final int rightArmMotorID = 3;// Todo: update to an actual on robot value
 
-    public static final Solenoid shooterSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);// Todo: update to an actual on robot value
-    public static final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
-    
+   public static final int s_Channel = 0;
+
     // default arm pids
     // Todo: calibrate these
     public static final double p = 1;

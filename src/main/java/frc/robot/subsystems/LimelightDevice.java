@@ -65,20 +65,16 @@ public class LimelightDevice extends SubsystemBase {
   public Pose2d getTagPose() {
     double[] tagTransform =
         mainTable.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
-    for (int i = 0; i < tagTransform.length; i++) {
-      System.out.println(tagTransform[i] + ",");
-    }
-
     // Todo: determine which tag transform entries are equivilent to a top down 2d view of the feild
     // (x, y)
     // Determine how to correct for rotation (is pitch, yaw, or roll the value we want)
     // Adjust april tag offsets
     // Configure position of limelight relative to robot(once mounted).
-    return new Pose2d(tagTransform[0], tagTransform[1], new Rotation2d(tagTransform[5]));
+    return new Pose2d(tagTransform[0], tagTransform[2], new Rotation2d(tagTransform[6]));
   }
 
   public Pose2d getFakeTagPose() {
-    return new Pose2d(0.3, 0.4, new Rotation2d(33));
+    return new Pose2d(3, 4, new Rotation2d(33));
   }
 
   public boolean

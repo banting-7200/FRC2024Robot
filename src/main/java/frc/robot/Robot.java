@@ -25,10 +25,12 @@ public class Robot extends TimedRobot {
   private static Robot instance;
   private Command m_autonomousCommand;
 
-  private RobotContainer m_robotContainer;
+  // private RobotContainer m_robotContainer;
 
   // ArmSubsystem arm = new ArmSubsystem();
   private Timer disabledTimer;
+
+  LimelightDevice limelight = new LimelightDevice();
 
   public Robot() {
     instance = this;
@@ -47,7 +49,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer = new RobotContainer();
+    // m_robotContainer = new RobotContainer();
 
     // Create a timer to disable motor brake a few seconds after disable. This will
     // let the robot stop
@@ -74,7 +76,7 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    m_robotContainer.setMotorBrake(true);
+    // m_robotContainer.setMotorBrake(true);
     disabledTimer.reset();
     disabledTimer.start();
   }
@@ -82,7 +84,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     if (disabledTimer.hasElapsed(Constants.Drivebase.WHEEL_LOCK_TIME)) {
-      m_robotContainer.setMotorBrake(false);
+      // m_robotContainer.setMotorBrake(false);
       disabledTimer.stop();
     }
   }
@@ -90,8 +92,8 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_robotContainer.setMotorBrake(true);
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // m_robotContainer.setMotorBrake(true);
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -100,10 +102,10 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during autonomous. */
-  @Override
-  public void autonomousPeriodic() {
+  // @Override
+  /*public void autonomousPeriodic() {
     System.out.println("robot pose: " + m_robotContainer.getRobotPose());
-  }
+  }*/
 
   @Override
   public void teleopInit() {
@@ -114,13 +116,15 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_robotContainer.setDriveMode();
-    m_robotContainer.setMotorBrake(true);
+    // m_robotContainer.setDriveMode();
+    // m_robotContainer.setMotorBrake(true);
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    limelight.printTagData();
+  }
 
   @Override
   public void testInit() {

@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,6 +45,29 @@ public class LimelightDevice extends SubsystemBase {
     SmartDashboard.putNumber("AprilTag ID", tid);
 
     return (int) tid;
+  }
+
+  /*public double[] getTagPose(){
+
+  }*/
+
+  public Pose2d getTagPose() {
+    double[] tagTransform =
+        mainTable.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
+    for (int i = 0; i < tagTransform.length; i++) {
+      System.out.println(tagTransform[i] + ",");
+    }
+
+    // Todo: determine which tag transform entries are equivilent to a top down 2d view of the feild
+    // (x, y)
+    // Determine how to correct for rotation (is pitch, yaw, or roll the value we want)
+    // Adjust april tag offsets
+    // Configure position of limelight relative to robot(once mounted).
+    return new Pose2d(tagTransform[0], tagTransform[1], new Rotation2d(0));
+  }
+
+  public Pose2d getFakeTagPose() {
+    return new Pose2d(3, 4, new Rotation2d(0));
   }
 
   public boolean

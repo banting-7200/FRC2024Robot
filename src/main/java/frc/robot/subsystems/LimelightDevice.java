@@ -51,6 +51,17 @@ public class LimelightDevice extends SubsystemBase {
 
   }*/
 
+  public void printTagData() {
+    String[] keyWords = {
+      "x: ", "y: ", "z: ", "roll: ", "pitch: ", "yaw: ",
+    };
+    double[] tagTransform =
+        mainTable.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
+    for (int i = 0; i < tagTransform.length; i++) {
+      SmartDashboard.putNumber(keyWords[i], tagTransform[i]);
+    }
+  }
+
   public Pose2d getTagPose() {
     double[] tagTransform =
         mainTable.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
@@ -63,11 +74,11 @@ public class LimelightDevice extends SubsystemBase {
     // Determine how to correct for rotation (is pitch, yaw, or roll the value we want)
     // Adjust april tag offsets
     // Configure position of limelight relative to robot(once mounted).
-    return new Pose2d(tagTransform[0], tagTransform[1], new Rotation2d(0));
+    return new Pose2d(tagTransform[0], tagTransform[1], new Rotation2d(tagTransform[5]));
   }
 
   public Pose2d getFakeTagPose() {
-    return new Pose2d(3, 4, new Rotation2d(0));
+    return new Pose2d(0.3, 0.4, new Rotation2d(33));
   }
 
   public boolean

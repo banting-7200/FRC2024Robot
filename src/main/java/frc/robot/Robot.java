@@ -27,9 +27,8 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  // ArmSubsystem arm = new ArmSubsystem();
   private Timer disabledTimer;
-
-  private LimelightDevice limelight;
 
   public Robot() {
     instance = this;
@@ -45,16 +44,15 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+    // Instantiate our RobotContainer. This will perform all our button bindings,
+    // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    // Create a timer to disable motor brake a few seconds after disable.  This will let the robot
-    // stop
+    // Create a timer to disable motor brake a few seconds after disable. This will
+    // let the robot stop
     // immediately when disabled, but then also let it be pushed more
     disabledTimer = new Timer();
-
-    limelight = new LimelightDevice();
   }
 
   /**
@@ -79,7 +77,6 @@ public class Robot extends TimedRobot {
     m_robotContainer.setMotorBrake(true);
     disabledTimer.reset();
     disabledTimer.start();
-    limelight.setLight(false);
   }
 
   @Override
@@ -104,7 +101,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    System.out.println("robot pose: " + m_robotContainer.getRobotPose());
+  }
 
   @Override
   public void teleopInit() {
@@ -117,31 +116,11 @@ public class Robot extends TimedRobot {
     }
     m_robotContainer.setDriveMode();
     m_robotContainer.setMotorBrake(true);
-    limelight.setMode(1); // sets to tag detection when teleop is started
-    limelight.setLight(true);
   }
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-    switch (limelight.mode) { // limelight detection modes
-      case 0: // apriltag detection mode
-        switch (limelight
-            .getTagData()) { // switch case for april tags, IDs 1-16 are used. returns -1 if no tag
-            // is detected.
-          case 5: // if april tag 5 is detected
-            limelight.setMode(0); // switches to note detection
-            break;
-          default:
-            break;
-        }
-        break;
-      case 1:
-        if (limelight.getNoteData()) { // if note is detected
-        }
-        break;
-    }
-  }
+  public void teleopPeriodic() {}
 
   @Override
   public void testInit() {

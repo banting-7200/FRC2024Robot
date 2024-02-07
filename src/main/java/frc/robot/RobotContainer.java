@@ -142,11 +142,17 @@ public class RobotContainer {
     // Todo: impliment rotation, move addition to it's own function
     // Add the tag pose to the bot pose to get the tag pose in feild position instead of robot
     // position.
-    return drivebase.driveToPose(
+
+    // double f_tx = drivebase.getPose().getX() + limelight.getFakeTagPose().getX();
+    // double f_ty = drivebase.getPose().getY() + limelight.getFakeTagPose().getY();
+    // Rotation2d f_tr =
+    // drivebase.getPose().getRotation().rotateBy(limelight.getFakeTagPose().getRotation());
+
+    return drivebase.interpolateToPose(
         new Pose2d(
-            drivebase.getPose().getX() + limelight.getTagPose().getX(),
-            drivebase.getPose().getY() + limelight.getTagPose().getY(),
-            drivebase.getPose().getRotation().rotateBy(limelight.getTagPose().getRotation())));
+            limelight.getFakeTagPose().getX(),
+            limelight.getFakeTagPose().getY(),
+            limelight.getFakeTagPose().getRotation()));
   }
 
   public void setDriveMode() {

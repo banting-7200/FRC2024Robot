@@ -67,7 +67,7 @@ public class LimelightDevice extends SubsystemBase {
     // Adjust april tag offsets
     // Configure position of limelight relative to robot(once mounted).
 
-    // Y fed as component x and voce versa because the robot space coordinate axis of the limelight
+    // Y fed as component x and vice versa because the robot space coordinate axis of the limelight
     // are opposite
     // those of the pigeon 2 which is used in swerve odometry.
     return new Pose2d(tagTransform[1], tagTransform[0], new Rotation2d(tagTransform[5]));

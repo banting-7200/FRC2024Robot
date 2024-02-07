@@ -47,10 +47,6 @@ public class LimelightDevice extends SubsystemBase {
     return (int) tid;
   }
 
-  /*public double[] getTagPose(){
-
-  }*/
-
   public void printTagData() {
     String[] keyWords = {
       "x: ", "y: ", "z: ", "roll: ", "pitch: ", "yaw: ",
@@ -70,11 +66,17 @@ public class LimelightDevice extends SubsystemBase {
     // Determine how to correct for rotation (is pitch, yaw, or roll the value we want)
     // Adjust april tag offsets
     // Configure position of limelight relative to robot(once mounted).
-    return new Pose2d(tagTransform[0], tagTransform[2], new Rotation2d(tagTransform[6]));
+
+    // Y fed as component x and voce versa because the robot space coordinate axis of the limelight
+    // are opposite
+    // those of the pigeon 2 which is used in swerve odometry.
+    return new Pose2d(tagTransform[1], tagTransform[0], new Rotation2d(tagTransform[5]));
   }
 
-  public Pose2d getFakeTagPose() {
-    return new Pose2d(3, 4, new Rotation2d(33));
+  public Pose2d
+      getFakeTagPose() { // Can't take negative values because it is trying to pathfind out of the
+    // feild
+    return new Pose2d(2.98, 4, new Rotation2d(33));
   }
 
   public boolean

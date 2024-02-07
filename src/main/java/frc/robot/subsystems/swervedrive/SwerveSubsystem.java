@@ -181,6 +181,13 @@ public class SwerveSubsystem extends SubsystemBase {
         );
   }
 
+  public Command interpolateToPose(Pose2d targetPose) {
+    return run(
+        () -> {
+          drive(targetPose.getTranslation(), targetPose.getRotation().getRadians(), false);
+        });
+  }
+
   /**
    * Command to drive the robot using translative values and heading as a setpoint.
    *

@@ -104,8 +104,10 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    System.out.println("robot pose: " + m_robotContainer.getRobotPose());
-    limelight.printTagData();
+    // m_robotContainer.pidPosToPose();
+
+    // System.out.println("robot pose: " + m_robotContainer.getRobotPose());
+    // limelight.printTagData();
   }
 
   @Override

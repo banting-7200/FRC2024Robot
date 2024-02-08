@@ -152,20 +152,14 @@ public class RobotContainer {
     // return drivebase.driveToPose(new Pose2d(limelight.getFakeTagPose().getX(),
     // limelight.getFakeTagPose().getY(), limelight.getFakeTagPose().getRotation()));
     // return drivebase.driveToPose(new Pose2d(f_tx, f_ty, f_tr));
-    return null;
+    return Commands.run(
+        () ->
+            drivebase.driveCommand(
+                limelight.alignWithTag().getX(), limelight.alignWithTag().getY(), 0));
   }
 
-  public void pidPosToPose(Pose2d targetPose) {
-    double botX = drivebase.getPose().getX();
-    double botY = drivebase.getPose().getY();
-
-    double f_tx = botX + limelight.getFakeTagPose().getX();
-    double f_ty = botY + limelight.getFakeTagPose().getY();
-
-    Translation2d translation =
-        new Translation2d(posPID.calculate(botX, f_tx), posPID.calculate(botY, f_ty));
-
-    drivebase.drive(translation, /*rotation here */ 4, false);
+  public void pidPosToPose() {
+    drivebase.drive(limelight.alignWithTag(), /*rotation here */ 0, false);
   }
 
   public void setDriveMode() {

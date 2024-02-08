@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -11,11 +12,19 @@ public class LimelightDevice extends SubsystemBase {
   private NetworkTable mainTable;
   public int mode;
 
+  private double k_XP = 0.01;
+  private double k_fowardP = 5;
+  private double targetArea = 0.4;
+
+  // NetworkTableEntry m_XP, m_YP, m_targetArea;
+
   public LimelightDevice() { // initializes device
     mainTable =
-        NetworkTableInstance.getDefault()
-            .getTable("limelight"); // gets the network table with key "limelight"
+        NetworkTableInstance.getDefault().getTable("limelight"); // gets the network table with key
+    // "limelight"
     mode = 0;
+
+    // m_XP = ShuffleboardInfo.getInsatnce().
   }
 
   public void setLight(boolean on) { // toggles lights (true for on, false for off)
@@ -47,6 +56,11 @@ public class LimelightDevice extends SubsystemBase {
     return (int) tid;
   }
 
+  public boolean tagDetected() {
+    double ttarget = mainTable.getEntry("tv").getDouble(0);
+    return ttarget == 0 ? false : true;
+  }
+
   public void printTagData() {
     String[] keyWords = {
       "x: ", "y: ", "z: ", "roll: ", "pitch: ", "yaw: ",
@@ -61,14 +75,15 @@ public class LimelightDevice extends SubsystemBase {
   public Pose2d getTagPose() {
     double[] tagTransform =
         mainTable.getEntry("targetpose_robotspace").getDoubleArray(new double[6]);
-    // Todo: determine which tag transform entries are equivilent to a top down 2d view of the feild
-    // (x, y)
-    // Determine how to correct for rotation (is pitch, yaw, or roll the value we want)
+    // Todo: determine which tag transform entries are equivilent to a top down 2d
+    // view of the feild (x, y)
+    // Determine how to correct for rotation (is pitch, yaw, or roll the value we
+    // want)
     // Adjust april tag offsets
     // Configure position of limelight relative to robot(once mounted).
 
-    // Y fed as component x and vice versa because the robot space coordinate axis of the limelight
-    // are opposite
+    // Y fed as component x and vice versa because the robot space coordinate axis
+    // of the limelight are opposite
     // those of the pigeon 2 which is used in swerve odometry.
     return new Pose2d(tagTransform[1], tagTransform[0], new Rotation2d(tagTransform[5]));
   }
@@ -79,9 +94,31 @@ public class LimelightDevice extends SubsystemBase {
     return new Pose2d(2.98, 4, new Rotation2d(33));
   }
 
+  public Translation2d alignWithTag() {
+    double xAdjust = 0;
+    double fowardAdjust = 0;
+    double tagArea = mainTable.getEntry("ta").getDouble(0);
+
+    if (tagDetected() && tagArea < targetArea) {
+      xAdjust = k_XP * mainTable.getEntry("tx").getDouble(0);
+      // fowardAdjust = k_fowardP * mainTable.getEntry("ty").getDouble(0);
+      fowardAdjust = (targetArea - tagArea) * k_fowardP;
+    }
+    System.out.println(
+        "foward adjust: "
+            + fowardAdjust
+            + ", target area: "
+            + targetArea
+            + ", tag area: "
+            + tagArea);
+
+    return new Translation2d(fowardAdjust, 0); // foward is x , right is y. Thanks, pigeon.
+  }
+
   public boolean
       getNoteData() { // posts limelight note pipelinedata to SmartDashboard & returns true if note
-    // is detected
+    // is
+    // detected
 
     double ntarget = mainTable.getEntry("tv").getDouble(0); // may have to be double then converted
     double nx = mainTable.getEntry("tx").getDouble(0);

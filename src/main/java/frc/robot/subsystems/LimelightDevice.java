@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -94,13 +93,13 @@ public class LimelightDevice extends SubsystemBase {
     return new Pose2d(2.98, 4, new Rotation2d(33));
   }
 
-  public Translation2d alignWithTag() {
+  public double alignWithTag() {
     double xAdjust = 0;
     double fowardAdjust = 0;
     double tagArea = mainTable.getEntry("ta").getDouble(0);
 
     if (tagDetected() && tagArea < targetArea) {
-      xAdjust = k_XP * mainTable.getEntry("tx").getDouble(0);
+      // xAdjust = k_XP * mainTable.getEntry("tx").getDouble(0);
       // fowardAdjust = k_fowardP * mainTable.getEntry("ty").getDouble(0);
       fowardAdjust = (targetArea - tagArea) * k_fowardP;
     }
@@ -112,7 +111,11 @@ public class LimelightDevice extends SubsystemBase {
             + ", tag area: "
             + tagArea);
 
-    return new Translation2d(fowardAdjust, 0); // foward is x , right is y. Thanks, pigeon.
+    return fowardAdjust; // foward is x , right is y. Thanks, pigeon.
+  }
+
+  public double getTagArea() {
+    return mainTable.getEntry("ta").getDouble(0);
   }
 
   public boolean

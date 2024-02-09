@@ -33,8 +33,8 @@ public final class Constants {
   }
 
   public static final class Lights {
-    public static final int lightID = 0;
-    public static final int lightStringLength = 0;
+    public static final int lightID = 9;
+    public static final int lightStringLength = 15;
   }
 
   public static final class Drivebase {

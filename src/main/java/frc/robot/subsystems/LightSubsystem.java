@@ -7,15 +7,26 @@ import frc.robot.Constants.Lights;
 public class LightSubsystem {
   private final AddressableLED statusLights;
   private final AddressableLEDBuffer statusBuffer;
+  private static LightSubsystem instance = null; // creates Singleton instance
 
-  enum lightStates {
+  public enum lightStates {
     ReadyForPickup,
     NotePickedUp,
     CarryingNote,
     ReadyToShoot
   }
 
-  public LightSubsystem(int lightPort, int stringLength) {
+  public static synchronized LightSubsystem
+      getInstance() { // if no instance has been made, create one.
+    // Otherwise, reference the already made instance.
+    // Ensures only one instance can be made.
+    if (instance == null) {
+      instance = new LightSubsystem(Lights.lightID, Lights.lightStringLength);
+    }
+    return instance;
+  }
+
+  private LightSubsystem(int lightPort, int stringLength) {
     statusLights = new AddressableLED(lightPort);
     statusBuffer = new AddressableLEDBuffer(stringLength);
 
@@ -25,36 +36,30 @@ public class LightSubsystem {
   }
 
   // Singleton instance of lights to call in other classes.
-  LightSubsystem instance =
-      new LightSubsystem(
-          Lights.lightID,
-          Lights.lightStringLength); // port and length still nedd to be filled as they are unknowns
 
-  // right now.
-
-  public void SetLightState(lightStates stateToSet) {
+  public void SetLightState(lightStates stateToSet) { // Set to predefined colours
     switch (stateToSet) {
       case ReadyForPickup:
-        setColor(232, 7, 7); // Red
+        setColor(255, 0, 0); // Red
         break;
       case NotePickedUp:
-        setColor(237, 122, 7); // Orange
+        setColor(255, 50, 0); // Orange
         break;
       case CarryingNote:
-        setColor(12, 28, 245); // Blue
+        setColor(0, 0, 255); // Blue
         break;
       case ReadyToShoot:
-        setColor(23, 232, 61); // Green
+        setColor(0, 255, 0); // Green
         break;
       default:
-        setColor(255, 0, 247); // Purple(for error)
+        setColor(200, 0, 255); // Purple(for error)
         break;
     }
   }
 
-  public void setColor(int r, int g, int b) {
+  public void setColor(int r, int g, int b) { // set to specific colour
     for (int i = 0; i < statusBuffer.getLength(); i++) {
-      statusBuffer.setRGB(i, r, g, b);
+      statusBuffer.setRGB(i, g, r, b); // GRB
     }
 
     statusLights.setData(statusBuffer);

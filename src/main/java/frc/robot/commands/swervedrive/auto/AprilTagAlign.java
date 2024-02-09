@@ -12,7 +12,8 @@ public class AprilTagAlign extends Command {
   private final SwerveSubsystem swerveSubsystem;
   private final LimelightDevice limelightSubsystem;
 
-  private final PIDController controller;
+  private final PIDController positionController;
+  private final PIDController rotationController;
 
   private double tagArea;
   private double targetArea = 2;
@@ -21,8 +22,11 @@ public class AprilTagAlign extends Command {
     this.swerveSubsystem = swerveSubsystem;
     this.limelightSubsystem = limelightSubsystem;
 
-    controller = new PIDController(1, 0, 0);
-    controller.setSetpoint(targetArea);
+    positionController = new PIDController(1, 0, 0);
+    positionController.setSetpoint(targetArea);
+
+    rotationController = new PIDController(0.1, 0, 0);
+    rotationController.setSetpoint(0);
 
     addRequirements(swerveSubsystem, limelightSubsystem);
   }
@@ -33,16 +37,20 @@ public class AprilTagAlign extends Command {
   @Override
   public void execute() {
     tagArea = limelightSubsystem.getTagArea();
-    double fowardAdjust = controller.calculate(tagArea, targetArea);
-    swerveSubsystem.drive(new Translation2d(fowardAdjust, 0), 0, true);
+    double fowardAdjust = positionController.calculate(tagArea, targetArea);
+    double rotationAdjust = rotationController.calculate(limelightSubsystem.getTX(), 0);
+    swerveSubsystem.drive(new Translation2d(fowardAdjust, 0), rotationAdjust, true);
 
     SmartDashboard.putNumber("tagArea", tagArea);
     SmartDashboard.putNumber("targetArea", targetArea);
-    SmartDashboard.putBoolean("at setpoint", controller.atSetpoint());
+    SmartDashboard.putBoolean("at position", positionController.atSetpoint());
+
+    SmartDashboard.putNumber("tag offset", rotationAdjust);
+    SmartDashboard.putBoolean("at rotation", rotationController.atSetpoint());
   }
 
   @Override
   public boolean isFinished() {
-    return controller.atSetpoint();
+    return positionController.atSetpoint() && rotationController.atSetpoint();
   }
 }

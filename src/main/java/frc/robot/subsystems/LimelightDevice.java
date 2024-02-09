@@ -118,6 +118,10 @@ public class LimelightDevice extends SubsystemBase {
     return mainTable.getEntry("ta").getDouble(0);
   }
 
+  public double getTX() {
+    return mainTable.getEntry("tx").getDouble(0);
+  }
+
   public boolean
       getNoteData() { // posts limelight note pipelinedata to SmartDashboard & returns true if note
     // is

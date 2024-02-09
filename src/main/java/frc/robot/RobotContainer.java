@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.swervedrive.auto.AprilTagAlign;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -152,14 +153,11 @@ public class RobotContainer {
     // return drivebase.driveToPose(new Pose2d(limelight.getFakeTagPose().getX(),
     // limelight.getFakeTagPose().getY(), limelight.getFakeTagPose().getRotation()));
     // return drivebase.driveToPose(new Pose2d(f_tx, f_ty, f_tr));
-    return Commands.run(
-        () ->
-            drivebase.driveCommand(
-                limelight.alignWithTag().getX(), limelight.alignWithTag().getY(), 0));
+    return new AprilTagAlign(drivebase, limelight);
   }
 
   public void pidPosToPose() {
-    drivebase.drive(limelight.alignWithTag(), /*rotation here */ 0, false);
+    // drivebase.drive(limelight.alignWithTag(), /*rotation here */0, false);
   }
 
   public void setDriveMode() {

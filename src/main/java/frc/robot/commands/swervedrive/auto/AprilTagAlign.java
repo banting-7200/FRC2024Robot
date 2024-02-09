@@ -38,7 +38,7 @@ public class AprilTagAlign extends Command {
   public void execute() {
     tagArea = limelightSubsystem.getTagArea();
     double fowardAdjust = positionController.calculate(tagArea, targetArea);
-    double rotationAdjust = rotationController.calculate(limelightSubsystem.getTX(), 0);
+    double rotationAdjust = rotationController.calculate(limelightSubsystem.getTagX(), 0);
     swerveSubsystem.drive(new Translation2d(fowardAdjust, 0), rotationAdjust, true);
 
     SmartDashboard.putNumber("tagArea", tagArea);

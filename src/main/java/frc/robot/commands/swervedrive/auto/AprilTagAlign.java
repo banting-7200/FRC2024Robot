@@ -16,16 +16,25 @@ public class AprilTagAlign extends Command {
   private final PIDController rotationController;
 
   private double tagArea;
-  private double targetArea = 2;
+  private double targetArea;
 
-  public AprilTagAlign(SwerveSubsystem swerveSubsystem, LimelightDevice limelightSubsystem) {
+  private int tagToAlign;
+
+  public AprilTagAlign(
+      SwerveSubsystem swerveSubsystem,
+      LimelightDevice limelightSubsystem,
+      double targetArea,
+      int tagToAlign) {
     this.swerveSubsystem = swerveSubsystem;
     this.limelightSubsystem = limelightSubsystem;
+
+    this.targetArea = targetArea;
+    this.tagToAlign = tagToAlign;
 
     positionController = new PIDController(1, 0, 0);
     positionController.setSetpoint(targetArea);
 
-    rotationController = new PIDController(0.1, 0, 0);
+    rotationController = new PIDController(0.035, 0.0001, 0);
     rotationController.setSetpoint(0);
 
     addRequirements(swerveSubsystem, limelightSubsystem);
@@ -36,10 +45,15 @@ public class AprilTagAlign extends Command {
 
   @Override
   public void execute() {
-    tagArea = limelightSubsystem.getTagArea();
-    double fowardAdjust = positionController.calculate(tagArea, targetArea);
-    double rotationAdjust = rotationController.calculate(limelightSubsystem.getTagX(), 0);
-    swerveSubsystem.drive(new Translation2d(fowardAdjust, 0), rotationAdjust, true);
+    double fowardAdjust = 0;
+    double rotationAdjust = 0;
+
+    if (tagToAlign == limelightSubsystem.getTagID()) {
+      tagArea = limelightSubsystem.getTagArea();
+      fowardAdjust = positionController.calculate(tagArea, targetArea);
+      rotationAdjust = rotationController.calculate(limelightSubsystem.getTagX(), 0);
+      swerveSubsystem.drive(new Translation2d(fowardAdjust, 0), rotationAdjust, false);
+    }
 
     SmartDashboard.putNumber("tagArea", tagArea);
     SmartDashboard.putNumber("targetArea", targetArea);
@@ -52,5 +66,10 @@ public class AprilTagAlign extends Command {
   @Override
   public boolean isFinished() {
     return positionController.atSetpoint() && rotationController.atSetpoint();
+  }
+
+  @Override
+  public void end(boolean interrupted) {
+    swerveSubsystem.lock();
   }
 }

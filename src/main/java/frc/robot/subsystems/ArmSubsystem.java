@@ -21,8 +21,8 @@ public class ArmSubsystem extends SubsystemBase {
         leftArmMotor = new CANSparkMax(Arm.leftArmMotorID, MotorType.kBrushless);
         rightArmMotor = new CANSparkMax(Arm.rightArmMotorID, MotorType.kBrushless);
 
-        leftArmMotor.restoreFactoryDefaults();
-        rightArmMotor.restoreFactoryDefaults();
+       // leftArmMotor.restoreFactoryDefaults();
+       // rightArmMotor.restoreFactoryDefaults();
 
         leftArmMotor.follow(rightArmMotor);
         rightArmMotor.setInverted(true);
@@ -68,12 +68,9 @@ public class ArmSubsystem extends SubsystemBase {
 
         double maxGravityFF = 0.07;// Todo: Find the best gravity feed foward for our arm
 
-        pidController.setReference(angle, CANSparkBase.ControlType.kSmartMotion, 0, maxGravityFF * cosineScalar);// Todo: find what pidslot the pid is or find a way to apply arb feedfoward without it
+        pidController.setReference(angle, CANSparkBase.ControlType.kPosition, 0, maxGravityFF * cosineScalar);// Todo: find what pidslot the pid is or find a way to apply arb feedfoward without it
         System.out.println("motor angle: " + rightEncoder.getPosition());
     }
-
-    // ask felix if it would be better to keep solonoid action or integrate it all
-    // into arm subsystem
 
     public boolean isTucked() {
         return !shooterSolenoidActions.getState();

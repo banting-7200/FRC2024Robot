@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.ArmSubsystem;
+
 import java.io.File;
 import java.io.IOException;
 import swervelib.parser.SwerveParser;
@@ -27,6 +29,8 @@ public class Robot extends TimedRobot
   private RobotContainer m_robotContainer;
 
   private Timer disabledTimer;
+
+  private ArmSubsystem arm = new ArmSubsystem();
 
   public Robot()
   {
@@ -128,6 +132,7 @@ public class Robot extends TimedRobot
     }
     m_robotContainer.setDriveMode();
     m_robotContainer.setMotorBrake(true);
+    arm.moveToAngle(60);
   }
 
   /**

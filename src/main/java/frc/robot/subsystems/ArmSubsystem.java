@@ -41,15 +41,15 @@ public class ArmSubsystem extends SubsystemBase {
         int smartMotionSlot = Arm.smartMotionSlot;
         
         // Configure PID
-        pidController.setP(p);
-        pidController.setI(i);
-        pidController.setD(d);
-        pidController.setFF(f);
-        pidController.setIZone(iz);
-        pidController.setOutputRange(Arm.pidOutputMin, Arm.pidOutputMax);
+        pidController.setP(p, smartMotionSlot);
+        pidController.setI(i, smartMotionSlot);
+        pidController.setD(d, smartMotionSlot);
+        pidController.setFF(f, smartMotionSlot);
+        pidController.setIZone(iz, smartMotionSlot);
+        pidController.setOutputRange(Arm.pidOutputMin, Arm.pidOutputMax, smartMotionSlot);
 
         // Configure smart motion
-        int smartMotionSlot = Arm.smartMotionSlot;
+      
         pidController.setSmartMotionMaxVelocity(Arm.maxMotorVelocity, smartMotionSlot);
         pidController.setSmartMotionMinOutputVelocity(Arm.minMotorVelocity, smartMotionSlot);
         pidController.setSmartMotionMaxAccel(Arm.maxMotorAccel, smartMotionSlot);
@@ -76,6 +76,20 @@ public class ArmSubsystem extends SubsystemBase {
 
         return maxGravityFF * cosineScalar;
     }
+
+    //Todo: add a degrees to motor rotations conversion to account for the gearboxes
+    
+    // Solenoid movement functions
+    public void tuckShooter(){
+        shooterSolenoidActions.setOff();
+    }
+
+    public void deployShooter(){
+        shooterSolenoidActions.setOn();
+    }
+
+    public void toggleShooterState(){
+        shooterSolenoidActions.toggle();
     }
 
     public boolean isTucked() {

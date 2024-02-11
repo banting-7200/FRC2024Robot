@@ -2,9 +2,13 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Arm;
@@ -35,6 +39,10 @@ public class ArmSubsystem extends SubsystemBase {
         pidController.setFeedbackDevice(rightEncoder);
 
         setPID(Arm.p, Arm.i, Arm.d, Arm.f, Arm.iz);
+
+          if (RobotBase.isSimulation()) {
+      REVPhysicsSim.getInstance().addSparkMax(rightArmMotor, DCMotor.getNEO(1));
+    }
     }
 
     private void setPID(double p, double i, double d, double f, double iz) {
@@ -95,4 +103,9 @@ public class ArmSubsystem extends SubsystemBase {
     public boolean isTucked() {
         return !shooterSolenoidActions.getState();
     }
+
+    @Override
+  public void simulationPeriodic() {
+    REVPhysicsSim.getInstance().run();
+  }
 }

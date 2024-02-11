@@ -21,11 +21,10 @@ public class ArmSubsystem extends SubsystemBase {
         leftArmMotor = new CANSparkMax(Arm.leftArmMotorID, MotorType.kBrushless);
         rightArmMotor = new CANSparkMax(Arm.rightArmMotorID, MotorType.kBrushless);
 
-       // leftArmMotor.restoreFactoryDefaults();
-       // rightArmMotor.restoreFactoryDefaults();
+        leftArmMotor.restoreFactoryDefaults();
+        rightArmMotor.restoreFactoryDefaults();
 
-        leftArmMotor.follow(rightArmMotor);
-        rightArmMotor.setInverted(true);
+        leftArmMotor.follow(rightArmMotor, true);
 
         leftArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
         rightArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -39,6 +38,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     private void setPID(double p, double i, double d, double f, double iz) {
+        int smartMotionSlot = Arm.smartMotionSlot;
+        
         // Configure PID
         pidController.setP(p);
         pidController.setI(i);
@@ -56,7 +57,12 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void moveToAngle(double angle) {
-        // Arbirtary feedfoward to account for gravity acting on the arm
+        pidController.setReference(angle, CANSparkMax.ControlType.kSmartMotion, Arm.smartMotionSlot, getArbFF());// Todo: find what pidslot the pid is or find a way to apply arb feedfoward without it
+        System.out.println("motor angle: " + rightEncoder.getPosition());
+    }
+
+    public double getArbFF(){
+ // Arbirtary feedfoward to account for gravity acting on the arm
         int kMeasuredPosHorizontal = 840; // Default position measured when arm is horizontal from example. Todo: find
                                           // the value for our arm.
         double kTicksPerDegree = 42 / 360; // Todo: find the ammount of ticks per degree relative to all the gearboxes
@@ -68,8 +74,8 @@ public class ArmSubsystem extends SubsystemBase {
 
         double maxGravityFF = 0.07;// Todo: Find the best gravity feed foward for our arm
 
-        pidController.setReference(angle, CANSparkBase.ControlType.kPosition, 0, maxGravityFF * cosineScalar);// Todo: find what pidslot the pid is or find a way to apply arb feedfoward without it
-        System.out.println("motor angle: " + rightEncoder.getPosition());
+        return maxGravityFF * cosineScalar;
+    }
     }
 
     public boolean isTucked() {

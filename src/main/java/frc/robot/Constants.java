@@ -43,7 +43,7 @@ public final class Constants {
 
   public static final class Arm {
     public static final int leftArmMotorID = 2;// Todo: update to an actual on robot value
-    public static final int rightArmMotorID = 3;// Todo: update to an actual on robot value
+    public static final int rightArmMotorID = 11;// Todo: update to an actual on robot value
 
    public static final int s_Channel = 0;
 

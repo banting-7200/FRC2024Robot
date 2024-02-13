@@ -101,7 +101,13 @@
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
-        "open": true
+        "Field": {
+          "open": true
+        },
+        "open": true,
+        "swerve": {
+          "open": true
+        }
       }
     }
   },

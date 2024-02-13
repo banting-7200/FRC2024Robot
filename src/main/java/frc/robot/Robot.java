@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
@@ -50,6 +51,9 @@ public class Robot extends TimedRobot {
     // stop
     // immediately when disabled, but then also let it be pushed more
     disabledTimer = new Timer();
+
+    // start the camera server
+    CameraServer.startAutomaticCapture("Front Camera", 0);
   }
 
   /**

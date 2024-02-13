@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Arm;
@@ -20,17 +21,11 @@ public class ArmSubsystem extends SubsystemBase {
     private AbsoluteEncoder rightEncoder;
     private SparkPIDController pidController;
 
-    //Todo: enquire on the function of the limit switch
-    private DigitalInput minAngleEstop, maxAngleEstop;
-
     SolenoidActions shooterSolenoidActions = new SolenoidActions(Constants.m_pH.makeSolenoid(Arm.s_Channel));
 
     public ArmSubsystem() {
         leftArmMotor = new CANSparkMax(Arm.leftArmMotorID, MotorType.kBrushless);
         rightArmMotor = new CANSparkMax(Arm.rightArmMotorID, MotorType.kBrushless);
-
-        minAngleEstop = new DigitalInput(Arm.minEstopID);
-        maxAngleEstop = new DigitalInput(Arm.maxEstopID);
 
         leftArmMotor.restoreFactoryDefaults();
         rightArmMotor.restoreFactoryDefaults();
@@ -41,7 +36,8 @@ public class ArmSubsystem extends SubsystemBase {
         rightArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
         rightEncoder = rightArmMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-        rightEncoder.setPositionConversionFactor(42);// Amount of ticks in a Neo encoder rotation unit. Converted for gravity feedfoward later on.
+        rightEncoder.setPositionConversionFactor(42);// Amount of ticks in a Neo encoder rotation unit. Converted for
+                                                     // gravity feedfoward later on.
         pidController = rightArmMotor.getPIDController();
         pidController.setFeedbackDevice(rightEncoder);
 
@@ -54,7 +50,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     private void setPID(double p, double i, double d, double f, double iz) {
         int smartMotionSlot = Arm.smartMotionSlot;
-        
+
         // Configure PID
         pidController.setP(p, smartMotionSlot);
         pidController.setI(i, smartMotionSlot);
@@ -71,17 +67,16 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public boolean moveToAngle(double angle) {
-        //Todo: validate pid functionality
         pidController.setReference(angle, CANSparkMax.ControlType.kSmartMotion, Arm.smartMotionSlot, getArbFF());
         System.out.println("motor angle: " + rightEncoder.getPosition());
         return rightEncoder.getPosition() == angle;
     }
 
-    public double getArbFF(){
+    public double getArbFF() {
         // Arbirtary feedfoward to account for gravity acting on the arm
         int kMeasuredPosHorizontal = 840; // Default position measured when arm is horizontal from example. Todo: find
                                           // the value for our arm.
-        double kTicksPerDegree = 42 / (360 * 200); 
+        double kTicksPerDegree = 42 / (360 * 200);
         double currentPos = rightEncoder.getPosition();
         double degrees = (currentPos - kMeasuredPosHorizontal) / kTicksPerDegree;
         double radians = java.lang.Math.toRadians(degrees);
@@ -92,39 +87,30 @@ public class ArmSubsystem extends SubsystemBase {
         return maxGravityFF * cosineScalar;
     }
 
-    double degreesToRotations(double degrees){
-          return degrees * 200;
+    double degreesToRotations(double degrees) {
+        return degrees * 200;
     }
 
-    public void stopArm(){
+    public void stopArm() {
         rightArmMotor.stopMotor();
     }
 
-    public double getEncoderPosition(){
-          return rightEncoder.getPosition();
+    public double getEncoderPosition() {
+        return rightEncoder.getPosition();
     }
 
-    //Emergency stop limit switch helper functions
-    public boolean getMinEstop(){
-        return minAngleEstop.get();//Todo: maybe have to flip this.
-    }
-
-    public boolean getMaxEstop(){
-        return maxAngleEstop.get();//Todo: maybe have to flip this.
-    }
-    
     // Solenoid movement functions
-    public void tuckShooter(){
+    public void tuckShooter() {
         shooterSolenoidActions.setOff();
         System.out.println("Shooter tucked");
     }
 
-    public void deployShooter(){
+    public void deployShooter() {
         shooterSolenoidActions.setOn();
         System.out.println("Shooter deployed");
     }
 
-    public void toggleShooterState(){
+    public void toggleShooterState() {
         shooterSolenoidActions.toggle();
         System.out.println("Shooter toggled");
     }
@@ -134,7 +120,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     @Override
-  public void simulationPeriodic() {
-    REVPhysicsSim.getInstance().run();
-  }
+    public void simulationPeriodic() {
+        REVPhysicsSim.getInstance().run();
+    }
 }

@@ -6,10 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
 import swervelib.math.Matter;
 import swervelib.parser.PIDFConfig;
 
@@ -44,9 +41,8 @@ public final class Constants {
   public static final class Arm {
     public static final int leftArmMotorID = 2;// Todo: update to an actual on robot value
     public static final int rightArmMotorID = 11;// Todo: update to an actual on robot value
-    public static final int limitSwitchID = 1;
-
-   public static final int s_Channel = 0;
+    
+    public static final int s_Channel = 0;
 
     // default arm pids
     // Todo: calibrate these
@@ -68,7 +64,10 @@ public final class Constants {
     //Arm movement constants
     //Todo: find the min-max safe ange range to tuck the shooter
     public static final double tuckSafeMin = 10, tuckSafeMax = 32;
+    public static final double armEstopCorrection = 0.5;
+
     public static final double tuckArmAngle = 0;
+    public static final double intakeArmAngle = 0;
   }
 
   public static final class Drivebase {

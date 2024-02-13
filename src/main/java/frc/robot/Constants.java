@@ -44,25 +44,31 @@ public final class Constants {
   public static final class Arm {
     public static final int leftArmMotorID = 2;// Todo: update to an actual on robot value
     public static final int rightArmMotorID = 11;// Todo: update to an actual on robot value
+    public static final int limitSwitchID = 1;
 
    public static final int s_Channel = 0;
 
     // default arm pids
     // Todo: calibrate these
-    public static final double p = 1;
-    public static final double i = 1;
-    public static final double d = 1;
-    public static final double f = 1;
-    public static final double iz = 1;
+    public static final double p = 0.01;
+    public static final double i = 0;
+    public static final double d = 0;
+    public static final double f = 0;
+    public static final double iz = 0;
 
     public static final double pidOutputMin = -1;
     public static final double pidOutputMax = 1;
 
     public static final int smartMotionSlot = 0;
-    public static final double maxMotorVelocity = 2000; //max motor velocity in rpm
+    public static final double maxMotorVelocity = 20; //max motor velocity in rpm
     public static final double minMotorVelocity = 0;
-    public static final double maxMotorAccel = 1500;
+    public static final double maxMotorAccel = 15;
     public static final double allowedPIDError = 0;
+     
+    //Arm movement constants
+    //Todo: find the min-max safe ange range to tuck the shooter
+    public static final double tuckSafeMin = 10, tuckSafeMax = 32;
+    public static final double tuckArmAngle = 0;
   }
 
   public static final class Drivebase {

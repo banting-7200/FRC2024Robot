@@ -1,15 +1,14 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.REVPhysicsSim;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -18,14 +17,20 @@ import frc.robot.Constants.Arm;
 public class ArmSubsystem extends SubsystemBase {
 
     private CANSparkMax leftArmMotor, rightArmMotor;
-    private AbsoluteEncoder rightEncoder;// Change to absolute encoder???
+    private AbsoluteEncoder rightEncoder;
     private SparkPIDController pidController;
+
+    //Todo: enquire on the function of the limit switch
+    private DigitalInput minAngleEstop, maxAngleEstop;
 
     SolenoidActions shooterSolenoidActions = new SolenoidActions(Constants.m_pH.makeSolenoid(Arm.s_Channel));
 
     public ArmSubsystem() {
         leftArmMotor = new CANSparkMax(Arm.leftArmMotorID, MotorType.kBrushless);
         rightArmMotor = new CANSparkMax(Arm.rightArmMotorID, MotorType.kBrushless);
+
+        minAngleEstop = new DigitalInput(Arm.minEstopID);
+        maxAngleEstop = new DigitalInput(Arm.maxEstopID);
 
         leftArmMotor.restoreFactoryDefaults();
         rightArmMotor.restoreFactoryDefaults();
@@ -65,16 +70,18 @@ public class ArmSubsystem extends SubsystemBase {
         pidController.setSmartMotionAllowedClosedLoopError(Arm.allowedPIDError, smartMotionSlot);
     }
 
-    public void moveToAngle(double angle) {
+    public boolean moveToAngle(double angle) {
+        //Todo: validate pid functionality
         pidController.setReference(angle, CANSparkMax.ControlType.kSmartMotion, Arm.smartMotionSlot, getArbFF());
         System.out.println("motor angle: " + rightEncoder.getPosition());
+        return rightEncoder.getPosition() == angle;
     }
 
     public double getArbFF(){
         // Arbirtary feedfoward to account for gravity acting on the arm
         int kMeasuredPosHorizontal = 840; // Default position measured when arm is horizontal from example. Todo: find
                                           // the value for our arm.
-        double kTicksPerDegree = 42 / (360 * 200); // Todo: find the ammount of ticks per degree relative to all the gearboxes and factor that into the calculation.
+        double kTicksPerDegree = 42 / (360 * 200); 
         double currentPos = rightEncoder.getPosition();
         double degrees = (currentPos - kMeasuredPosHorizontal) / kTicksPerDegree;
         double radians = java.lang.Math.toRadians(degrees);
@@ -85,9 +92,25 @@ public class ArmSubsystem extends SubsystemBase {
         return maxGravityFF * cosineScalar;
     }
 
-    //Todo: add a degrees to motor rotations conversion to account for the gearboxes
     double degreesToRotations(double degrees){
           return degrees * 200;
+    }
+
+    public void stopArm(){
+        rightArmMotor.stopMotor();
+    }
+
+    public double getEncoderPosition(){
+          return rightEncoder.getPosition();
+    }
+
+    //Emergency stop limit switch helper functions
+    public boolean getMinEstop(){
+        return minAngleEstop.get();//Todo: maybe have to flip this.
+    }
+
+    public boolean getMaxEstop(){
+        return maxAngleEstop.get();//Todo: maybe have to flip this.
     }
     
     // Solenoid movement functions

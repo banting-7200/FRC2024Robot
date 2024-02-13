@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -20,9 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.swervedrive.auto.AprilTagAlign;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
-import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import java.util.function.BooleanSupplier;
@@ -45,10 +42,6 @@ public class RobotContainer {
   // CommandJoystick driverController   = new
   // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   static XboxController driverXbox = new XboxController(0);
-
-  LimelightDevice limelight = new LimelightDevice();
-
-  PIDController posPID = new PIDController(0, 0, 0);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -143,21 +136,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    // Todo: impliment rotation, move addition to it's own function
-    // Add the tag pose to the bot pose to get the tag pose in feild position instead of robot
-    // position.
-
-    // Rotation2d f_tr =
-    // drivebase.getPose().getRotation().rotateBy(limelight.getFakeTagPose().getRotation());
-
-    // return drivebase.driveToPose(new Pose2d(limelight.getFakeTagPose().getX(),
-    // limelight.getFakeTagPose().getY(), limelight.getFakeTagPose().getRotation()));
-    // return drivebase.driveToPose(new Pose2d(f_tx, f_ty, f_tr));
-    return new AprilTagAlign(drivebase, limelight);
-  }
-
-  public void pidPosToPose() {
-    // drivebase.drive(limelight.alignWithTag(), /*rotation here */0, false);
+    return drivebase.getAutonomousCommand("New Path", true);
   }
 
   public void setDriveMode() {
@@ -166,9 +145,5 @@ public class RobotContainer {
 
   public void setMotorBrake(boolean brake) {
     drivebase.setMotorBrake(brake);
-  }
-
-  public Pose2d getRobotPose() {
-    return drivebase.getPose();
   }
 }

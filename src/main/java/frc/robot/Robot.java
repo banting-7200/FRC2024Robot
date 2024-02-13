@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.LimelightDevice;
 import java.io.File;
 import java.io.IOException;
 import swervelib.parser.SwerveParser;
@@ -29,8 +28,6 @@ public class Robot extends TimedRobot {
 
   private Timer disabledTimer;
 
-  LimelightDevice limelight = new LimelightDevice();
-
   public Robot() {
     instance = this;
   }
@@ -45,13 +42,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    // Instantiate our RobotContainer. This will perform all our button bindings,
-    // and put our
+    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    // Create a timer to disable motor brake a few seconds after disable. This will
-    // let the robot stop
+    // Create a timer to disable motor brake a few seconds after disable.  This will let the robot
+    // stop
     // immediately when disabled, but then also let it be pushed more
     disabledTimer = new Timer();
   }
@@ -98,17 +94,11 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-    limelight.setMode(0);
   }
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {
-    // m_robotContainer.pidPosToPose();
-
-    // System.out.println("robot pose: " + m_robotContainer.getRobotPose());
-    // limelight.printTagData();
-  }
+  public void autonomousPeriodic() {}
 
   @Override
   public void teleopInit() {

@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   public ShooterSubsystem shooter;
 
-  // private RobotContainer m_robotContainer;
+  // private RobotContainer m_robotContainer; ***
 
   private Timer disabledTimer;
 
@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
     // autonomous chooser on the dashboard.
-    // m_robotContainer = new RobotContainer();
+    // m_robotContainer = new RobotContainer();***
 
     // Create a timer to disable motor brake a few seconds after disable. This will
     // let the robot stop
@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-    // m_robotContainer.setMotorBrake(true);
+    // m_robotContainer.setMotorBrake(true); ***
     disabledTimer.reset();
     disabledTimer.start();
   }
@@ -95,7 +95,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     if (disabledTimer.hasElapsed(Constants.Drivebase.WHEEL_LOCK_TIME)) {
-      // m_robotContainer.setMotorBrake(false);
+      // m_robotContainer.setMotorBrake(false);***
       disabledTimer.stop();
     }
   }
@@ -122,7 +122,9 @@ public class Robot extends TimedRobot {
     so you don't need to put that in. Another thing, you also need to change the Talon motor
      id's under src\main\java\frc\robot\Constants.java (if you're on vscode simply 
      hold on CTRL and click on constants for easy access)if you want to use 
-     two motors (intake and shoot motor).
+     two motors (intake and shoot motor). Also FYI, this code does not allow the robot
+     to drive as those controls have been commented out, to uncomment them simply look for
+     the asterisks and uncomment those lines.
  */    
 
 
@@ -147,8 +149,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    // m_robotContainer.setDriveMode();
-    // m_robotContainer.setMotorBrake(true);
+    // m_robotContainer.setDriveMode();***
+    // m_robotContainer.setMotorBrake(true); ***
   }
 
   /**

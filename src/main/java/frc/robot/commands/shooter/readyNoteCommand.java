@@ -7,13 +7,21 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class readyNoteCommand extends Command {
-    private ShooterSubsystem shooter;
+    public ShooterSubsystem shooter = new ShooterSubsystem(new ArmSubsystem());
     Clock currentTime = Clock.systemDefaultZone();
     long currentMillis;
-    long intakeActivatedMillis;
+    long intakeActivatedMillis = currentTime.millis();
     boolean hasBeenStowed = false;
     long timeHasBeenIn = 0;
     boolean isReadyNextStage = false;
+    int rpm;
+
+    
+    public readyNoteCommand(int rpm) {
+        this.rpm = rpm;
+    }
+
+
 
     @Override
     public void initialize() {
@@ -22,16 +30,9 @@ public class readyNoteCommand extends Command {
 
     @Override
     public void execute() {
-        if (shooter.hasNote() == true) {
-            hasBeenStowed = true;
-            intakeActivatedMillis = currentTime.millis();
-        }
         currentMillis = currentTime.millis();
-        if (hasBeenStowed == true
-                && (intakeActivatedMillis - 10 < currentMillis && currentMillis < intakeActivatedMillis + 10)) {
-            shooter.spinIntakeToRPM(-30);
-            timeHasBeenIn = currentMillis - intakeActivatedMillis;
-        }
+        shooter.spinIntakeToRPM(-rpm);
+        timeHasBeenIn = currentMillis - intakeActivatedMillis;
     }
 
     public boolean isFinished() {

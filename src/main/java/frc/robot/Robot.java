@@ -9,7 +9,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.shooter.intakeCommand;
+import frc.robot.commands.shooter.readyNoteCommand;
 import frc.robot.commands.shooter.shootCommand;
+import frc.robot.subsystems.ShooterSubsystem;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,8 +29,9 @@ public class Robot extends TimedRobot {
 
   private static Robot instance;
   private Command m_autonomousCommand;
+  public ShooterSubsystem shooter;
 
- // private RobotContainer m_robotContainer;
+  // private RobotContainer m_robotContainer;
 
   private Timer disabledTimer;
 
@@ -83,7 +87,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-   // m_robotContainer.setMotorBrake(true);
+    // m_robotContainer.setMotorBrake(true);
     disabledTimer.reset();
     disabledTimer.start();
   }
@@ -91,7 +95,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledPeriodic() {
     if (disabledTimer.hasElapsed(Constants.Drivebase.WHEEL_LOCK_TIME)) {
-      //m_robotContainer.setMotorBrake(false);
+      // m_robotContainer.setMotorBrake(false);
       disabledTimer.stop();
     }
   }
@@ -102,12 +106,26 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    //m_robotContainer.setMotorBrake(true);
+    // m_robotContainer.setMotorBrake(true);
     // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    m_autonomousCommand = new shootCommand(2000);
+    m_autonomousCommand = new intakeCommand(1500);
+    //m_autonomousCommand = new shootCommand(1500);
+    //m_autonomousCommand = new readyNoteCommand(1500);
 
-    // schedule the autonomous command (example)
+/*  The 3 commands above here are what's being run
+    is what's behind the commands that are used to
+    intake the note, ready it, and shoot it, which for now
+    you can set the rpm's that are being used for the motors.
+    As of right now the command for the readyNoteCommand has the rpm
+    already set to negative (as it need to pull the note back to "ready" it) 
+    so you don't need to put that in. Another thing, you also need to change the Talon motor
+     id's under src\main\java\frc\robot\Constants.java (if you're on vscode simply 
+     hold on CTRL and click on constants for easy access)if you want to use 
+     two motors (intake and shoot motor).
+ */    
+
+
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
@@ -129,8 +147,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    //m_robotContainer.setDriveMode();
-    //m_robotContainer.setMotorBrake(true);
+    // m_robotContainer.setDriveMode();
+    // m_robotContainer.setMotorBrake(true);
   }
 
   /**

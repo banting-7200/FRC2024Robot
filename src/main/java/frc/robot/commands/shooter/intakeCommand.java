@@ -1,10 +1,11 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class intakeCommand extends Command {
-    private ShooterSubsystem shooter;
+    public ShooterSubsystem shooter = new ShooterSubsystem(new ArmSubsystem());
     private boolean noteHasEntered = false;
     int rpm;
 

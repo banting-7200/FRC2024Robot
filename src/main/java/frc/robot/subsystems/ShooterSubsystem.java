@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Shooter;
 
 public class ShooterSubsystem extends SubsystemBase {
-    private TalonFX armShooter;
-    private TalonFX armIntake;
+    private TalonFX m_shoot;
+    private TalonFX m_intake;
 
     VelocityVoltage m_velocity = new VelocityVoltage(0);
 
@@ -17,13 +17,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
     private ArmSubsystem arm;
 
-    ShooterSubsystem(ArmSubsystem armClass) {
-        armShooter = new TalonFX(Shooter.shooterID);
-        armIntake = new TalonFX(Shooter.intakeID);
+    public ShooterSubsystem(ArmSubsystem _arm) {
+        m_shoot = new TalonFX(Shooter.shooterID);
+        m_intake = new TalonFX(Shooter.intakeID);
 
         noteSensor = new DigitalInput(Shooter.sensorPin);
 
-        arm = armClass;
+        arm = _arm;
 
         // PID config
         var slot0Configs = new Slot0Configs();
@@ -38,33 +38,33 @@ public class ShooterSubsystem extends SubsystemBase {
         slot1Configs.kI = Shooter.intakeI;// inatke motor Integral
         slot1Configs.kD = Shooter.intakeD;// inatke motor Derivitive
 
-        armShooter.getConfigurator().apply(slot0Configs);// pass shoot motor PID configs to the motor
-        armIntake.getConfigurator().apply(slot1Configs);// pass intake motor PID configs to the motor
+        m_shoot.getConfigurator().apply(slot0Configs);// pass shoot motor PID configs to the motor
+        m_intake.getConfigurator().apply(slot1Configs);// pass intake motor PID configs to the motor
     }
 
     public void spinIntakeToRPM(double targetRPM) {
         if (arm.isTucked() == false) {
             m_velocity.Slot = 1;
-            armIntake.setControl(m_velocity.withVelocity(targetRPM / 60));// convert rpm to rps then apply
+            m_intake.setControl(m_velocity.withVelocity(targetRPM / 60));// convert rpm to rps then apply
         }
     }
 
-    public void spinShooterToRPM(double targetRPM) {
+    public void spinShootToRPM(double targetRPM) {
         if (arm.isTucked() == false) {
             m_velocity.Slot = 0;
-            armShooter.setControl(m_velocity.withVelocity(targetRPM / 60));// convert rpm to rps then apply
+            m_shoot.setControl(m_velocity.withVelocity(targetRPM / 60));// convert rpm to rps then apply
         }
-    }
-
-    public void stopShootMotor() {
-        armShooter.stopMotor();
-    }
-
-    public void stopIntakeMotor() {
-        armIntake.stopMotor();
     }
 
     public boolean hasNote() {
         return !noteSensor.get();// Inverted because the IR sensor returns true when there is no note.
+    }
+
+    public void stopShootMotor() {
+        m_shoot.stopMotor();
+    }
+
+    public void stopIntakeMotor() {
+        m_intake.stopMotor();
     }
 }

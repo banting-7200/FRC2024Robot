@@ -36,11 +36,11 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 2;
   }
 
-   public static final PneumaticHub m_pH = new PneumaticHub(1);
+   public static final PneumaticHub m_pH = new PneumaticHub(3);
 
   public static final class Arm {
-    public static final int leftArmMotorID = 2;// Todo: update to an actual on robot value
-    public static final int rightArmMotorID = 11;// Todo: update to an actual on robot value
+    public static final int leftArmMotorID = 33;// Todo: update to an actual on robot value
+    public static final int rightArmMotorID = 32;// Todo: update to an actual on robot value
     
     public static final int s_Channel = 0;
 
@@ -64,10 +64,20 @@ public final class Constants {
     //Arm movement constants
     //Todo: find the min-max safe ange range to tuck the shooter
     public static final double tuckSafeMin = 10, tuckSafeMax = 32;
-    public static final double armEstopCorrection = 0.5;
 
     public static final double tuckArmAngle = 0;
     public static final double intakeArmAngle = 0;
+    public static final double ampArmAngle = 0;
+
+     public static final int kMeasuredPosHorizontal = 840; // Default position measured when arm is horizontal from example. Todo: find the value for our arm.
+     public static final double maxGravityFF = 0.07;// Todo: Find the best gravity feed forward for our arm
+
+    //Arm angle calculation constants
+    public static final double armToSpeakerHeight = 0;// from the motor axel to speaker(goal - arm height from ground)
+    public static final double armToShooterAngle = 0;
+    public static final double limelightToSpeakerHeight = 0;// from camera lens to speaker(goal - limelight height from ground)
+    public static final double limelightMountAngle = 0;
+    public static final double armToLimelightDistance = 0;
   }
 
   public static final class Drivebase {

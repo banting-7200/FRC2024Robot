@@ -41,22 +41,22 @@ public class ArmSubsystem extends SubsystemBase {
         pidController = rightArmMotor.getPIDController();
         pidController.setFeedbackDevice(rightEncoder);
 
-        setPID(Arm.p, Arm.i, Arm.d, Arm.f, Arm.iz);
+        setPID();
 
         if (RobotBase.isSimulation()) {
             REVPhysicsSim.getInstance().addSparkMax(rightArmMotor, DCMotor.getNEO(1));
         }
     }
 
-    private void setPID(double p, double i, double d, double f, double iz) {
+    private void setPID() {
         int smartMotionSlot = Arm.smartMotionSlot;
 
         // Configure PID
-        pidController.setP(p, smartMotionSlot);
-        pidController.setI(i, smartMotionSlot);
-        pidController.setD(d, smartMotionSlot);
-        pidController.setFF(f, smartMotionSlot);
-        pidController.setIZone(iz, smartMotionSlot);
+        pidController.setP(Arm.p, smartMotionSlot);
+        pidController.setI(Arm.i, smartMotionSlot);
+        pidController.setD(Arm.d, smartMotionSlot);
+        pidController.setFF(Arm.f, smartMotionSlot);
+        pidController.setIZone(Arm.iz, smartMotionSlot);
         pidController.setOutputRange(Arm.pidOutputMin, Arm.pidOutputMax, smartMotionSlot);
 
         // Configure smart motion
@@ -73,18 +73,14 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public double getArbFF() {
-        // Arbirtary feedfoward to account for gravity acting on the arm
-        int kMeasuredPosHorizontal = 840; // Default position measured when arm is horizontal from example. Todo: find
-                                          // the value for our arm.
+        // Arbirtary feedfoward to account for gravity acting on the arm      
         double kTicksPerDegree = 42 / (360 * 200);
         double currentPos = rightEncoder.getPosition();
-        double degrees = (currentPos - kMeasuredPosHorizontal) / kTicksPerDegree;
+        double degrees = (currentPos - Arm.kMeasuredPosHorizontal) / kTicksPerDegree;
         double radians = java.lang.Math.toRadians(degrees);
         double cosineScalar = java.lang.Math.cos(radians);
 
-        double maxGravityFF = 0.07;// Todo: Find the best gravity feed forward for our arm
-
-        return maxGravityFF * cosineScalar;
+        return Arm.maxGravityFF * cosineScalar;
     }
 
     double degreesToRotations(double degrees) {

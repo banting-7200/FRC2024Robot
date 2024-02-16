@@ -3,12 +3,11 @@ package frc.robot.commands.shooter;
 import java.time.Clock;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class shootCommand extends Command {
 
-    public ShooterSubsystem shooter = new ShooterSubsystem(new ArmSubsystem());
+    public ShooterSubsystem shooter;
     private boolean hasNotBeenDetected = false;
     Clock currentTime = Clock.systemDefaultZone();
     long startedMillis = currentTime.millis();
@@ -16,9 +15,11 @@ public class shootCommand extends Command {
     long sinceNoteLeft;
     int rpm;
 
-    public shootCommand(int rpm) {
+    public shootCommand(int rpm, ShooterSubsystem shooter) {
         this.rpm = rpm;
+        this.shooter = shooter;
     }
+
 
     @Override
     public void initialize() {
@@ -32,11 +33,12 @@ public class shootCommand extends Command {
         shooter.spinShootToRPM(rpm);
         if(shooter.hasNote() == true){
             sinceNoteLeft = currentTime.millis();
+            System.out.println("Note still inside");
         }
     }
 
     public boolean isFinished() {
-        return shooter.hasNote() == false && currentMillis - sinceNoteLeft > 5000;
+        return shooter.hasNote() == false && currentMillis - sinceNoteLeft > 3000;
     }
 
     @Override

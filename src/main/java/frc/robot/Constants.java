@@ -35,8 +35,8 @@ public final class Constants
 
   public static final class Shooter
   {
-      public static final int shooterID = 1;
-      public static final int intakeID = 0;
+      public static final int shooterID = 0;
+      public static final int intakeID = 1;
       public static final int sensorPin = 0;
       
       // Default PID values to be tuned later

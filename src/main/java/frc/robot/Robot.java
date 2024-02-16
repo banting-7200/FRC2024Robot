@@ -7,11 +7,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.commands.shooter.intakeCommand;
 import frc.robot.commands.shooter.readyNoteCommand;
 import frc.robot.commands.shooter.shootCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 import java.io.File;
@@ -29,9 +32,11 @@ public class Robot extends TimedRobot {
 
   private static Robot instance;
   private Command m_autonomousCommand;
-  public ShooterSubsystem shooter;
+  private Command shooterCommand;
+  public ShooterSubsystem shooter = new ShooterSubsystem(new ArmSubsystem());
 
   // private RobotContainer m_robotContainer; ***
+  XboxController driverXbox = new XboxController(0);
 
   private Timer disabledTimer;
 
@@ -109,24 +114,26 @@ public class Robot extends TimedRobot {
     // m_robotContainer.setMotorBrake(true);
     // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    m_autonomousCommand = new intakeCommand(1500);
-    //m_autonomousCommand = new shootCommand(1500);
-    //m_autonomousCommand = new readyNoteCommand(1500);
+    // m_autonomousCommand = new shootCommand(1500);
+    // m_autonomousCommand = new readyNoteCommand(1500);
 
-/*  The 3 commands above here are what's being run
-    is what's behind the commands that are used to
-    intake the note, ready it, and shoot it, which for now
-    you can set the rpm's that are being used for the motors.
-    As of right now the command for the readyNoteCommand has the rpm
-    already set to negative (as it need to pull the note back to "ready" it) 
-    so you don't need to put that in. Another thing, you also need to change the Talon motor
-     id's under src\main\java\frc\robot\Constants.java (if you're on vscode simply 
-     hold on CTRL and click on constants for easy access)if you want to use 
-     two motors (intake and shoot motor). Also FYI, this code does not allow the robot
-     to drive as those controls have been commented out, to uncomment them simply look for
-     the asterisks and uncomment those lines.
- */    
-
+    /*
+     * The 3 commands above here are what's being run
+     * is what's behind the commands that are used to
+     * intake the note, ready it, and shoot it, which for now
+     * you can set the rpm's that are being used for the motors.
+     * As of right now the command for the readyNoteCommand has the rpm
+     * already set to negative (as it need to pull the note back to "ready" it)
+     * so you don't need to put that in. Another thing, you also need to change the
+     * Talon motor
+     * id's under src\main\java\frc\robot\Constants.java (if you're on vscode simply
+     * hold on CTRL and click on constants for easy access)if you want to use
+     * two motors (intake and shoot motor). Also FYI, this code does not allow the
+     * robot
+     * to drive as those controls have been commented out, to uncomment them simply
+     * look for
+     * the asterisks and uncomment those lines.
+     */
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -142,13 +149,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
     // m_robotContainer.setDriveMode();***
     // m_robotContainer.setMotorBrake(true); ***
   }
@@ -157,7 +164,33 @@ public class Robot extends TimedRobot {
    * This function is called periodically during operator control.
    */
   @Override
-  public void teleopPeriodic() {
+  public void teleopPeriodic() { //Controller inputs to create and automate commands
+    if (driverXbox.getAButtonReleased() == true) {
+      System.out.println("A Button Pressed");
+      shooterCommand = new intakeCommand(1500, shooter);
+      shooterCommand.schedule();
+
+    }
+
+    if (driverXbox.getBButtonReleased() == true) {
+      System.out.println("B Button Pressed");
+      shooterCommand = new readyNoteCommand(1500, shooter);
+      shooterCommand.schedule();
+
+    }
+
+    if (driverXbox.getXButtonReleased() == true) {
+      System.out.println("X Button Pressed");
+      shooterCommand = new shootCommand(2000, shooter);
+      shooterCommand.schedule();
+
+    }
+    if (driverXbox.getYButtonReleased() == true) {
+      System.out.println("Y Button Pressed");
+      shooterCommand = new intakeCommand(1500, shooter).andThen(new readyNoteCommand(1500, shooter))
+          .andThen(new shootCommand(6000, shooter));
+      shooterCommand.schedule();
+    }
   }
 
   @Override

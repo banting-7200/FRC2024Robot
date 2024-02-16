@@ -3,11 +3,10 @@ package frc.robot.commands.shooter;
 import java.time.Clock;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class readyNoteCommand extends Command {
-    public ShooterSubsystem shooter = new ShooterSubsystem(new ArmSubsystem());
+    public ShooterSubsystem shooter;
     Clock currentTime = Clock.systemDefaultZone();
     long currentMillis;
     long intakeActivatedMillis = currentTime.millis();
@@ -17,14 +16,17 @@ public class readyNoteCommand extends Command {
     int rpm;
 
     
-    public readyNoteCommand(int rpm) {
+    public readyNoteCommand(int rpm, ShooterSubsystem shooter) {
         this.rpm = rpm;
+        this.shooter = shooter;
     }
+
 
 
 
     @Override
     public void initialize() {
+        System.out.println("Time at ready note was activated! " + intakeActivatedMillis);
 
     }
 
@@ -42,6 +44,7 @@ public class readyNoteCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         shooter.stopIntakeMotor();
+        System.out.println("Ready Note Command ShutDown");
     }
 
 }

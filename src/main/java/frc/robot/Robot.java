@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.LimelightDevice;
+import frc.robot.subsystems.ShuffleboardSubsystem;
 import java.io.File;
 import java.io.IOException;
 import swervelib.parser.SwerveParser;
@@ -28,6 +29,7 @@ public class Robot extends TimedRobot {
   private RobotContainer m_robotContainer;
 
   private Timer disabledTimer;
+  ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
 
   LimelightDevice limelight = new LimelightDevice();
 
@@ -99,7 +101,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }
     limelight.setMode(0);
-  }
+      }
 
   /** This function is called periodically during autonomous. */
   @Override

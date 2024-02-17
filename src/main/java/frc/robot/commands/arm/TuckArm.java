@@ -17,6 +17,8 @@ public class TuckArm extends Command {
 
     @Override
     public void initialize() {
+        arm.disableBrake();
+        System.out.println("Tuck Arm");
         if (arm.getEncoderPosition() >= Arm.tuckSafeMin && arm.getEncoderPosition() <= Arm.tuckSafeMax) {
             safeToTuck = true;
         }
@@ -43,6 +45,7 @@ public class TuckArm extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        arm.enableBrake();
         arm.stopArm();
     }
 }

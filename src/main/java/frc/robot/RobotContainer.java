@@ -144,11 +144,15 @@ public class RobotContainer {
     // // InstantCommand(drivebase::lock, drivebase)));
    
     //Arm bindings with temp buttons
-    new JoystickButton((driverXbox), 0).onTrue(new TuckArm(arm));// Tuck arm
-    new JoystickButton((driverXbox), 1).onTrue(new UntuckArm(arm));// Untuck arm
-    new JoystickButton((driverXbox), 2).onTrue(new MoveArmToPosition(arm, Arm.intakeArmAngle));//Move to intake position
-    new JoystickButton((driverXbox), 3).onTrue(new MoveArmToPosition(arm, Arm.ampArmAngle));//Move to amp position
-    new JoystickButton((driverXbox), 4).onTrue(new MoveArmToPosition(arm, limelight.calculateArmShootAngle()));//Move to shoot position
+   // new JoystickButton(driverXbox, 1).onTrue(new InstantCommand(() -> System.out.println("Hit A")));/*new TuckArm(arm));*/// Tuck arm
+    //new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue(new InstantCommand(() -> new UntuckArm(arm)));// Untuck arm
+    new JoystickButton(driverXbox,  XboxController.Button.kX.value).onTrue(new MoveArmToPosition(arm, 0));//Move to intake position
+    //new JoystickButton(driverXbox, XboxController.Button.kY.value).onTrue(new MoveArmToPosition(arm, Arm.ampArmAngle));//Move to amp position
+    //new JoystickButton(driverXbox, XboxController.Button.kA.value).onTrue(new MoveArmToPosition(arm, limelight.calculateArmShootAngle()));//Move to shoot position
+    //new JoystickButton(driverXbox, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> arm.deployShooter()))
+    new JoystickButton(driverXbox, XboxController.Button.kA.value).onTrue(Commands.runOnce(() -> arm.tuckShooter()));
+    new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue(Commands.runOnce(() -> arm.toggleShooterState()));
+    //new JoystickButton(driverXbox, XboxController.Button.kY.value).onTrue(Commands.runOnce(() -> arm.disableBrake()));*/
   }
 
   /**

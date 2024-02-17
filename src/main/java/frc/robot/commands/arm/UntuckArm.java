@@ -17,11 +17,13 @@ public class UntuckArm extends Command {
 
     @Override
     public void initialize() {
+        System.out.println("Untuck Arm");
         if (!arm.isTucked()) {
             reachedSetpoint = true;
         } else if (arm.getEncoderPosition() >= Arm.tuckSafeMin && arm.getEncoderPosition() <= Arm.tuckSafeMax) {
             safeToUntuck = true;
         }
+        arm.disableBrake();
     }
 
     @Override
@@ -44,6 +46,7 @@ public class UntuckArm extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        arm.enableBrake();
         arm.stopArm();
     }
 }

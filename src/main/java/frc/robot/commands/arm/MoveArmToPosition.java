@@ -11,7 +11,7 @@ public class MoveArmToPosition extends Command {
 
     private double angleSetpoint;
 
-    public MoveArmToPosition(ArmSubsystem arm, int angleSetpoint) {
+    public MoveArmToPosition(ArmSubsystem arm, double angleSetpoint) {
         this.arm = arm;
         this.angleSetpoint = angleSetpoint;
 
@@ -26,6 +26,8 @@ public class MoveArmToPosition extends Command {
          * }
          */
         // supplier assignment goes here
+        arm.disableBrake();
+        System.out.println("Move Arm To Position");
     }
 
     @Override
@@ -38,11 +40,13 @@ public class MoveArmToPosition extends Command {
 
     @Override
     public boolean isFinished() {
+        System.out.println("At Setpoint");
         return reachedSetpoint;
     }
 
     @Override
     public void end(boolean interrupted) {
+        arm.enableBrake();
         arm.stopArm();
     }
 }

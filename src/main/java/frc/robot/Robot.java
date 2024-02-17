@@ -9,11 +9,12 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.arm.MoveArmToIntake;
-import frc.robot.commands.arm.MoveArmToTuck;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.commands.arm.MoveArmToPosition;
+import frc.robot.commands.arm.TuckArm;
+import frc.robot.commands.arm.UntuckArm;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,11 +31,11 @@ public class Robot extends TimedRobot
   private static Robot   instance;
   private        Command m_autonomousCommand;
 
-  //private RobotContainer m_robotContainer;
+  private RobotContainer m_robotContainer;
 
   private Timer disabledTimer;
 
-  private ArmSubsystem arm = new ArmSubsystem();
+  //private ArmSubsystem arm = new ArmSubsystem();
 
   public Robot()
   {
@@ -54,7 +55,9 @@ public class Robot extends TimedRobot
   {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    //m_robotContainer = new RobotContainer();
+    m_robotContainer = new RobotContainer();
+    m_robotContainer.arm.disableBrake();
+    //m_robotCon
 
     // Create a timer to disable motor brake a few seconds after disable.  This will let the robot stop
     // immediately when disabled, but then also let it be pushed more 
@@ -76,6 +79,7 @@ public class Robot extends TimedRobot
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    m_robotContainer.arm.getLimitSwitch();
   }
 
   /**
@@ -87,6 +91,8 @@ public class Robot extends TimedRobot
     //m_robotContainer.setMotorBrake(true);
     disabledTimer.reset();
     disabledTimer.start();
+    m_robotContainer.arm.enableBrake();
+    m_robotContainer.arm.stopArm();
   }
 
   @Override
@@ -107,7 +113,7 @@ public class Robot extends TimedRobot
   {
     //m_robotContainer.setMotorBrake(true);
     //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    m_autonomousCommand = new MoveArmToIntake(arm);
+    //m_autonomousCommand = new UntuckArm(arm).andThen(new MoveArmToPosition(arm, 26)).andThen(new TuckArm(arm));
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null)
@@ -122,7 +128,7 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousPeriodic()
   {
-    SmartDashboard.putNumber("motor angle", arm.getEncoderPosition());
+    //SmartDashboard.putNumber("motor angle", arm.getEncoderPosition());
   }
 
   @Override
@@ -138,7 +144,7 @@ public class Robot extends TimedRobot
     }
    // m_robotContainer.setDriveMode();
    // m_robotContainer.setMotorBrake(true);
-    
+    //m_robotContainer.arm.setPID();
   }
 
   /**

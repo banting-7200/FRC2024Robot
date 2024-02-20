@@ -13,9 +13,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.commands.arm.MoveArmToPosition;
 import frc.robot.commands.arm.TuckArm;
 import frc.robot.commands.arm.UntuckArm;
+import frc.robot.commands.shooter.intakeCommand;
+import frc.robot.commands.shooter.readyNoteCommand;
+import frc.robot.commands.shooter.shootCommand;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,11 +35,12 @@ import swervelib.parser.SwerveParser;
 public class Robot extends TimedRobot {
 
   private static Robot instance;
+   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
   private Command shooterCommand;
   public ShooterSubsystem shooter = new ShooterSubsystem(new ArmSubsystem());
 
-  // private RobotContainer m_robotContainer; ***
+  // private RobotContainer m_robotContainer;
   XboxController driverXbox = new XboxController(0);
 
   private Timer disabledTimer;
@@ -63,7 +68,6 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     m_robotContainer.arm.disableBrake();
-    //m_robotCon
 
     // Create a timer to disable motor brake a few seconds after disable. This will
     // let the robot stop
@@ -185,11 +189,11 @@ public class Robot extends TimedRobot {
    * This function is called periodically during operator control.
    */
   @Override
-  public void teleopPeriodic()
+  public void teleopPeriodic()//Controller inputs to create and automate commands
   {
     //arm.moveToAngle(10);
     //arm.toggleShooterState();
-  public void teleopPeriodic() { //Controller inputs to create and automate commands
+
     if (driverXbox.getAButtonReleased() == true) {
       System.out.println("A Button Pressed");
       shooterCommand = new intakeCommand(1500, shooter);

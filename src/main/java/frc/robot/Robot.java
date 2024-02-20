@@ -21,6 +21,8 @@ import frc.robot.commands.shooter.intakeCommand;
 import frc.robot.commands.shooter.readyNoteCommand;
 import frc.robot.commands.shooter.shootCommand;
 
+import frc.robot.subsystems.LimelightDevice;
+import frc.robot.subsystems.ShuffleboardSubsystem;
 import java.io.File;
 import java.io.IOException;
 import swervelib.parser.SwerveParser;
@@ -44,6 +46,9 @@ public class Robot extends TimedRobot {
   XboxController driverXbox = new XboxController(0);
 
   private Timer disabledTimer;
+  ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
+
+  LimelightDevice limelight = new LimelightDevice();
 
   //private ArmSubsystem arm = new ArmSubsystem();
 
@@ -62,6 +67,9 @@ public class Robot extends TimedRobot {
    * for any initialization code.
    */
   @Override
+  public void robotInit() {
+    // Instantiate our RobotContainer. This will perform all our button bindings,
+    // and put our
   public void robotInit() {
     // Instantiate our RobotContainer. This will perform all our button bindings,
     // and put our
@@ -98,9 +106,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.arm.getLimitSwitch();
   }
 
-  /**
-   * This function is called once each time the robot enters Disabled mode.
-   */
+  /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit()
   {
@@ -156,11 +162,10 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-  }
+    limelight.setMode(0);
+      }
 
-  /**
-   * This function is called periodically during autonomous.
-   */
+  /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic()
   {
@@ -176,8 +181,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null)
-    {
+    if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
    // m_robotContainer.setDriveMode();
@@ -185,9 +189,7 @@ public class Robot extends TimedRobot {
     //m_robotContainer.arm.setPID();
   }
 
-  /**
-   * This function is called periodically during operator control.
-   */
+  /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic()//Controller inputs to create and automate commands
   {
@@ -233,23 +235,17 @@ public class Robot extends TimedRobot {
     }
   }
 
-  /**
-   * This function is called periodically during test mode.
-   */
+  /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
   }
 
-  /**
-   * This function is called once when the robot is first started up.
-   */
+  /** This function is called once when the robot is first started up. */
   @Override
   public void simulationInit() {
   }
 
-  /**
-   * This function is called periodically whilst in simulation.
-   */
+  /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {
   }

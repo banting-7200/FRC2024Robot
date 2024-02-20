@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -28,6 +29,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
+import java.util.function.BooleanSupplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -60,7 +62,6 @@ public class RobotContainer {
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  public RobotContainer() {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
@@ -169,6 +170,11 @@ public class RobotContainer {
     //new JoystickButton(driverXbox, XboxController.Button.kY.value).onTrue(Commands.runOnce(() -> arm.disableBrake()));*/
   }
 
+  public static final BooleanSupplier creepBoolean =
+      () -> {
+        return driverXbox.getLeftTriggerAxis() > 0.5;
+      };
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -186,5 +192,9 @@ public class RobotContainer {
 
   public void setMotorBrake(boolean brake) {
     // drivebase.setMotorBrake(brake);
+  }
+
+  public Pose2d getRobotPose() {
+    return drivebase.getPose();
   }
 }

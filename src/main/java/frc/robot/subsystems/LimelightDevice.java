@@ -13,7 +13,8 @@ public class LimelightDevice extends SubsystemBase {
   public int mode;
 
   public LimelightDevice() { // initializes device
-    mainTable = NetworkTableInstance.getDefault().getTable("limelight"); // gets the network table with key
+    mainTable =
+        NetworkTableInstance.getDefault().getTable("limelight"); // gets the network table with key
     // "limelight"
     mode = 0;
 
@@ -64,10 +65,12 @@ public class LimelightDevice extends SubsystemBase {
     double angleToGoalDegrees = Arm.limelightMountAngle + getTagY();
     double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
 
-    double distanceFromLimelightToGoal = Arm.limelightToSpeakerHeight / Math.tan(angleToGoalRadians);
+    double distanceFromLimelightToGoal =
+        Arm.limelightToSpeakerHeight / Math.tan(angleToGoalRadians);
     double distanceFromArmToGoal = distanceFromLimelightToGoal + Arm.armToLimelightDistance;
 
-    return (Math.atan2(Arm.armToSpeakerHeight, distanceFromArmToGoal) + Arm.armToShooterAngle) * (180.0 / 3.14159);
+    return (Math.atan2(Arm.armToSpeakerHeight, distanceFromArmToGoal) + Arm.armToShooterAngle)
+        * (180.0 / 3.14159);
   }
 
   public void putTagData() { // publishes tag data to SmartDashboard
@@ -85,7 +88,8 @@ public class LimelightDevice extends SubsystemBase {
     SmartDashboard.putNumber("AprilTag ID", tid);
   }
 
-  public boolean noteDetected() { // posts limelight note pipelinedata to SmartDashboard & returns true if note
+  public boolean
+      noteDetected() { // posts limelight note pipelinedata to SmartDashboard & returns true if note
     // is
     // detected
     double ntarget = mainTable.getEntry("tv").getDouble(0); // may have to be double then converted

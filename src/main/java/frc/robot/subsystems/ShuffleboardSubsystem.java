@@ -29,8 +29,7 @@ public class ShuffleboardSubsystem {
   List<GenericEntry> entries = new ArrayList<GenericEntry>();
   private static ShuffleboardSubsystem instance = null;
 
-  private ShuffleboardSubsystem() {
-  }
+  private ShuffleboardSubsystem() {}
 
   public static synchronized ShuffleboardSubsystem getInstance() {
     if (instance == null) {
@@ -51,7 +50,8 @@ public class ShuffleboardSubsystem {
     layout = tab.getLayout(layoutName, "List Layout").withSize(x, y);
   }
 
-  public void setNumber(String name, double value) { // creates or sets a double on the shuffleboard.
+  public void setNumber(
+      String name, double value) { // creates or sets a double on the shuffleboard.
     GenericEntry entry;
     int index = entryNames.indexOf(name);
     if (index == -1) {
@@ -67,8 +67,9 @@ public class ShuffleboardSubsystem {
     }
   }
 
-  public void setNumber(String name, double value, BuiltInWidgets type) { // creates or sets a double on the
-                                                                          // shuffleboard with a specific widget.
+  public void setNumber(
+      String name, double value, BuiltInWidgets type) { // creates or sets a double on the
+    // shuffleboard with a specific widget.
     GenericEntry entry;
     int index = entryNames.indexOf(name);
     if (index == -1) {
@@ -84,7 +85,8 @@ public class ShuffleboardSubsystem {
     }
   }
 
-  public void setBoolean(String name, boolean value) { // creates or sets a boolean on the shuffleboard.
+  public void setBoolean(
+      String name, boolean value) { // creates or sets a boolean on the shuffleboard.
     GenericEntry entry;
     int index = entryNames.indexOf(name);
     if (index == -1) {
@@ -120,15 +122,24 @@ public class ShuffleboardSubsystem {
     }
   }
 
-  public void setSwerve(String name, double speed, double direction) { // create a named list layout of swerve motor and
-                                                                       // direction values.
+  public void setSwerve(
+      String name,
+      double speed,
+      double direction) { // create a named list layout of swerve motor and
+    // direction values.
     setLayout(name, 2, 2);
     setNumber(name + " Speed", speed, BuiltInWidgets.kDial);
     setNumber(name + " Direction", direction, BuiltInWidgets.kGyro);
   }
 
-  public void setPID(String name, double p, double i, double d, double f, double iz) { // create a named list layout of
-                                                                                       // PID values.
+  public void setPID(
+      String name,
+      double p,
+      double i,
+      double d,
+      double f,
+      double iz) { // create a named list layout of
+    // PID values.
     setTab("PID");
     setLayout(name, 1, 4);
     setNumber(name + " P", p);
@@ -146,7 +157,7 @@ public class ShuffleboardSubsystem {
     double d = getNumber(name + " D");
     double f = getNumber(name + " F");
     double iz = getNumber(name + " IZ");
-    return new double[] { p, i, d, f, iz };
+    return new double[] {p, i, d, f, iz};
   }
 
   public void newCommandButton(

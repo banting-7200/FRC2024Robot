@@ -53,7 +53,7 @@ public class RobotContainer {
   // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   // CommandJoystick driverController = new
   // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
-  XboxController driverXbox = new XboxController(0);
+  static XboxController driverXbox = new XboxController(0);
   
   //Subsystem Declaration
   ArmSubsystem arm = new ArmSubsystem();
@@ -194,7 +194,7 @@ public class RobotContainer {
     // drivebase.setMotorBrake(brake);
   }
 
-  public Pose2d getRobotPose() {
+  /*public Pose2d getRobotPose() {
     return drivebase.getPose();
-  }
+  }*/
 }

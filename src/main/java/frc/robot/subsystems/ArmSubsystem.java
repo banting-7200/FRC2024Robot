@@ -27,10 +27,15 @@ public class ArmSubsystem extends SubsystemBase {
 
     DoubleSolenoidActions shooterSolenoidActions = new DoubleSolenoidActions(Constants.m_pH.makeDoubleSolenoid(Arm.sForward_Channel, Arm.sReverse_Channel));
     SolenoidActions brakeSolenoidActions = new SolenoidActions(Constants.m_pH.makeSolenoid(Arm.b_Channel));
+    DoubleSolenoidActions hookSolenoidActions = new DoubleSolenoidActions(Constants.m_pH.makeDoubleSolenoid(Arm.hForward_Channel, Arm.hReverse_Channel));
+
+    ShuffleboardSubsystem shuffleboard;
 
     public ArmSubsystem() {
         leftArmMotor = new CANSparkMax(Arm.leftArmMotorID, MotorType.kBrushless);
         rightArmMotor = new CANSparkMax(Arm.rightArmMotorID, MotorType.kBrushless);
+
+        shuffleboard = ShuffleboardSubsystem.getInstance();
 
         leftArmMotor.restoreFactoryDefaults();
         rightArmMotor.restoreFactoryDefaults();
@@ -57,7 +62,7 @@ public class ArmSubsystem extends SubsystemBase {
     private void setPID() {
         int smartMotionSlot = Arm.smartMotionSlot;
 
-        ShuffleboardTab tab = Shuffleboard.getTab("PID Tuning");
+       /*ShuffleboardTab tab = Shuffleboard.getTab("PID Tuning");
         GenericEntry pinput = tab.add("P", Arm.p).withPosition(0, 0).getEntry();
         GenericEntry iinput = tab.add("I", Arm.i).withPosition(0, 1).getEntry();
         GenericEntry dinput = tab.add("D", Arm.d).withPosition(0, 2).getEntry();
@@ -73,25 +78,25 @@ public class ArmSubsystem extends SubsystemBase {
         double pidMinval = minPIDinput.getDouble(0);
         double pidMaxval = maxPIDinput.getDouble(0);
         GenericEntry maxVelocityinput = tab.add("maxMotorVelocity", Arm.maxMotorVelocity).withPosition(1, 2).getEntry();
-        GenericEntry maxMotorAccel = tab.add("maxMotorAccel", Arm.maxMotorAccel).withPosition(1, 3).getEntry(); 
+        GenericEntry maxMotorAccel = tab.add("maxMotorAccel", Arm.maxMotorAccel).withPosition(1, 3).getEntry();
         GenericEntry allowedPIDError = tab.add("allowedPIDError", Arm.allowedPIDError).withPosition(1, 4).getEntry();
         double maxVelocityinputval = maxVelocityinput.getDouble(0);
         double maxMotorAccelval = maxMotorAccel.getDouble(0);
-        double allowedPIDErrorval = allowedPIDError.getDouble(0);
+        double allowedPIDErrorval = allowedPIDError.getDouble(0);*/
 
         // Configure PID
-        pidController.setP(pval, smartMotionSlot);
-        pidController.setI(ival, smartMotionSlot);
-        pidController.setD(dval, smartMotionSlot);
-        pidController.setFF(fval, smartMotionSlot);
-        pidController.setIZone(izval, smartMotionSlot);
-        pidController.setOutputRange(pidMinval, pidMaxval, smartMotionSlot);
+        pidController.setP(Arm.p, smartMotionSlot);
+        pidController.setI(Arm.i, smartMotionSlot);
+        pidController.setD(Arm.d, smartMotionSlot);
+        pidController.setFF(Arm.f, smartMotionSlot);
+        pidController.setIZone(Arm.iz, smartMotionSlot);
+        pidController.setOutputRange(Arm.pidOutputMax, Arm.pidOutputMax, smartMotionSlot);
 
         // Configure smart motion
-        pidController.setSmartMotionMaxVelocity(maxVelocityinputval, smartMotionSlot);
+        pidController.setSmartMotionMaxVelocity(Arm.maxMotorVelocity, smartMotionSlot);
         pidController.setSmartMotionMinOutputVelocity(Arm.minMotorVelocity, smartMotionSlot);
-        pidController.setSmartMotionMaxAccel(maxMotorAccelval, smartMotionSlot);
-        pidController.setSmartMotionAllowedClosedLoopError(allowedPIDErrorval, smartMotionSlot);
+        pidController.setSmartMotionMaxAccel(Arm.maxMotorAccel, smartMotionSlot);
+        pidController.setSmartMotionAllowedClosedLoopError(Arm.allowedPIDError, smartMotionSlot);
     }
 
     public boolean moveToAngle(double angle) {
@@ -115,9 +120,9 @@ public class ArmSubsystem extends SubsystemBase {
         return degrees * 400;
     }
 
-    //Todo: This whole thing
-    public void getLimitSwitch(){
-        System.out.println("Limit switch foward: " + rightArmMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed() + ", Limit switch reverse: " + rightArmMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed());//Change type
+    public void getLimitSwitch() {
+        System.out.println("Limit switch foward: " + rightArmMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed()
+                + ", Limit switch reverse: " + rightArmMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed());// Change type
     }
 
     public void stopArm() {
@@ -129,6 +134,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     // Solenoid movement functions
+    
+    // Shooter
     public void tuckShooter() {
         shooterSolenoidActions.setReverse();
         System.out.println("Shooter tucked");
@@ -144,7 +151,7 @@ public class ArmSubsystem extends SubsystemBase {
         System.out.println("Shooter toggled");
     }
 
-    public void disableShooterSolenoids(){
+    public void disableShooterSolenoids() {
         shooterSolenoidActions.setOff();
         System.out.println("Shooter solenoids disabled");
     }
@@ -153,11 +160,33 @@ public class ArmSubsystem extends SubsystemBase {
         return !shooterSolenoidActions.getState();
     }
 
-    public void enableBrake(){
+    // Hook
+    public void deployHook() {
+        hookSolenoidActions.setForward();
+        System.out.println("Hook Deployed");
+    }
+
+    public void stowHook() {
+        hookSolenoidActions.setReverse();
+        System.out.println("Hook Stowed");
+    }
+
+    public void toggleHook(){
+        hookSolenoidActions.toggle();
+        System.out.println("Hook Toggled");
+    }
+
+    public void disableHookSolenoids(){
+        hookSolenoidActions.setOff();
+         System.out.println("Hook disabled");
+    }
+
+    // Brake
+    public void enableBrake() {
         brakeSolenoidActions.setOff();
     }
 
-     public void disableBrake(){
+    public void disableBrake() {
         brakeSolenoidActions.setOn();
     }
 

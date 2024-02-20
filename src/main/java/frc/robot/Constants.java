@@ -36,7 +36,6 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 2;
   }
 
-<<<<<<< HEAD
    public static final PneumaticHub m_pH = new PneumaticHub(3);
 
   public static final class Arm {
@@ -45,6 +44,8 @@ public final class Constants {
     
     public static final int sForward_Channel = 0;
     public static final int sReverse_Channel = 15;
+    public static final int hForward_Channel = 1;//Todo: update these values
+    public static final int hReverse_Channel = 14;//Todo: update these values
     public static final int b_Channel = 2;
 
     // default arm pids
@@ -82,9 +83,6 @@ public final class Constants {
     public static final double limelightMountAngle = 31;
     public static final double armToLimelightDistance = 0.04;
   }
-
-  public static final class Drivebase {
-=======
   public static final class Shooter
   {
       public static final int shooterID = 0;
@@ -104,9 +102,8 @@ public final class Constants {
       public static final double intakeD = 0.0001;
   }
 
-  public static final class Drivebase
-  {
->>>>>>> Shooter-Tuning
+
+  public static final class Drivebase {
 
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds

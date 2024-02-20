@@ -36,6 +36,7 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 2;
   }
 
+<<<<<<< HEAD
    public static final PneumaticHub m_pH = new PneumaticHub(3);
 
   public static final class Arm {
@@ -83,6 +84,29 @@ public final class Constants {
   }
 
   public static final class Drivebase {
+=======
+  public static final class Shooter
+  {
+      public static final int shooterID = 0;
+      public static final int intakeID = 1;
+      public static final int sensorPin = 0;
+      
+      // Default PID values to be tuned later
+      public static final double shooterF = 0.13;
+      public static final double shooterP = 0.11;
+      public static final double shooterI = 0;
+      public static final double shooterD = 0;
+      
+      // Default PID values to be tuned later
+      public static final double intakeF = 0.12;
+      public static final double intakeP = 0.11;
+      public static final double intakeI = 0.5;
+      public static final double intakeD = 0.0001;
+  }
+
+  public static final class Drivebase
+  {
+>>>>>>> Shooter-Tuning
 
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds

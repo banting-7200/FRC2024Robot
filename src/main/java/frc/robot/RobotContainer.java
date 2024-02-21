@@ -5,12 +5,17 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.arm.MoveArmToPosition;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightDevice;
+import frc.robot.subsystems.ShuffleboardSubsystem;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,6 +42,7 @@ public class RobotContainer {
   // Subsystem Declaration
   ArmSubsystem arm = new ArmSubsystem();
   LimelightDevice limelight = new LimelightDevice();
+  private static ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -92,6 +98,10 @@ public class RobotContainer {
      * !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle :
      * driveFieldOrientedDirectAngleSim);
      */
+
+    shuffle.setTab("arm");
+    // shuffle.setLayout("arm", 1, 4);
+    shuffle.setNumber("arm angle", 0);
   }
 
   /**
@@ -109,6 +119,13 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
+  public static final DoubleSupplier shuffleboardAngle =
+      () -> {
+        return shuffle.getNumber("arm angle");
+      };
+
+  DoubleSupplier d;
+
   private void configureBindings() {
     // // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
@@ -126,38 +143,31 @@ public class RobotContainer {
     // // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new
     // // InstantCommand(drivebase::lock, drivebase)));
 
-    // Arm bindings with temp buttons
-    // new JoystickButton(driverXbox, 1).onTrue(new InstantCommand(() ->
-    // System.out.println("Hit
-    // A")));/*new TuckArm(arm));*/// Tuck arm
-    // new JoystickButton(driverXbox, XboxController.Button.kB.value).onTrue(new
-    // InstantCommand(()
-    // -> new UntuckArm(arm)));// Untuck arm
-    //    new JoystickButton(driverXbox, XboxController.Button.kX.value)
-    //        .onTrue(new MoveArmToPosition(arm, 0)); // Move to intake position
-    // new JoystickButton(driverXbox, XboxController.Button.kY.value).onTrue(new
-    // MoveArmToPosition(arm, Arm.ampArmAngle));//Move to amp position
-    // new JoystickButton(driverXbox, XboxController.Button.kA.value).onTrue(new
-    // MoveArmToPosition(arm, limelight.calculateArmShootAngle()));//Move to shoot
-    // position
-    // new JoystickButton(driverXbox,
-    // XboxController.Button.kA.value).onTrue(Commands.runOnce(() ->
-    // arm.deployShooter()))
-    //    new JoystickButton(driverXbox, XboxController.Button.kA.value)
-    //       .onTrue(Commands.runOnce(() -> arm.tuckShooter()));
-    //    new JoystickButton(driverXbox, XboxController.Button.kB.value)
-    //        .onTrue(Commands.runOnce(() -> arm.toggleShooterState()));
-    //    new JoystickButton(driverXbox, XboxController.Button.kY.value)
-    //        .onTrue(Commands.runOnce(() -> arm.toggleHook()));
-    // new JoystickButton(driverXbox,
-    // XboxController.Button.kY.value).onTrue(Commands.runOnce(() ->
-    // arm.disableBrake()));*/
+    /*Trigger t = new Trigger(creepBoolean);
+    t.onTrue(new InstantCommand(() -> drivebase.setDriveSpeeds(true)))
+        .onFalse(new InstantCommand(() -> drivebase.setDriveSpeeds(false)));*/
+    new JoystickButton(driverXbox, XboxController.Button.kX.value)
+        .onTrue(
+            new MoveArmToPosition(
+                arm, shuffleboardAngle)); // Move to position outlined on shuffleboard position
+
+    new JoystickButton(driverXbox, XboxController.Button.kA.value)
+        .onTrue(Commands.runOnce(() -> arm.tuckShooter()));
+    new JoystickButton(driverXbox, XboxController.Button.kB.value)
+        .onTrue(Commands.runOnce(() -> arm.toggleShooterState()));
+
+    new JoystickButton(driverXbox, XboxController.Button.kY.value)
+        .onTrue(Commands.runOnce(() -> arm.disableBrake()));
   }
 
   public static final BooleanSupplier creepBoolean =
       () -> {
         return driverXbox.getLeftTriggerAxis() > 0.5;
       };
+
+  public double getDoubleSupplier() {
+    return shuffleboardAngle.getAsDouble();
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

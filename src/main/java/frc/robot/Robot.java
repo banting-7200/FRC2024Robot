@@ -10,9 +10,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.shooter.intakeCommand;
-import frc.robot.commands.shooter.readyNoteCommand;
-import frc.robot.commands.shooter.shootCommand;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ShuffleboardSubsystem;
@@ -64,7 +61,7 @@ public class Robot extends TimedRobot {
     shooter = new ShooterSubsystem(m_robotContainer.arm);
     shuffle = ShuffleboardSubsystem.getInstance();
     limelight = m_robotContainer.limelight;
-    m_robotContainer.arm.disableBrake();
+    // m_robotContainer.arm.disableBrake(); // Todo: put this a the start of arm commands
 
     // Create a timer to disable motor brake a few seconds after disable. This will
     // let the robot stop
@@ -89,7 +86,10 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    m_robotContainer.arm.getLimitSwitch();
+    // m_robotContainer.arm.getLimitSwitch();
+    shuffle.setNumber("arm encoder reading", m_robotContainer.arm.getEncoderPosition());
+    shuffle.setBoolean("brake state", m_robotContainer.arm.getBrake());
+    // System.out.println("shuffleboard input: " + m_robotContainer.getDoubleSupplier());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -175,7 +175,9 @@ public class Robot extends TimedRobot {
     // arm.moveToAngle(10);
     // arm.toggleShooterState();
 
-    if (driverXbox.getAButtonReleased() == true) {
+    m_robotContainer.arm.getLimitSwitch();
+
+    /*if (driverXbox.getAButtonReleased() == true) {
       System.out.println("A Button Pressed");
       shooterCommand = new intakeCommand(1500, shooter);
       shooterCommand.schedule();
@@ -199,7 +201,7 @@ public class Robot extends TimedRobot {
               .andThen(new readyNoteCommand(1500, shooter))
               .andThen(new shootCommand(6000, shooter));
       shooterCommand.schedule();
-    }
+    }*/
   }
 
   @Override

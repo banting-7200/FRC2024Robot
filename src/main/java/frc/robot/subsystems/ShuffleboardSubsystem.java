@@ -24,7 +24,7 @@ import java.util.List;
 
 public class ShuffleboardSubsystem {
   ShuffleboardLayout layout;
-  ShuffleboardTab tab;
+  ShuffleboardTab tab = Shuffleboard.getTab("arm");
   List<String> entryNames = new ArrayList<String>();
   List<GenericEntry> entries = new ArrayList<GenericEntry>();
   private static ShuffleboardSubsystem instance = null;

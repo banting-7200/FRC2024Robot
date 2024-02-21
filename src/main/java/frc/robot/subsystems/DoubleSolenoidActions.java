@@ -12,7 +12,11 @@ public class DoubleSolenoidActions {
   }
 
   public void toggle() {
-    SOLENOID.toggle();
+    if (SOLENOID.get() == DoubleSolenoid.Value.kOff) {
+      SOLENOID.set(Value.kForward);
+    } else {
+      SOLENOID.toggle();
+    }
   }
 
   public void setOff() {

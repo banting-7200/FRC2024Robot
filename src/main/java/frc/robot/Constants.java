@@ -33,11 +33,16 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 2;
   }
 
+  public static final class Lights {
+    public static final int lightID = 9;
+    public static final int lightStringLength = 15;
+  }
+
   public static final PneumaticHub m_pH = new PneumaticHub(3);
 
   public static final class Arm {
-    public static final int leftArmMotorID = 33; // 21 Todo: update to an actual on robot value
-    public static final int rightArmMotorID = 32; // 20 Todo: update to an actual on robot value
+    public static final int leftArmMotorID = 21; // 33 Todo: update to an actual on robot value
+    public static final int rightArmMotorID = 20; // 32 Todo: update to an actual on robot value
 
     public static final int sForward_Channel = 0;
     public static final int sReverse_Channel = 15;
@@ -47,14 +52,14 @@ public final class Constants {
 
     // default arm pids
     // Todo: calibrate these
-    public static final double p = 0.0001;
-    public static final double i = 0.4; // 0.03
-    public static final double d = 0;
-    public static final double f = 0;
-    public static final double iz = 0.08;
+    public static /*final*/ double p = 0.0001;
+    public static /*final*/ double i = 0.4; // 0.03
+    public static /*final*/ double d = 0;
+    public static /*final*/ double f = 0;
+    public static /*final*/ double iz = 0.08;
 
-    public static final double pidOutputMin = -1;
-    public static final double pidOutputMax = 1;
+    public static /*final*/ double pidOutputMin = -1;
+    public static /*final*/ double pidOutputMax = 1;
 
     public static final int smartMotionSlot = 0;
     public static final double maxMotorVelocity = 1700; // max motor velocity in rpm
@@ -66,6 +71,7 @@ public final class Constants {
     // Todo: find the min-max safe range to tuck the shooter
     public static final double tuckSafeMin = 10,
         tuckSafeMax = 11; // Robot hard max 11 ticks, min must be further tuned later
+    public static final double armGearRatio = 400;
 
     public static final double tuckArmAngle = 8;
     public static final double intakeArmAngle = 0;

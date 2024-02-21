@@ -46,12 +46,19 @@ public class ArmSubsystem extends SubsystemBase {
 
     rightEncoder = rightArmMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     rightEncoder.setPositionConversionFactor(
-        42); // Amount of ticks in a Neo encoder rotation unit. Converted for
-    // gravity feedfoward later on.
+        42 /* * Arm.armGearRatio */); // Amount of ticks in a Neo encoder rotation unit. Converted
+    // for gravity feedfoward later on.
     pidController = rightArmMotor.getPIDController();
     pidController.setFeedbackDevice(rightEncoder);
     pidController.setPositionPIDWrappingEnabled(true);
 
+    shuffleboard.setNumber("arm P", Arm.p);
+    shuffleboard.setNumber("arm I", Arm.i);
+    shuffleboard.setNumber("arm D", Arm.d);
+    shuffleboard.setNumber("arm F", Arm.f);
+    shuffleboard.setNumber("arm IZ", Arm.iz);
+    shuffleboard.setNumber("arm min output", Arm.pidOutputMin);
+    shuffleboard.setNumber("arm max output", Arm.pidOutputMax);
     setPID();
 
     if (RobotBase.isSimulation()) {
@@ -62,53 +69,56 @@ public class ArmSubsystem extends SubsystemBase {
   private void setPID() {
     int smartMotionSlot = Arm.smartMotionSlot;
 
-    /*ShuffleboardTab tab = Shuffleboard.getTab("PID Tuning");
-    GenericEntry pinput = tab.add("P", Arm.p).withPosition(0, 0).getEntry();
-    GenericEntry iinput = tab.add("I", Arm.i).withPosition(0, 1).getEntry();
-    GenericEntry dinput = tab.add("D", Arm.d).withPosition(0, 2).getEntry();
-    GenericEntry finput = tab.add("F", Arm.f).withPosition(0, 3).getEntry();
-    GenericEntry izinput = tab.add("IZ", Arm.iz).withPosition(0, 4).getEntry();
-    double pval = pinput.getDouble(0);
-    double ival = iinput.getDouble(0);
-    double dval = dinput.getDouble(0);
-    double fval = finput.getDouble(0);
-    double izval = izinput.getDouble(0);
-    GenericEntry minPIDinput = tab.add("pidOutputMin", Arm.pidOutputMin).withPosition(1, 0).getEntry();
-    GenericEntry maxPIDinput = tab.add("pidOutputMax", Arm.pidOutputMax).withPosition(1, 1).getEntry();
-    double pidMinval = minPIDinput.getDouble(0);
-    double pidMaxval = maxPIDinput.getDouble(0);
-    GenericEntry maxVelocityinput = tab.add("maxMotorVelocity", Arm.maxMotorVelocity).withPosition(1, 2).getEntry();
-    GenericEntry maxMotorAccel = tab.add("maxMotorAccel", Arm.maxMotorAccel).withPosition(1, 3).getEntry();
-    GenericEntry allowedPIDError = tab.add("allowedPIDError", Arm.allowedPIDError).withPosition(1, 4).getEntry();
-    double maxVelocityinputval = maxVelocityinput.getDouble(0);
-    double maxMotorAccelval = maxMotorAccel.getDouble(0);
-    double allowedPIDErrorval = allowedPIDError.getDouble(0);*/
-
+    double[] PIDvalues = shuffleboard.getPID("arm");
     // Configure PID
-    pidController.setP(Arm.p, smartMotionSlot);
-    pidController.setI(Arm.i, smartMotionSlot);
-    pidController.setD(Arm.d, smartMotionSlot);
-    pidController.setFF(Arm.f, smartMotionSlot);
-    pidController.setIZone(Arm.iz, smartMotionSlot);
-    pidController.setOutputRange(Arm.pidOutputMax, Arm.pidOutputMax, smartMotionSlot);
+    if (Arm.p != PIDvalues[0]) {
+      Arm.p = PIDvalues[0];
+    }
+    if (Arm.i != PIDvalues[1]) {
+      Arm.i = PIDvalues[1];
+    }
+    if (Arm.d != PIDvalues[2]) {
+      Arm.d = PIDvalues[2];
+    }
+    if (Arm.f != PIDvalues[3]) {
+      Arm.f = PIDvalues[3];
+    }
+    if (Arm.iz != PIDvalues[4]) {
+      Arm.iz = PIDvalues[4];
+    }
+    if (Arm.pidOutputMin != shuffleboard.getNumber("arm min output")) {
+      Arm.pidOutputMin = shuffleboard.getNumber("arm min output");
+    }
+    if (Arm.pidOutputMax != shuffleboard.getNumber("arm max output")) {
+      Arm.pidOutputMax = shuffleboard.getNumber("arm max output");
+    }
+    pidController.setP(PIDvalues[0], smartMotionSlot);
+    pidController.setI(PIDvalues[1], smartMotionSlot);
+    pidController.setD(PIDvalues[2], smartMotionSlot);
+    pidController.setFF(PIDvalues[3], smartMotionSlot);
+    pidController.setIZone(PIDvalues[4], smartMotionSlot);
+    pidController.setOutputRange(
+        shuffleboard.getNumber("arm min output"),
+        shuffleboard.getNumber("arm max output"),
+        smartMotionSlot);
 
     // Configure smart motion
-    pidController.setSmartMotionMaxVelocity(Arm.maxMotorVelocity, smartMotionSlot);
+    /*pidController.setSmartMotionMaxVelocity(Arm.maxMotorVelocity, smartMotionSlot);
     pidController.setSmartMotionMinOutputVelocity(Arm.minMotorVelocity, smartMotionSlot);
     pidController.setSmartMotionMaxAccel(Arm.maxMotorAccel, smartMotionSlot);
-    pidController.setSmartMotionAllowedClosedLoopError(Arm.allowedPIDError, smartMotionSlot);
+    pidController.setSmartMotionAllowedClosedLoopError(Arm.allowedPIDError, smartMotionSlot);*/
   }
 
   public boolean moveToAngle(double angle) {
     pidController.setReference(
-        angle, CANSparkMax.ControlType.kSmartMotion, Arm.smartMotionSlot, getArbFF());
-    System.out.println("motor angle: " + rightEncoder.getPosition());
+        angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot, getArbFF());
+    // System.out.println("motor angle: " + rightEncoder.getPosition());
     return Math.abs(rightEncoder.getPosition() - angle) < 0.99;
   }
 
   public double getArbFF() {
     // Arbirtary feedfoward to account for gravity acting on the arm
-    double kTicksPerDegree = 42 / (360 * 400); // Todo: hardcode gear ratio
+    double kTicksPerDegree = 42 / (360 * Arm.armGearRatio);
     double currentPos = rightEncoder.getPosition();
     double degrees = (currentPos - Arm.kMeasuredPosHorizontal) / kTicksPerDegree;
     double radians = java.lang.Math.toRadians(degrees);
@@ -118,17 +128,16 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   double degreesToRotations(double degrees) {
-    return degrees * 400;
+    return degrees * Arm.armGearRatio;
   }
 
   public void getLimitSwitch() {
-    System.out.println(
-        "Limit switch foward: "
-            + rightArmMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed()
-            + ", Limit switch reverse: "
-            + rightArmMotor
-                .getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen)
-                .isPressed()); // Change type
+    shuffleboard.setBoolean(
+        "Limit switch foward",
+        rightArmMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed());
+    shuffleboard.setBoolean(
+        "Limit switch reverse",
+        rightArmMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed());
   }
 
   public void stopArm() {
@@ -194,6 +203,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void disableBrake() {
     brakeSolenoidActions.setOn();
+  }
+
+  public boolean getBrake() {
+    return !brakeSolenoidActions.getState();
   }
 
   @Override

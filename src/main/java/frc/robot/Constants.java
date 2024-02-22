@@ -41,8 +41,8 @@ public final class Constants {
   public static final PneumaticHub m_pH = new PneumaticHub(3);
 
   public static final class Arm {
-    public static final int leftArmMotorID = 21; // 33 Todo: update to an actual on robot value
-    public static final int rightArmMotorID = 20; // 32 Todo: update to an actual on robot value
+    public static final int leftArmMotorID = 33; // 21 Todo: update to an actual on robot value
+    public static final int rightArmMotorID = 32; // 20 Todo: update to an actual on robot value
 
     public static final int sForward_Channel = 0;
     public static final int sReverse_Channel = 15;
@@ -52,7 +52,7 @@ public final class Constants {
 
     // default arm pids
     // Todo: calibrate these
-    public static /*final*/ double p = 0.0001;
+    public static /*final*/ double p = 0.04;
     public static /*final*/ double i = 0.4; // 0.03
     public static /*final*/ double d = 0;
     public static /*final*/ double f = 0;
@@ -60,6 +60,8 @@ public final class Constants {
 
     public static /*final*/ double pidOutputMin = -1;
     public static /*final*/ double pidOutputMax = 1;
+
+    public static /*final*/ double stopRange = 0.89;
 
     public static final int smartMotionSlot = 0;
     public static final double maxMotorVelocity = 1700; // max motor velocity in rpm
@@ -73,12 +75,12 @@ public final class Constants {
         tuckSafeMax = 11; // Robot hard max 11 ticks, min must be further tuned later
     public static final double armGearRatio = 400;
 
-    public static final double tuckArmAngle = 8;
+    public static final double tuckArmAngle = 3.2;
     public static final double intakeArmAngle = 0;
     public static final double ampArmAngle = 12;
 
     public static final int kMeasuredPosHorizontal =
-        840; // Default position measured when arm is horizontal from example. Todo: find the value
+        0; // Default position measured when arm is horizontal from example. Todo: find the value
     // for our arm.
     public static final double maxGravityFF =
         0.07; // Todo: Find the best gravity feed forward for our arm

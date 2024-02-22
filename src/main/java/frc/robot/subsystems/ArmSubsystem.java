@@ -59,6 +59,7 @@ public class ArmSubsystem extends SubsystemBase {
     shuffleboard.setNumber("arm IZ", Arm.iz);
     shuffleboard.setNumber("arm min output", Arm.pidOutputMin);
     shuffleboard.setNumber("arm max output", Arm.pidOutputMax);
+    shuffleboard.setNumber("stop range", Arm.stopRange);
     setPID();
 
     if (RobotBase.isSimulation()) {
@@ -66,7 +67,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
   }
 
-  private void setPID() {
+  public void setPID() {
     int smartMotionSlot = Arm.smartMotionSlot;
 
     double[] PIDvalues = shuffleboard.getPID("arm");
@@ -111,9 +112,9 @@ public class ArmSubsystem extends SubsystemBase {
 
   public boolean moveToAngle(double angle) {
     pidController.setReference(
-        angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot, getArbFF());
+        angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot /*, getArbFF()*/);
     // System.out.println("motor angle: " + rightEncoder.getPosition());
-    return Math.abs(rightEncoder.getPosition() - angle) < 0.99;
+    return Math.abs(rightEncoder.getPosition() - angle) < shuffleboard.getNumber("stop range");
   }
 
   public double getArbFF() {

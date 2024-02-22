@@ -41,6 +41,7 @@ public class MoveArmToPosition extends Command {
     reachedSetpoint = arm.moveToAngle(angleSetpoint.getAsDouble());
     shuffle.setNumber("command setpoint", angleSetpoint.getAsDouble());
     shuffle.setBoolean("reached setpoint", reachedSetpoint);
+    // System.out.println("execute arm");
   }
 
   // Might need an angle supplier function if an object of this command is created

@@ -22,20 +22,6 @@ public class shootCommand extends Command {
     this.shooter = shooter;
   }
 
-  @Override
-  public void initialize() {}
-
-  @Override
-  public void execute() {
-    currentMillis = currentTime.millis();
-    shooter.spinIntakeToRPM(rpm);
-    shooter.spinShootToRPM(rpm);
-    if (shooter.hasNote() == true) {
-      sinceNoteLeft = currentTime.millis();
-      System.out.println("Note still inside");
-    }
-  }
-
     @Override
     public void initialize() {
         sinceIntakeMotor = currentTime.millis();

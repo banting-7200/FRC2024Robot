@@ -19,22 +19,6 @@ public class readyNoteCommand extends Command {
     this.shooter = shooter;
   }
 
-  @Override
-  public void initialize() {
-    System.out.println("Time at ready note was activated! " + intakeActivatedMillis);
-  }
-
-  @Override
-  public void execute() {
-    currentMillis = currentTime.millis();
-    shooter.spinIntakeToRPM(-rpm);
-    timeHasBeenIn = currentMillis - intakeActivatedMillis;
-  }
-
-  public boolean isFinished() {
-    return timeHasBeenIn > 250;
-  }
-
     @Override
     public void initialize() {
         System.out.println("Time at ready note was activated! " + intakeActivatedMillis);

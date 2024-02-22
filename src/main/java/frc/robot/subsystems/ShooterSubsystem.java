@@ -62,8 +62,11 @@ public class ShooterSubsystem extends SubsystemBase {
         }
     }
 
-  public boolean hasNote() {
-    return !noteSensor.get(); // Inverted because the IR sensor returns true when there is no note.
+    public void spinShootToRPM(double targetRPM) {
+      if (arm.isTucked() == false) {
+          m_velocity.Slot = 0;
+          m_shoot.setControl(m_velocity.withVelocity(targetRPM / 60));// convert rpm to rps then apply
+      }
   }
 
     public boolean shooterHasNote() {

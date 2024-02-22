@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.shooter.intakeCommand;
+import frc.robot.commands.shooter.shootCommand;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ShuffleboardSubsystem;
@@ -186,12 +188,9 @@ public class Robot extends TimedRobot {
       shooterCommand = new intakeCommand(1500, shooter);
       shooterCommand.schedule();
     }
-
-   
+  
       // shooterCommand = new readyNoteCommand(1500, shooter);
       // shooterCommand.schedule();
-
-    
 
     if (driverXbox.getXButtonReleased() == true) {
       System.out.println("X Button Pressed");

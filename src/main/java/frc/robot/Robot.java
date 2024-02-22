@@ -90,6 +90,8 @@ public class Robot extends TimedRobot {
     shuffle.setNumber("arm encoder reading", m_robotContainer.arm.getEncoderPosition());
     shuffle.setBoolean("brake state", m_robotContainer.arm.getBrake());
     // System.out.println("shuffleboard input: " + m_robotContainer.getDoubleSupplier());
+    m_robotContainer.arm.setPID();
+    m_robotContainer.arm.getLimitSwitch();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -174,8 +176,6 @@ public class Robot extends TimedRobot {
       {
     // arm.moveToAngle(10);
     // arm.toggleShooterState();
-
-    m_robotContainer.arm.getLimitSwitch();
 
     /*if (driverXbox.getAButtonReleased() == true) {
       System.out.println("A Button Pressed");

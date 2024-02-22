@@ -21,7 +21,9 @@ public class LightSubsystem {
     NotePickedUp,
     CarryingNote,
     ReadyToSPEAKER,
-    ReadyToAMP
+    ReadyToAMP,
+    ReadyToShoot,
+    AprilTagFound
   }
 
   public void shuffleSetup() {

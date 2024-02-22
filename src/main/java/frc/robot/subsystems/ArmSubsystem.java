@@ -105,22 +105,36 @@ public class ArmSubsystem extends SubsystemBase {
         smartMotionSlot);
 
     // Configure smart motion
-    /*pidController.setSmartMotionMaxVelocity(Arm.maxMotorVelocity, smartMotionSlot);
-    pidController.setSmartMotionMinOutputVelocity(Arm.minMotorVelocity, smartMotionSlot);
-    pidController.setSmartMotionMaxAccel(Arm.maxMotorAccel, smartMotionSlot);
-    pidController.setSmartMotionAllowedClosedLoopError(Arm.allowedPIDError, smartMotionSlot);*/
+    /*
+     * pidController.setSmartMotionMaxVelocity(Arm.maxMotorVelocity,
+     * smartMotionSlot);
+     * pidController.setSmartMotionMinOutputVelocity(Arm.minMotorVelocity,
+     * smartMotionSlot);
+     * pidController.setSmartMotionMaxAccel(Arm.maxMotorAccel, smartMotionSlot);
+     * pidController.setSmartMotionAllowedClosedLoopError(Arm.allowedPIDError,
+     * smartMotionSlot);
+     */
   }
 
   public boolean moveToAngle(double angle) {
-    pidController.setReference(
-        angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot, getArbFF());
-    // System.out.println("motor angle: " + rightEncoder.getPosition());
-    return Math.abs(rightEncoder.getPosition() - angle) < shuffleboard.getNumber("stop range");
+    if (rightEncoder.getPosition() >= Arm.encoderHardMax
+        || angle
+            >= Arm.encoderHardMax) { // Check if the arm is beyond the encoder hard max before we
+      // move. If it is beyond the hard max then stop the motor and end the movement
+      stopArm();
+      return true;
+    } else {
+
+      pidController.setReference(
+          angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot, getArbFF());
+      // System.out.println("motor angle: " + rightEncoder.getPosition());
+      return Math.abs(rightEncoder.getPosition() - angle) < shuffleboard.getNumber("stop range");
+    }
   }
 
   public double getArbFF() {
     // Arbirtary feedfoward to account for gravity acting on the arm
-    double kTicksPerDegree = 8192 / (360 * Arm.armGearRatio);
+    double kTicksPerDegree = 4096 / (360 * Arm.armGearRatio);
     double currentPos = rightEncoder.getPosition();
     double degrees = (currentPos - Arm.kMeasuredPosHorizontal) / kTicksPerDegree;
     double radians = java.lang.Math.toRadians(degrees);

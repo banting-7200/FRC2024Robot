@@ -19,25 +19,23 @@ public class readyNoteCommand extends Command {
     this.shooter = shooter;
   }
 
-    @Override
-    public void initialize() {
-        System.out.println("Time at ready note was activated! " + intakeActivatedMillis);
+  @Override
+  public void initialize() {
+    System.out.println("Time at ready note was activated! " + intakeActivatedMillis);
+  }
 
-    }
+  @Override
+  public void execute() {
+    shooter.spinIntakeToPositiveRPM(rpm);
+  }
 
-    @Override
-    public void execute() {
-        shooter.spinIntakeToPositiveRPM(rpm);
-    }
+  public boolean isFinished() {
+    return shooter.shooterHasNote() == false;
+  }
 
-    public boolean isFinished() {
-        return shooter.shooterHasNote() == false;
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        shooter.stopIntakeMotor();
-        System.out.println("Ready Note Command ShutDown");
-    }
-
+  @Override
+  public void end(boolean interrupted) {
+    shooter.stopIntakeMotor();
+    System.out.println("Ready Note Command ShutDown");
+  }
 }

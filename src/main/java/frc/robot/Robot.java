@@ -4,15 +4,12 @@
 
 package frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.shooter.intakeCommand;
-import frc.robot.commands.shooter.shootCommand;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ShuffleboardSubsystem;
@@ -71,7 +68,7 @@ public class Robot extends TimedRobot {
     // immediately when disabled, but then also let it be pushed more
     disabledTimer = new Timer();
 
-    CameraServer.startAutomaticCapture("Front Camera", 0);
+    // CameraServer.startAutomaticCapture("Front Camera", 0);
   }
 
   /**
@@ -182,13 +179,12 @@ public class Robot extends TimedRobot {
     // arm.moveToAngle(10);
     // arm.toggleShooterState();
 
-   
-    if (driverXbox.getAButtonReleased() == true) {
+    /*if (driverXbox.get() == true) {
       System.out.println("A Button Pressed");
       shooterCommand = new intakeCommand(1500, shooter);
       shooterCommand.schedule();
     }
-  
+
       // shooterCommand = new readyNoteCommand(1500, shooter);
       // shooterCommand.schedule();
 
@@ -201,7 +197,7 @@ public class Robot extends TimedRobot {
       System.out.println("Y Button Pressed");
       shooterCommand = new intakeCommand(1500, shooter).andThen(new shootCommand(2000, shooter));
       shooterCommand.schedule();
-    }
+    }*/
   }
 
   @Override
@@ -227,4 +223,3 @@ public class Robot extends TimedRobot {
   @Override
   public void simulationPeriodic() {}
 }
-

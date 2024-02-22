@@ -6,13 +6,16 @@ import java.time.Clock;
 
 public class shootCommand extends Command {
 
-  public ShooterSubsystem shooter;
-  private boolean hasNotBeenDetected = false;
-  Clock currentTime = Clock.systemDefaultZone();
-  long startedMillis = currentTime.millis();
-  long currentMillis;
-  long sinceNoteLeft;
-  int rpm;
+    public ShooterSubsystem shooter;
+    private boolean hasNotBeenDetected = false;
+    Clock currentTime = Clock.systemDefaultZone();
+    long startedMillis = currentTime.millis();
+    long currentMillis;
+    long sinceNoteLeft;
+    long sinceIntakeMotor;
+    int rpm;
+    Boolean hasSeenNote;
+    
 
   public shootCommand(int rpm, ShooterSubsystem shooter) {
     this.rpm = rpm;
@@ -33,13 +36,38 @@ public class shootCommand extends Command {
     }
   }
 
-  public boolean isFinished() {
-    return shooter.hasNote() == false && currentMillis - sinceNoteLeft > 3000;
-  }
+    @Override
+    public void initialize() {
+        sinceIntakeMotor = currentTime.millis();
+        sinceNoteLeft = currentTime.millis();
 
-  @Override
-  public void end(boolean interrupted) {
-    shooter.stopShootMotor();
-    shooter.stopIntakeMotor();
-  }
+    }
+
+    @Override
+    public void execute() {
+        currentMillis = currentTime.millis(); // records current time
+        shooter.spinShootToRPM(rpm); // spins the shooters
+        if ((currentMillis - sinceIntakeMotor) > 1000) { // waits for 250 ms for it to turn on the shoot motor
+            shooter.spinIntakeToNegativeRPM(rpm); // runs the shoot motor
+            System.out.println("Run Shooter motor");
+        }
+        if (shooter.shooterHasNote() == true) {
+            sinceNoteLeft = currentTime.millis(); // if it see's the note it will set the since note left time for current time
+            hasSeenNote = true;
+
+        }
+
+    }
+
+    public boolean isFinished() {
+        return (currentMillis - sinceNoteLeft) > 1000 && hasSeenNote == true;
+
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        shooter.stopShootMotor();
+        shooter.stopIntakeMotor();
+        System.out.println("Shooting Done");
+    }
 }

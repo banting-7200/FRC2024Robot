@@ -13,7 +13,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   VelocityVoltage m_velocity = new VelocityVoltage(0);
 
-  private DigitalInput noteSensor;
+    private DigitalInput shootIR;
 
   private ArmSubsystem arm;
 
@@ -21,7 +21,7 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shoot = new TalonFX(Shooter.shooterID);
     m_intake = new TalonFX(Shooter.intakeID);
 
-    noteSensor = new DigitalInput(Shooter.sensorPin);
+        shootIR = new DigitalInput(Shooter.shootIR); // haha shooter lol, get it?
 
     arm = _arm;
 
@@ -49,22 +49,32 @@ public class ShooterSubsystem extends SubsystemBase {
     }
   }
 
-  public void spinShootToRPM(double targetRPM) {
-    if (arm.isTucked() == false) {
-      m_velocity.Slot = 0;
-      m_shoot.setControl(m_velocity.withVelocity(targetRPM / 60)); // convert rpm to rps then apply
+    public void spinIntakeToPositiveRPM(double targetRPM) {
+        if (arm.isTucked() == false) {
+            m_velocity.Slot = 1;
+            m_intake.setControl(m_velocity.withVelocity(targetRPM / 60));// convert rpm to rps then apply
+        }
     }
-  }
+     public void spinIntakeToNegativeRPM(double targetRPM) {
+        if (arm.isTucked() == false) {
+            m_velocity.Slot = 1;
+            m_intake.setControl(m_velocity.withVelocity(-targetRPM / 60));// convert rpm to rps then apply
+        }
+    }
 
   public boolean hasNote() {
     return !noteSensor.get(); // Inverted because the IR sensor returns true when there is no note.
   }
 
-  public void stopShootMotor() {
-    m_shoot.stopMotor();
-  }
+    public boolean shooterHasNote() {
+        return !shootIR.get();// Inverted because the IR sensor returns true when there is no note.
+    }
 
-  public void stopIntakeMotor() {
-    m_intake.stopMotor();
-  }
+    public void stopShootMotor() {
+        m_shoot.stopMotor();
+    }
+
+    public void stopIntakeMotor() {
+        m_intake.setControl(m_velocity.withVelocity(0));
+    }
 }

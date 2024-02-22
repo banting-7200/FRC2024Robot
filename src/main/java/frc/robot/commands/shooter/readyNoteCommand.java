@@ -2,7 +2,10 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.LightSubsystem.lightStates;
+
 import java.time.Clock;
+import frc.robot.subsystems.LightSubsystem;
 
 public class readyNoteCommand extends Command {
   public ShooterSubsystem shooter;
@@ -12,6 +15,7 @@ public class readyNoteCommand extends Command {
   boolean hasBeenStowed = false;
   long timeHasBeenIn = 0;
   boolean isReadyNextStage = false;
+  LightSubsystem lights = LightSubsystem.getInstance();
   int rpm;
 
   public readyNoteCommand(int rpm, ShooterSubsystem shooter) {
@@ -21,6 +25,7 @@ public class readyNoteCommand extends Command {
 
   @Override
   public void initialize() {
+    lights.SetLightState(lightStates.ReadyToSPEAKER);
     System.out.println("Time at ready note was activated! " + intakeActivatedMillis);
   }
 
@@ -39,5 +44,6 @@ public class readyNoteCommand extends Command {
   public void end(boolean interrupted) {
     shooter.stopIntakeMotor();
     System.out.println("Ready Note Command ShutDown");
+    lights.SetLightState(lightStates.ReadyToSPEAKER);
   }
 }

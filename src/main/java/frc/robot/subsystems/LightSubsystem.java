@@ -13,7 +13,8 @@ public class LightSubsystem {
     ReadyForPickup,
     NotePickedUp,
     CarryingNote,
-    ReadyToShoot
+    ReadyToShoot,
+    AprilTagFound
   }
 
   public static synchronized LightSubsystem

@@ -60,6 +60,7 @@ public class ArmSubsystem extends SubsystemBase {
     shuffleboard.setNumber("arm min output", Arm.pidOutputMin);
     shuffleboard.setNumber("arm max output", Arm.pidOutputMax);
     shuffleboard.setNumber("stop range", Arm.stopRange);
+    shuffleboard.setNumber("gravity FF", Arm.maxGravityFF);
     setPID();
 
     if (RobotBase.isSimulation()) {
@@ -112,20 +113,20 @@ public class ArmSubsystem extends SubsystemBase {
 
   public boolean moveToAngle(double angle) {
     pidController.setReference(
-        angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot /*, getArbFF()*/);
+        angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot, getArbFF());
     // System.out.println("motor angle: " + rightEncoder.getPosition());
     return Math.abs(rightEncoder.getPosition() - angle) < shuffleboard.getNumber("stop range");
   }
 
   public double getArbFF() {
     // Arbirtary feedfoward to account for gravity acting on the arm
-    double kTicksPerDegree = 42 / (360 * Arm.armGearRatio);
+    double kTicksPerDegree = 8192 / (360 * Arm.armGearRatio);
     double currentPos = rightEncoder.getPosition();
     double degrees = (currentPos - Arm.kMeasuredPosHorizontal) / kTicksPerDegree;
     double radians = java.lang.Math.toRadians(degrees);
     double cosineScalar = java.lang.Math.cos(radians);
 
-    return Arm.maxGravityFF * cosineScalar;
+    return shuffleboard.getNumber("gravity FF") * cosineScalar;
   }
 
   double degreesToRotations(double degrees) {

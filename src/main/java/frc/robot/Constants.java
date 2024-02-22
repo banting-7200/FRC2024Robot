@@ -52,7 +52,7 @@ public final class Constants {
 
     // default arm pids
     // Todo: calibrate these
-    public static /*final*/ double p = 0.04;
+    public static /*final*/ double p = 0.07;
     public static /*final*/ double i = 0.4; // 0.03
     public static /*final*/ double d = 0;
     public static /*final*/ double f = 0;
@@ -61,7 +61,7 @@ public final class Constants {
     public static /*final*/ double pidOutputMin = -1;
     public static /*final*/ double pidOutputMax = 1;
 
-    public static /*final*/ double stopRange = 0.89;
+    public static /*final*/ double stopRange = 0.1;
 
     public static final int smartMotionSlot = 0;
     public static final double maxMotorVelocity = 1700; // max motor velocity in rpm
@@ -71,7 +71,7 @@ public final class Constants {
 
     // Arm movement constants
     // Todo: find the min-max safe range to tuck the shooter
-    public static final double tuckSafeMin = 10,
+    public static final double tuckSafeMin = 4,
         tuckSafeMax = 11; // Robot hard max 11 ticks, min must be further tuned later
     public static final double armGearRatio = 400;
 
@@ -82,8 +82,8 @@ public final class Constants {
     public static final int kMeasuredPosHorizontal =
         0; // Default position measured when arm is horizontal from example. Todo: find the value
     // for our arm.
-    public static final double maxGravityFF =
-        0.07; // Todo: Find the best gravity feed forward for our arm
+    public static /*final*/ double maxGravityFF =
+        0.8; // Todo: Find the best gravity feed forward for our arm
 
     // Arm angle calculation constants
     public static final double armToSpeakerHeight =

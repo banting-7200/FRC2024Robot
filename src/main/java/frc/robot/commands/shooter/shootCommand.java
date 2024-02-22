@@ -14,11 +14,13 @@ public class shootCommand extends Command {
   long sinceNoteLeft;
   long sinceIntakeMotor;
   int rpm;
-  Boolean hasSeenNote;
+  Boolean hasSeenNote = false;
+  int waitTime;
 
-  public shootCommand(int rpm, ShooterSubsystem shooter) {
+  public shootCommand(int rpm, ShooterSubsystem shooter, int waitTime) {
     this.rpm = rpm;
     this.shooter = shooter;
+    this.waitTime = waitTime;
   }
 
   @Override
@@ -32,7 +34,7 @@ public class shootCommand extends Command {
     currentMillis = currentTime.millis(); // records current time
     shooter.spinShootToRPM(rpm); // spins the shooters
     if ((currentMillis - sinceIntakeMotor)
-        > 1000) { // waits for 250 ms for it to turn on the shoot motor
+        > waitTime) { // waits for 250 ms for it to turn on the shoot motor
       shooter.spinIntakeToNegativeRPM(rpm); // runs the shoot motor
       System.out.println("Run Shooter motor");
     }

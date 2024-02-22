@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.commands.shooter.intakeCommand;
+import frc.robot.commands.shooter.shootCommand;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ShuffleboardSubsystem;
@@ -34,6 +37,9 @@ public class Robot extends TimedRobot {
 
   // private RobotContainer m_robotContainer;
   XboxController driverXbox = new XboxController(0);
+  POVButton dpadDownButton = new POVButton(driverXbox, 270);
+  POVButton dpadLeftButton = new POVButton(driverXbox, 180);
+  POVButton dpadUpButton = new POVButton(driverXbox, 90);
 
   private Timer disabledTimer;
   ShuffleboardSubsystem shuffle;
@@ -61,7 +67,8 @@ public class Robot extends TimedRobot {
     shooter = new ShooterSubsystem(m_robotContainer.arm);
     shuffle = ShuffleboardSubsystem.getInstance();
     limelight = m_robotContainer.limelight;
-    // m_robotContainer.arm.disableBrake(); // Todo: put this a the start of arm commands
+    // m_robotContainer.arm.disableBrake(); // Todo: put this a the start of arm
+    // commands
 
     // Create a timer to disable motor brake a few seconds after disable. This will
     // let the robot stop
@@ -91,7 +98,8 @@ public class Robot extends TimedRobot {
     // m_robotContainer.arm.getLimitSwitch();
     shuffle.setNumber("arm encoder reading", m_robotContainer.arm.getEncoderPosition());
     shuffle.setBoolean("brake state", m_robotContainer.arm.getBrake());
-    // System.out.println("shuffleboard input: " + m_robotContainer.getDoubleSupplier());
+    // System.out.println("shuffleboard input: " +
+    // m_robotContainer.getDoubleSupplier());
     m_robotContainer.arm.setPID();
     m_robotContainer.arm.getLimitSwitch();
   }
@@ -119,7 +127,8 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     // m_robotContainer.setMotorBrake(true);
     // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    // m_autonomousCommand = new UntuckArm(arm).andThen(new MoveArmToPosition(arm, 26)).andThen(new
+    // m_autonomousCommand = new UntuckArm(arm).andThen(new MoveArmToPosition(arm,
+    // 26)).andThen(new
     // TuckArm(arm));
 
     // m_autonomousCommand = new shootCommand(1500);
@@ -176,28 +185,35 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() // Controller inputs to create and automate commands
       {
+    dpadDownButton.onTrue(new intakeCommand(500, shooter));
+    dpadLeftButton.onTrue(new shootCommand(500, shooter, 1000));
+    dpadUpButton.onTrue(
+        new intakeCommand(1500, shooter).andThen(new shootCommand(2000, shooter, 1000)));
     // arm.moveToAngle(10);
     // arm.toggleShooterState();
 
-    /*if (driverXbox.get() == true) {
-      System.out.println("A Button Pressed");
-      shooterCommand = new intakeCommand(1500, shooter);
-      shooterCommand.schedule();
-    }
-
-      // shooterCommand = new readyNoteCommand(1500, shooter);
-      // shooterCommand.schedule();
-
-    if (driverXbox.getXButtonReleased() == true) {
-      System.out.println("X Button Pressed");
-      shooterCommand = new shootCommand(2000, shooter);
-      shooterCommand.schedule();
-    }
-    if (driverXbox.getYButtonReleased() == true) {
-      System.out.println("Y Button Pressed");
-      shooterCommand = new intakeCommand(1500, shooter).andThen(new shootCommand(2000, shooter));
-      shooterCommand.schedule();
-    }*/
+    /*
+     * if (driverXbox.get() == true) {
+     * System.out.println("A Button Pressed");
+     * shooterCommand = new intakeCommand(1500, shooter);
+     * shooterCommand.schedule();
+     * }
+     *
+     * // shooterCommand = new readyNoteCommand(1500, shooter);
+     * // shooterCommand.schedule();
+     *
+     * if (driverXbox.getXButtonReleased() == true) {
+     * System.out.println("X Button Pressed");
+     * shooterCommand = new shootCommand(2000, shooter);
+     * shooterCommand.schedule();
+     * }
+     * if (driverXbox.getYButtonReleased() == true) {
+     * System.out.println("Y Button Pressed");
+     * shooterCommand = new intakeCommand(1500, shooter).andThen(new
+     * shootCommand(2000, shooter));
+     * shooterCommand.schedule();
+     * }
+     */
   }
 
   @Override

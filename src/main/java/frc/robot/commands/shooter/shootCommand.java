@@ -12,9 +12,10 @@ public class shootCommand extends Command {
     Clock currentTime = Clock.systemDefaultZone();
     long startedMillis = currentTime.millis();
     long currentMillis;
-    long sinceNoteLeft = 0;
+    long sinceNoteLeft;
     long sinceIntakeMotor;
     int rpm;
+    Boolean hasSeenNote;
     
 
     public shootCommand(int rpm, ShooterSubsystem shooter) {
@@ -39,12 +40,14 @@ public class shootCommand extends Command {
         }
         if (shooter.shooterHasNote() == true) {
             sinceNoteLeft = currentTime.millis(); // if it see's the note it will set the since note left time for current time
+            hasSeenNote = true;
+
         }
 
     }
 
     public boolean isFinished() {
-        return (currentMillis - sinceNoteLeft) > 1000;
+        return (currentMillis - sinceNoteLeft) > 1000 && hasSeenNote == true;
 
     }
 

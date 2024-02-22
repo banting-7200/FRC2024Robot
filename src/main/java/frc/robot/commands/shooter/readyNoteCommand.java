@@ -32,13 +32,11 @@ public class readyNoteCommand extends Command {
 
     @Override
     public void execute() {
-        currentMillis = currentTime.millis();
-        shooter.spinIntakeToRPM(-rpm);
-        timeHasBeenIn = currentMillis - intakeActivatedMillis;
+        shooter.spinIntakeToPositiveRPM(rpm);
     }
 
     public boolean isFinished() {
-        return timeHasBeenIn > 250;
+        return shooter.shooterHasNote() == false;
     }
 
     @Override

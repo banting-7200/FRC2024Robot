@@ -44,6 +44,9 @@ public class ArmSubsystem extends SubsystemBase {
     leftArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake); // make kBreak
     rightArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
+    rightArmMotor.setClosedLoopRampRate(Arm.motorRampRate);
+    rightArmMotor.setSmartCurrentLimit(Arm.currentLimit);
+
     rightEncoder = rightArmMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     rightEncoder.setPositionConversionFactor(
         42 /* * Arm.armGearRatio */); // Amount of ticks in a Neo encoder rotation unit. Converted
@@ -61,6 +64,8 @@ public class ArmSubsystem extends SubsystemBase {
     shuffleboard.setNumber("arm max output", Arm.pidOutputMax);
     shuffleboard.setNumber("stop range", Arm.stopRange);
     shuffleboard.setNumber("gravity FF", Arm.maxGravityFF);
+    shuffleboard.setNumber("ramp rate", Arm.motorRampRate);
+    shuffleboard.setNumber("current limit", Arm.currentLimit);
     setPID();
 
     if (RobotBase.isSimulation()) {
@@ -104,6 +109,9 @@ public class ArmSubsystem extends SubsystemBase {
         shuffleboard.getNumber("arm max output"),
         smartMotionSlot);
 
+    rightArmMotor.setClosedLoopRampRate(shuffleboard.getNumber("ramp rate"));
+    rightArmMotor.setSmartCurrentLimit((int) shuffleboard.getNumber("current limit"));
+
     // Configure smart motion
     /*
      * pidController.setSmartMotionMaxVelocity(Arm.maxMotorVelocity,
@@ -117,19 +125,19 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public boolean moveToAngle(double angle) {
-    if (rightEncoder.getPosition() >= Arm.encoderHardMax
+    /* if (rightEncoder.getPosition() >= Arm.encoderHardMax
         || angle
             >= Arm.encoderHardMax) { // Check if the arm is beyond the encoder hard max before we
       // move. If it is beyond the hard max then stop the motor and end the movement
       stopArm();
       return true;
-    } else {
+    } else {*/
 
-      pidController.setReference(
-          angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot, getArbFF());
-      // System.out.println("motor angle: " + rightEncoder.getPosition());
-      return Math.abs(rightEncoder.getPosition() - angle) < shuffleboard.getNumber("stop range");
-    }
+    pidController.setReference(
+        angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot, getArbFF());
+    // System.out.println("motor angle: " + rightEncoder.getPosition());
+    return Math.abs(rightEncoder.getPosition() - angle) < shuffleboard.getNumber("stop range");
+    // }
   }
 
   public double getArbFF() {
@@ -188,7 +196,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public boolean isTucked() {
-    return !shooterSolenoidActions.getState();
+    return shooterSolenoidActions.isReversed();
   }
 
   // Hook

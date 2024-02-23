@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LightSubsystem;
 import frc.robot.subsystems.ShuffleboardSubsystem;
-import java.util.function.DoubleSupplier;
 
 public class MoveArmToPosition extends Command {
 
@@ -13,11 +12,11 @@ public class MoveArmToPosition extends Command {
   private boolean reachedSetpoint;
   // private boolean safeToMove = true;
 
-  private DoubleSupplier angleSetpoint;
+  private double /*DoubleSupplier*/ angleSetpoint;
 
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
 
-  public MoveArmToPosition(ArmSubsystem arm, DoubleSupplier angleSetpoint) {
+  public MoveArmToPosition(ArmSubsystem arm, double /*DoubleSupplier*/ angleSetpoint) {
     this.arm = arm;
     this.angleSetpoint = angleSetpoint;
 
@@ -33,13 +32,14 @@ public class MoveArmToPosition extends Command {
      */
     // supplier assignment goes here
     arm.disableBrake();
-    System.out.println("Move Arm To Position. setpoint is: " + angleSetpoint.getAsDouble());
+    System.out.println("Move Arm To Position. setpoint is: " + angleSetpoint);
+    // see if setting set point here is good
   }
 
   @Override
   public void execute() {
-    reachedSetpoint = arm.moveToAngle(angleSetpoint.getAsDouble());
-    shuffle.setNumber("command setpoint", angleSetpoint.getAsDouble());
+    reachedSetpoint = arm.moveToAngle(angleSetpoint);
+    shuffle.setNumber("command setpoint", angleSetpoint);
     shuffle.setBoolean("reached setpoint", reachedSetpoint);
     // System.out.println("execute arm");
   }

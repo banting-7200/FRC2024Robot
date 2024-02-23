@@ -41,7 +41,7 @@ public class DoubleSolenoidActions {
             + SOLENOID.getRevChannel());
   }
 
-  public boolean getState() {
+  public boolean isReversed() {
     return SOLENOID.get() == Value.kReverse;
   }
 }

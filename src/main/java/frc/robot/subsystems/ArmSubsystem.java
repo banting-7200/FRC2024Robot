@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.time.Clock;
-
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -16,6 +14,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.Arm;
 import frc.robot.subsystems.Solenoids.DoubleSolenoidActions;
 import frc.robot.subsystems.Solenoids.SolenoidActions;
+import java.time.Clock;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -23,11 +22,14 @@ public class ArmSubsystem extends SubsystemBase {
   private AbsoluteEncoder rightEncoder;
   private SparkPIDController pidController;
 
-  DoubleSolenoidActions shooterSolenoidActions = new DoubleSolenoidActions(
-      Constants.m_pH.makeDoubleSolenoid(Arm.sForward_Channel, Arm.sReverse_Channel));
-  SolenoidActions brakeSolenoidActions = new SolenoidActions(Constants.m_pH.makeSolenoid(Arm.b_Channel));
-  DoubleSolenoidActions hookSolenoidActions = new DoubleSolenoidActions(
-      Constants.m_pH.makeDoubleSolenoid(Arm.hForward_Channel, Arm.hReverse_Channel));
+  DoubleSolenoidActions shooterSolenoidActions =
+      new DoubleSolenoidActions(
+          Constants.m_pH.makeDoubleSolenoid(Arm.sForward_Channel, Arm.sReverse_Channel));
+  SolenoidActions brakeSolenoidActions =
+      new SolenoidActions(Constants.m_pH.makeSolenoid(Arm.b_Channel));
+  DoubleSolenoidActions hookSolenoidActions =
+      new DoubleSolenoidActions(
+          Constants.m_pH.makeDoubleSolenoid(Arm.hForward_Channel, Arm.hReverse_Channel));
 
   private Clock currentTime = Clock.systemDefaultZone();
   private long stateChangeTimestamp;
@@ -133,7 +135,8 @@ public class ArmSubsystem extends SubsystemBase {
 
   public boolean moveToAngle(double angle) {
     if (rightEncoder.getPosition() >= Arm.encoderHardMax
-        && angle >= Arm.encoderHardMax) { // Check if the arm is beyond the encoder hard max before we
+        && angle
+            >= Arm.encoderHardMax) { // Check if the arm is beyond the encoder hard max before we
       // move. If it is beyond the hard max then stop the motor and end the movement
       stopArm();
       return true;
@@ -195,6 +198,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void toggleShooterState() {
     shooterSolenoidActions.toggle();
     stateChangeTimestamp = currentTime.millis();
+    // shuffleboard.setNumber("Changed state. current time: ", currentTime.millis());
     System.out.println("Shooter toggled");
   }
 
@@ -205,8 +209,11 @@ public class ArmSubsystem extends SubsystemBase {
 
   public boolean isTucked() {
     if (currentTime.millis() - stateChangeTimestamp > Arm.s_stateChangeDelay
-        && lastShooterState != shooterSolenoidActions.isReversed())
+        && lastShooterState != shooterSolenoidActions.isReversed()) {
       lastShooterState = shooterSolenoidActions.isReversed();
+      // shuffleboard.setNumber("updated state. current time: ", currentTime.millis());
+    }
+    shuffleboard.setBoolean("last shooter state", lastShooterState);
     return lastShooterState;
   }
 

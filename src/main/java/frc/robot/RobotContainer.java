@@ -10,10 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.Arm;
 import frc.robot.commands.arm.MoveArmToPosition;
-import frc.robot.commands.arm.TuckArm;
-import frc.robot.commands.arm.UntuckArm;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.ShuffleboardSubsystem;
@@ -151,20 +148,18 @@ public class RobotContainer {
      * t.onTrue(new InstantCommand(() -> drivebase.setDriveSpeeds(true)))
      * .onFalse(new InstantCommand(() -> drivebase.setDriveSpeeds(false)));
      */
-    /*new JoystickButton(driverXbox, XboxController.Button.kX.value)
-    .onTrue(
-        new MoveArmToPosition(
-            arm, shuffleboardAngle)); */
+    new JoystickButton(driverXbox, XboxController.Button.kX.value)
+        .onTrue(new MoveArmToPosition(arm, shuffleboardAngle));
     // Move to position outlined on shuffleboard
     // position
 
-    new JoystickButton(driverXbox, XboxController.Button.kX.value)
-        .onTrue(
-            new TuckArm(arm)
-                .andThen(
-                    new UntuckArm(arm)
-                        .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
-                        .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))));
+    /*  new JoystickButton(driverXbox, XboxController.Button.kX.value)
+    .onTrue(
+        new TuckArm(arm)
+            .andThen(
+                new UntuckArm(arm)
+                    .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
+                    .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))));*/
 
     new JoystickButton(driverXbox, XboxController.Button.kA.value)
         .onTrue(Commands.runOnce(() -> arm.disableShooterSolenoids()));

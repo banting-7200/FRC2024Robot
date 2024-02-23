@@ -65,6 +65,7 @@ public final class Constants {
 
     public static /*final*/ double stopRange = 0.3;
     public static final double encoderHardMax = 34;
+    public static /*final*/ long s_stateChangeDelay = 8;
 
     public static final int smartMotionSlot = 0;
     /*public static final double maxMotorVelocity = 1700; // max motor velocity in rpm

@@ -11,7 +11,7 @@ public class DoubleSolenoidActions {
     setOff();
   }
 
-  public void toggle() {//Todo:get rid of the if statement after testing is complete
+  public void toggle() { // Todo:get rid of the if statement after testing is complete
     if (SOLENOID.get() == DoubleSolenoid.Value.kOff) {
       SOLENOID.set(Value.kForward);
     } else {

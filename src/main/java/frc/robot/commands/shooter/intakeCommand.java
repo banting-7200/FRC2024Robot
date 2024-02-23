@@ -16,6 +16,7 @@ public class intakeCommand extends Command {
   @Override
   public void initialize() {
     openOrClosedCounter = 0;
+    System.out.println("I GOT TO INIT");
   }
 
   @Override
@@ -26,6 +27,7 @@ public class intakeCommand extends Command {
     } else if (openOrClosedCounter == 1 && shooter.shooterHasNote() == false) {
       openOrClosedCounter++;
     }
+    System.out.println("I GOT TO EXECUTE");
   }
 
   public boolean isFinished() {

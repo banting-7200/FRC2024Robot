@@ -167,7 +167,7 @@ public class RobotContainer {
                         .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))));
 
     new JoystickButton(driverXbox, XboxController.Button.kA.value)
-        .onTrue(Commands.runOnce(() -> arm.toggleShooterState()));
+        .onTrue(Commands.runOnce(() -> arm.disableShooterSolenoids()));
     new JoystickButton(driverXbox, XboxController.Button.kB.value)
         .onTrue(Commands.runOnce(() -> arm.toggleShooterState()));
 

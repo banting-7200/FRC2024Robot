@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.time.Clock;
+
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -12,6 +14,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Arm;
+import frc.robot.subsystems.Solenoids.DoubleSolenoidActions;
+import frc.robot.subsystems.Solenoids.SolenoidActions;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -19,14 +23,15 @@ public class ArmSubsystem extends SubsystemBase {
   private AbsoluteEncoder rightEncoder;
   private SparkPIDController pidController;
 
-  DoubleSolenoidActions shooterSolenoidActions =
-      new DoubleSolenoidActions(
-          Constants.m_pH.makeDoubleSolenoid(Arm.sForward_Channel, Arm.sReverse_Channel));
-  SolenoidActions brakeSolenoidActions =
-      new SolenoidActions(Constants.m_pH.makeSolenoid(Arm.b_Channel));
-  DoubleSolenoidActions hookSolenoidActions =
-      new DoubleSolenoidActions(
-          Constants.m_pH.makeDoubleSolenoid(Arm.hForward_Channel, Arm.hReverse_Channel));
+  DoubleSolenoidActions shooterSolenoidActions = new DoubleSolenoidActions(
+      Constants.m_pH.makeDoubleSolenoid(Arm.sForward_Channel, Arm.sReverse_Channel));
+  SolenoidActions brakeSolenoidActions = new SolenoidActions(Constants.m_pH.makeSolenoid(Arm.b_Channel));
+  DoubleSolenoidActions hookSolenoidActions = new DoubleSolenoidActions(
+      Constants.m_pH.makeDoubleSolenoid(Arm.hForward_Channel, Arm.hReverse_Channel));
+
+  private Clock currentTime = Clock.systemDefaultZone();
+  private long stateChangeTimestamp;
+  private boolean lastShooterState;
 
   ShuffleboardSubsystem shuffleboard;
 
@@ -66,6 +71,7 @@ public class ArmSubsystem extends SubsystemBase {
     shuffleboard.setNumber("gravity FF", Arm.maxGravityFF);
     shuffleboard.setNumber("ramp rate", Arm.motorRampRate);
     shuffleboard.setNumber("current limit", Arm.currentLimit);
+    shuffleboard.setNumber("solenoid delay", Arm.s_stateChangeDelay);
     setPID();
 
     if (RobotBase.isSimulation()) {
@@ -111,6 +117,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     rightArmMotor.setClosedLoopRampRate(shuffleboard.getNumber("ramp rate"));
     rightArmMotor.setSmartCurrentLimit((int) shuffleboard.getNumber("current limit"));
+    Arm.s_stateChangeDelay = (long) shuffleboard.getNumber("solenoid delay");
 
     // Configure smart motion
     /*
@@ -125,19 +132,17 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public boolean moveToAngle(double angle) {
-    /* if (rightEncoder.getPosition() >= Arm.encoderHardMax
-        || angle
-            >= Arm.encoderHardMax) { // Check if the arm is beyond the encoder hard max before we
+    if (rightEncoder.getPosition() >= Arm.encoderHardMax
+        && angle >= Arm.encoderHardMax) { // Check if the arm is beyond the encoder hard max before we
       // move. If it is beyond the hard max then stop the motor and end the movement
       stopArm();
       return true;
-    } else {*/
-
-    pidController.setReference(
-        angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot, getArbFF());
-    // System.out.println("motor angle: " + rightEncoder.getPosition());
-    return Math.abs(rightEncoder.getPosition() - angle) < shuffleboard.getNumber("stop range");
-    // }
+    } else {
+      pidController.setReference(
+          angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot, getArbFF());
+      // System.out.println("motor angle: " + rightEncoder.getPosition());
+      return Math.abs(rightEncoder.getPosition() - angle) < shuffleboard.getNumber("stop range");
+    }
   }
 
   public double getArbFF() {
@@ -177,16 +182,19 @@ public class ArmSubsystem extends SubsystemBase {
   // Shooter
   public void tuckShooter() {
     shooterSolenoidActions.setReverse();
+    stateChangeTimestamp = currentTime.millis();
     System.out.println("Shooter tucked");
   }
 
   public void deployShooter() {
     shooterSolenoidActions.setForward();
+    stateChangeTimestamp = currentTime.millis();
     System.out.println("Shooter deployed");
   }
 
   public void toggleShooterState() {
     shooterSolenoidActions.toggle();
+    stateChangeTimestamp = currentTime.millis();
     System.out.println("Shooter toggled");
   }
 
@@ -196,7 +204,10 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public boolean isTucked() {
-    return shooterSolenoidActions.isReversed();
+    if (currentTime.millis() - stateChangeTimestamp > Arm.s_stateChangeDelay
+        && lastShooterState != shooterSolenoidActions.isReversed())
+      lastShooterState = shooterSolenoidActions.isReversed();
+    return lastShooterState;
   }
 
   // Hook

@@ -9,6 +9,7 @@ public class UntuckArm extends Command {
   private ArmSubsystem arm;
   private boolean reachedSetpoint;
   private boolean safeToUntuck = false;
+  private boolean ranUntuckCommand = false;
 
   public UntuckArm(ArmSubsystem arm) {
     this.arm = arm;
@@ -30,9 +31,12 @@ public class UntuckArm extends Command {
   @Override
   public void execute() {
     if (safeToUntuck) {
-      // might need a delay to untuck here
-      arm.deployShooter();
-      reachedSetpoint = true;
+      if (!ranUntuckCommand) {
+        arm.deployShooter();
+        ranUntuckCommand = true;
+      } else if (!arm.isTucked()) {
+        reachedSetpoint = true;
+      }
     } else {
       // move to safe tuck pos
       safeToUntuck = arm.moveToAngle(Arm.tuckSafeMin);

@@ -143,16 +143,26 @@ public class RobotContainer {
     // // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new
     // // InstantCommand(drivebase::lock, drivebase)));
 
-    /*Trigger t = new Trigger(creepBoolean);
-    t.onTrue(new InstantCommand(() -> drivebase.setDriveSpeeds(true)))
-        .onFalse(new InstantCommand(() -> drivebase.setDriveSpeeds(false)));*/
+    /*
+     * Trigger t = new Trigger(creepBoolean);
+     * t.onTrue(new InstantCommand(() -> drivebase.setDriveSpeeds(true)))
+     * .onFalse(new InstantCommand(() -> drivebase.setDriveSpeeds(false)));
+     */
     new JoystickButton(driverXbox, XboxController.Button.kX.value)
-        .onTrue(
-            new MoveArmToPosition(
-                arm, shuffleboardAngle)); // Move to position outlined on shuffleboard position
+        .onTrue(new MoveArmToPosition(arm, shuffleboardAngle));
+    // Move to position outlined on shuffleboard
+    // position
+
+    /*  new JoystickButton(driverXbox, XboxController.Button.kX.value)
+    .onTrue(
+        new TuckArm(arm)
+            .andThen(
+                new UntuckArm(arm)
+                    .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
+                    .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))));*/
 
     new JoystickButton(driverXbox, XboxController.Button.kA.value)
-        .onTrue(Commands.runOnce(() -> arm.tuckShooter()));
+        .onTrue(Commands.runOnce(() -> arm.disableShooterSolenoids()));
     new JoystickButton(driverXbox, XboxController.Button.kB.value)
         .onTrue(Commands.runOnce(() -> arm.toggleShooterState()));
 

@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Arm;
+import frc.robot.subsystems.Solenoids.DoubleSolenoidActions;
+import frc.robot.subsystems.Solenoids.SolenoidActions;
+import java.time.Clock;
 
 public class ArmSubsystem extends SubsystemBase {
 
@@ -28,6 +31,10 @@ public class ArmSubsystem extends SubsystemBase {
       new DoubleSolenoidActions(
           Constants.m_pH.makeDoubleSolenoid(Arm.hForward_Channel, Arm.hReverse_Channel));
 
+  private Clock currentTime = Clock.systemDefaultZone();
+  private long stateChangeTimestamp;
+  private boolean lastShooterState;
+
   ShuffleboardSubsystem shuffleboard;
 
   public ArmSubsystem() {
@@ -43,6 +50,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     leftArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake); // make kBreak
     rightArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
+    rightArmMotor.setClosedLoopRampRate(Arm.motorRampRate);
+    rightArmMotor.setSmartCurrentLimit(Arm.currentLimit);
 
     rightEncoder = rightArmMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     rightEncoder.setPositionConversionFactor(
@@ -61,6 +71,9 @@ public class ArmSubsystem extends SubsystemBase {
     shuffleboard.setNumber("arm max output", Arm.pidOutputMax);
     shuffleboard.setNumber("stop range", Arm.stopRange);
     shuffleboard.setNumber("gravity FF", Arm.maxGravityFF);
+    shuffleboard.setNumber("ramp rate", Arm.motorRampRate);
+    shuffleboard.setNumber("current limit", Arm.currentLimit);
+    shuffleboard.setNumber("solenoid delay", Arm.s_stateChangeDelay);
     setPID();
 
     if (RobotBase.isSimulation()) {
@@ -104,6 +117,10 @@ public class ArmSubsystem extends SubsystemBase {
         shuffleboard.getNumber("arm max output"),
         smartMotionSlot);
 
+    rightArmMotor.setClosedLoopRampRate(shuffleboard.getNumber("ramp rate"));
+    rightArmMotor.setSmartCurrentLimit((int) shuffleboard.getNumber("current limit"));
+    Arm.s_stateChangeDelay = (long) shuffleboard.getNumber("solenoid delay");
+
     // Configure smart motion
     /*
      * pidController.setSmartMotionMaxVelocity(Arm.maxMotorVelocity,
@@ -118,13 +135,12 @@ public class ArmSubsystem extends SubsystemBase {
 
   public boolean moveToAngle(double angle) {
     if (rightEncoder.getPosition() >= Arm.encoderHardMax
-        || angle
+        && angle
             >= Arm.encoderHardMax) { // Check if the arm is beyond the encoder hard max before we
       // move. If it is beyond the hard max then stop the motor and end the movement
       stopArm();
       return true;
     } else {
-
       pidController.setReference(
           angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot, getArbFF());
       // System.out.println("motor angle: " + rightEncoder.getPosition());
@@ -169,16 +185,20 @@ public class ArmSubsystem extends SubsystemBase {
   // Shooter
   public void tuckShooter() {
     shooterSolenoidActions.setReverse();
+    stateChangeTimestamp = currentTime.millis();
     System.out.println("Shooter tucked");
   }
 
   public void deployShooter() {
     shooterSolenoidActions.setForward();
+    stateChangeTimestamp = currentTime.millis();
     System.out.println("Shooter deployed");
   }
 
   public void toggleShooterState() {
     shooterSolenoidActions.toggle();
+    stateChangeTimestamp = currentTime.millis();
+    // shuffleboard.setNumber("Changed state. current time: ", currentTime.millis());
     System.out.println("Shooter toggled");
   }
 
@@ -188,7 +208,13 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public boolean isTucked() {
-    return !shooterSolenoidActions.getState();
+    if (currentTime.millis() - stateChangeTimestamp > Arm.s_stateChangeDelay
+        && lastShooterState != shooterSolenoidActions.isReversed()) {
+      lastShooterState = shooterSolenoidActions.isReversed();
+      // shuffleboard.setNumber("updated state. current time: ", currentTime.millis());
+    }
+    shuffleboard.setBoolean("last shooter state", lastShooterState);
+    return lastShooterState;
   }
 
   // Hook

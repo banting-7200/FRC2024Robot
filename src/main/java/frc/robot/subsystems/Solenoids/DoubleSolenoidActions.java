@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Solenoids;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -11,7 +11,7 @@ public class DoubleSolenoidActions {
     setOff();
   }
 
-  public void toggle() {
+  public void toggle() { // Todo:get rid of the if statement after testing is complete
     if (SOLENOID.get() == DoubleSolenoid.Value.kOff) {
       SOLENOID.set(Value.kForward);
     } else {
@@ -41,7 +41,7 @@ public class DoubleSolenoidActions {
             + SOLENOID.getRevChannel());
   }
 
-  public boolean getState() {
+  public boolean isReversed() {
     return SOLENOID.get() == Value.kReverse;
   }
 }

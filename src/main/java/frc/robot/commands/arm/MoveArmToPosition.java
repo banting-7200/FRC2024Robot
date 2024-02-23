@@ -13,11 +13,11 @@ public class MoveArmToPosition extends Command {
   private boolean reachedSetpoint;
   // private boolean safeToMove = true;
 
-  private DoubleSupplier angleSetpoint;
+  private /*double*/ DoubleSupplier angleSetpoint;
 
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
 
-  public MoveArmToPosition(ArmSubsystem arm, DoubleSupplier angleSetpoint) {
+  public MoveArmToPosition(ArmSubsystem arm, /*double*/ DoubleSupplier angleSetpoint) {
     this.arm = arm;
     this.angleSetpoint = angleSetpoint;
 
@@ -34,6 +34,7 @@ public class MoveArmToPosition extends Command {
     // supplier assignment goes here
     arm.disableBrake();
     System.out.println("Move Arm To Position. setpoint is: " + angleSetpoint.getAsDouble());
+    // see if setting set point here is good
   }
 
   @Override

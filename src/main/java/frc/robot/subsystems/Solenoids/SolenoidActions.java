@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.Solenoids;
 
 import edu.wpi.first.wpilibj.Solenoid;
 

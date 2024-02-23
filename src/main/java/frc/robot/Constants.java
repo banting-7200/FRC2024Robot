@@ -44,47 +44,50 @@ public final class Constants {
     public static final int leftArmMotorID = 33; // 21 Todo: update to an actual on robot value
     public static final int rightArmMotorID = 32; // 20 Todo: update to an actual on robot value
 
-    public static final int sForward_Channel = 0;
-    public static final int sReverse_Channel = 15;
+    public static final int sForward_Channel = 15;
+    public static final int sReverse_Channel = 0;
     public static final int hForward_Channel = 1; // Todo: update these values
     public static final int hReverse_Channel = 14; // Todo: update these values
     public static final int b_Channel = 2;
 
     // default arm pids
     // Todo: calibrate these
-    public static /*final*/ double p = 0.07;
-    public static /*final*/ double i = 0.4; // 0.03
-    public static /*final*/ double d = 0;
+    public static /*final*/ double p = 0.15;
+    public static /*final*/ double i = 0.000009;
+    public static /*final*/ double d = 0.01;
     public static /*final*/ double f = 0;
-    public static /*final*/ double iz = 0.08;
+    public static /*final*/ double iz = 1.9;
 
     public static /*final*/ double pidOutputMin = -1;
     public static /*final*/ double pidOutputMax = 1;
+    public static /*final*/ double motorRampRate = 0.6;
+    public static /*final*/ int currentLimit = 20;
 
-    public static /*final*/ double stopRange = 0.1;
-    public static final double encoderHardMax = 12;
+    public static /*final*/ double stopRange = 0.3;
+    public static final double encoderHardMax = 34;
+    public static /*final*/ long s_stateChangeDelay = 8;
 
     public static final int smartMotionSlot = 0;
-    public static final double maxMotorVelocity = 1700; // max motor velocity in rpm
+    /*public static final double maxMotorVelocity = 1700; // max motor velocity in rpm
     public static final double minMotorVelocity = 0;
     public static final double maxMotorAccel = 1400;
-    public static final double allowedPIDError = 0;
+    public static final double allowedPIDError = 0;*/
 
     // Arm movement constants
     // Todo: find the min-max safe range to tuck the shooter
-    public static final double tuckSafeMin = 4,
-        tuckSafeMax = 11; // Robot hard max 11 ticks, min must be further tuned later
+    public static final double tuckSafeMin = 25,
+        tuckSafeMax = 32; // Robot hard max 11 ticks, min must be further tuned later
     public static final double armGearRatio = 400;
 
-    public static final double tuckArmAngle = 3.2;
-    public static final double intakeArmAngle = 0;
-    public static final double ampArmAngle = 12;
+    public static final double tuckArmAngle = 24;
+    public static final double intakeArmAngle = 21.0;
+    public static final double ampArmAngle = 31.3;
 
     public static final int kMeasuredPosHorizontal =
-        0; // Default position measured when arm is horizontal from example. Todo: find the value
+        21; // Default position measured when arm is horizontal from example. Todo: find the value
     // for our arm.
     public static /*final*/ double maxGravityFF =
-        0.8; // Todo: Find the best gravity feed forward for our arm
+        0.07; // Todo: Find the best gravity feed forward for our arm
 
     // Arm angle calculation constants
     public static final double armToSpeakerHeight =

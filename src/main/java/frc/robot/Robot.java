@@ -115,6 +115,7 @@ public class Robot extends TimedRobot {
     // m_robotContainer.getDoubleSupplier());
     m_robotContainer.arm.setPID();
     m_robotContainer.arm.getLimitSwitch();
+    m_robotContainer.arm.isTucked();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

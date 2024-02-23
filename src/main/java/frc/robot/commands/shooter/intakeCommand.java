@@ -5,10 +5,10 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class intakeCommand extends Command {
   public ShooterSubsystem shooter;
-  int rpm;
+  double rpm;
   int openOrClosedCounter;
 
-  public intakeCommand(int rpm, ShooterSubsystem shooter) {
+  public intakeCommand(double rpm, ShooterSubsystem shooter) {
     this.rpm = rpm;
     this.shooter = shooter;
   }

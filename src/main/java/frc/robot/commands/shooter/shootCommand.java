@@ -13,11 +13,11 @@ public class shootCommand extends Command {
   long currentMillis;
   long sinceNoteLeft;
   long sinceIntakeMotor;
-  int rpm;
+  double rpm;
   Boolean hasSeenNote = false;
-  int waitTime;
+  double waitTime;
 
-  public shootCommand(int rpm, ShooterSubsystem shooter, int waitTime) {
+  public shootCommand(double rpm, ShooterSubsystem shooter, double waitTime) {
     this.rpm = rpm;
     this.shooter = shooter;
     this.waitTime = waitTime;

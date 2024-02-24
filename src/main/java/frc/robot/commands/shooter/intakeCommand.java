@@ -5,10 +5,10 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class intakeCommand extends Command {
   public ShooterSubsystem shooter;
-  int rpm;
+  double rpm;
   int openOrClosedCounter;
 
-  public intakeCommand(int rpm, ShooterSubsystem shooter) {
+  public intakeCommand(double rpm, ShooterSubsystem shooter) {
     this.rpm = rpm;
     this.shooter = shooter;
 
@@ -18,6 +18,7 @@ public class intakeCommand extends Command {
   @Override
   public void initialize() {
     openOrClosedCounter = 0;
+    System.out.println("I GOT TO INIT");
   }
 
   @Override
@@ -28,6 +29,7 @@ public class intakeCommand extends Command {
     } else if (openOrClosedCounter == 1 && shooter.shooterHasNote() == false) {
       openOrClosedCounter++;
     }
+    System.out.println("I GOT TO EXECUTE");
   }
 
   public boolean isFinished() {

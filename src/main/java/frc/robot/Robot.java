@@ -10,6 +10,10 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.commands.shooter.intakeCommand;
+import frc.robot.commands.shooter.shootCommand;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.ShuffleboardSubsystem;
 import java.io.File;
@@ -31,7 +35,7 @@ public class Robot extends TimedRobot {
   XboxController driverXbox = new XboxController(0);
 
   private Timer disabledTimer;
-  ShuffleboardSubsystem shuffle;
+  ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
   LimelightDevice limelight;
 
   public Robot() {
@@ -55,6 +59,10 @@ public class Robot extends TimedRobot {
 
     shuffle = ShuffleboardSubsystem.getInstance();
     limelight = m_robotContainer.limelight;
+    shuffle.setNumber("Intake Command RPM", intakeCommandRPM);
+    shuffle.setNumber("Shoot Command RPM", shootCommandRPM);
+    shuffle.setNumber("Shoot Command Wait Time", shootCommandWaitTime);
+    shuffle.setBoolean("IR sensor", shooter.shooterHasNote());
     // m_robotContainer.arm.disableBrake(); // Todo: put this a the start of arm
     // commands
 
@@ -176,26 +184,9 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() // Controller inputs to create and automate commands
       {
     /*
-     * if (driverXbox.get() == true) {
-     * System.out.println("A Button Pressed");
-     * shooterCommand = new intakeCommand(1500, shooter);
-     * shooterCommand.schedule();
-     * }
-     *
-     * // shooterCommand = new readyNoteCommand(1500, shooter);
-     * // shooterCommand.schedule();
-     *
-     * if (driverXbox.getXButtonReleased() == true) {
-     * System.out.println("X Button Pressed");
-     * shooterCommand = new shootCommand(2000, shooter);
-     * shooterCommand.schedule();
-     * }
-     * if (driverXbox.getYButtonReleased() == true) {
-     * System.out.println("Y Button Pressed");
-     * shooterCommand = new intakeCommand(1500, shooter).andThen(new
-     * shootCommand(2000, shooter));
-     * shooterCommand.schedule();
-     * }
+     * dpadUpButton.onTrue(
+     * new intakeCommand(intakeCommandRPM, shooter)
+     * .andThen(new shootCommand(shootCommandRPM, shooter, shootCommandWaitTime)));
      */
   }
 

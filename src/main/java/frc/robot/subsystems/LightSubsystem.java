@@ -95,9 +95,17 @@ public class LightSubsystem {
         shuffle.setText("Mode", "Error");
         break;
     }
+    setColourMode();
   }
 
   public void setColor(int r, int g, int b) { // set to specific colour
+    for (int i = 0; i < statusBuffer.getLength(); i++) {
+        statusBuffer.setRGB(i, r, g, b);
+      }
+    statusLights.setData(statusBuffer);
+  }
+
+  public void setColourMode(){
     for (int i = 0; i < statusBuffer.getLength(); i++) {
       if (Math.floor(i / 4) % 2 == 0) {
         statusBuffer.setRGB(i, colour1.getGreen(), colour1.getRed(), colour1.getBlue());
@@ -105,6 +113,5 @@ public class LightSubsystem {
       statusBuffer.setRGB(i, colour2.getGreen(), colour2.getRed(), colour2.getBlue());
       }
     }
-    statusLights.setData(statusBuffer);
   }
 }

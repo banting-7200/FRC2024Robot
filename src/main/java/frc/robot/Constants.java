@@ -33,6 +33,24 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 2;
   }
 
+  public static final class copilotController {
+    public static final int upButton = 2;
+    public static final int downButton = 3;
+
+    public static final int brakeButton = 4;
+    public static final int pickupButton = 5;
+
+    public static final int hookButton = 6;
+    public static final int carryButton = 7;
+    public static final int extendButton = 8;
+
+    public static final int shootButton = 9;
+    public static final int limelightButton = 10;
+
+    public static final int speakerButton = 11;
+    public static final int ampButton = 12;
+  }
+
   public static final class Lights {
     public static final int lightID = 9;
     public static final int lightStringLength = 15;
@@ -44,10 +62,12 @@ public final class Constants {
     public static final int leftArmMotorID = 33; // 21 Todo: update to an actual on robot value
     public static final int rightArmMotorID = 32; // 20 Todo: update to an actual on robot value
 
-    public static final int sForward_Channel = 15;
-    public static final int sReverse_Channel = 0;
-    public static final int hForward_Channel = 1; // Todo: update these values
-    public static final int hReverse_Channel = 14; // Todo: update these values
+    public static final int solenoidSwitchID = 2;
+
+    public static final int sForward_Channel = 7;
+    public static final int sReverse_Channel = 8;
+    public static final int hForward_Channel = 6; // Todo: update these values
+    public static final int hReverse_Channel = 9; // Todo: update these values
     public static final int b_Channel = 2;
 
     // default arm pids
@@ -60,8 +80,12 @@ public final class Constants {
 
     public static /*final*/ double pidOutputMin = -1;
     public static /*final*/ double pidOutputMax = 1;
+
+    public static final double motorSpeed = 0.5;
+
     public static /*final*/ double motorRampRate = 0.6;
     public static /*final*/ int currentLimit = 20;
+    public static final double speakerAlignTagArea = 2;
 
     public static /*final*/ double stopRange = 0.3;
     public static final double encoderHardMax = 34;
@@ -75,8 +99,8 @@ public final class Constants {
 
     // Arm movement constants
     // Todo: find the min-max safe range to tuck the shooter
-    public static final double tuckSafeMin = 25,
-        tuckSafeMax = 32; // Robot hard max 11 ticks, min must be further tuned later
+    public static final double tuckSafeMin =
+        25; // Robot hard max 11 ticks, min must be further tuned later
     public static final double armGearRatio = 400;
 
     public static final double tuckArmAngle = 24;
@@ -103,6 +127,12 @@ public final class Constants {
     public static final int shooterID = 30;
     public static final int intakeID = 31;
     public static final int shootIR = 0;
+
+    public static final int intakeRPM = 1000;
+    public static final int ampShootRPM = 2000;
+    public static final int speakerShootRPM = 6000;
+    public static final int ampWaitTime = 0;
+    public static final int speakerWaitTime = 1000;
 
     // Default PID values to be tuned later
     public static final double shooterF = 0.13;

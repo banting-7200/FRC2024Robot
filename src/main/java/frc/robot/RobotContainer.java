@@ -4,15 +4,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.Shooter;
 import frc.robot.commands.arm.MoveArmToPosition;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightDevice;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ShuffleboardSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -26,27 +29,38 @@ import java.util.function.DoubleSupplier;
 public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
-  // private final SwerveSubsystem drivebase = new SwerveSubsystem(new
-  // File(Filesystem.getDeployDirectory(),
-  // "swerve/neo"));
-  // CommandJoystick rotationController = new CommandJoystick(1);
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  CommandJoystick driverController = new CommandJoystick(1);
 
   // CommandJoystick driverController = new
   // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   // CommandJoystick driverController = new
   // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   static XboxController driverXbox = new XboxController(0);
+  static Joystick CoPilotController = new Joystick(1);
 
   // Subsystem Declaration
-  ArmSubsystem arm = new ArmSubsystem();
-  LimelightDevice limelight = new LimelightDevice();
+  /*
+   * private final SwerveSubsystem drivebase =
+   * new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve/neo"));
+   */
+  ArmSubsystem arm;
+  private ShooterSubsystem shooter;
+  LimelightDevice limelight;
   private static ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
+
+  static boolean isRedAliance =
+      DriverStation.getAlliance().isPresent()
+          ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+          : false;
+
+  static boolean speakerShot;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    arm = new ArmSubsystem();
+    shooter = new ShooterSubsystem(arm);
+    limelight = new LimelightDevice();
+
     configureBindings();
 
     /*
@@ -124,7 +138,13 @@ public class RobotContainer {
         return shuffle.getNumber("arm angle");
       };
 
-  DoubleSupplier d;
+  /*  public static final IntSupplier tagToAlign = () -> isRedAliance ? 4 : 7; */
+
+  public static final DoubleSupplier shooterRPM =
+      () -> speakerShot ? Shooter.speakerShootRPM : Shooter.ampShootRPM;
+
+  public static final DoubleSupplier shooterWaitTime =
+      () -> speakerShot ? Shooter.speakerWaitTime : Shooter.ampWaitTime;
 
   private void configureBindings() {
     // // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
@@ -150,17 +170,16 @@ public class RobotContainer {
      */
     new JoystickButton(driverXbox, XboxController.Button.kX.value)
         .onTrue(new MoveArmToPosition(arm, shuffleboardAngle));
-    // Move to position outlined on shuffleboard
-    // position
+    // Move to position outlined on shuffleboard position
 
-    /*  new JoystickButton(driverXbox, XboxController.Button.kX.value)
+    /* new JoystickButton(driverXbox, XboxController.Button.kX.value)
     .onTrue(
         new TuckArm(arm)
+            .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
             .andThen(
                 new UntuckArm(arm)
                     .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
-                    .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))));*/
-
+                    .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle)))); */
     new JoystickButton(driverXbox, XboxController.Button.kA.value)
         .onTrue(Commands.runOnce(() -> arm.disableShooterSolenoids()));
     new JoystickButton(driverXbox, XboxController.Button.kB.value)
@@ -168,6 +187,47 @@ public class RobotContainer {
 
     new JoystickButton(driverXbox, XboxController.Button.kY.value)
         .onTrue(Commands.runOnce(() -> arm.disableBrake()));
+
+    /*  new POVButton(driverXbox, 270).onTrue(new intakeCommand(500, shooter)); //D-pad down
+    new POVButton(driverXbox, 180).onTrue(new shootCommand(500, shooter, 1000));
+    new POVButton(driverXbox, 90)
+    .onTrue(new intakeCommand(1500, shooter).andThen(new shootCommand(2000,
+    shooter, 1000))); */
+
+    // Todo: make suppliers for conditional commands
+    /* new JoystickButton(CoPilotController,
+    copilotController.upButton).onTrue(Commands.runOnce(() ->
+    arm.setMotor(Arm.motorSpeed))).onFalse(Commands.runOnce(() -> stopArm()));
+    new JoystickButton(CoPilotController,
+    copilotController.downButton).onTrue(Commands.runOnce(() ->
+    arm.setMotor(-Arm.motorSpeed))).onFalse(Commands.runOnce(() -> stopArm()));
+
+    new JoystickButton(CoPilotController, copilotController.brakeButton)
+    .onTrue(Commands.runOnce(() -> stopArm()));
+    new JoystickButton(CoPilotController, copilotController.pickupButton)
+    .onTrue(new intakeCommand(Shooter.intakeRPM, shooter)); // Todo: change rpm to a constant value
+
+    new JoystickButton(CoPilotController,
+    copilotController.hookButton).onTrue(Commands.runOnce(() ->
+    arm.toggleHook()));
+    new JoystickButton(CoPilotController,
+    copilotController.carryButton).onTrue(Commands.runOnce(() ->
+    shooter.stopIntakeMotor()).andThen(new TuckArm(arm)));
+    new JoystickButton(CoPilotController,
+    copilotController.extendButton).onTrue(Commands.runOnce(() ->
+    arm.toggleShooterState()));
+
+    new JoystickButton(CoPilotController, copilotController.shootButton).onTrue(new shootCommand(shooterRPM, shooter, shooterWaitTime));
+    new JoystickButton(CoPilotController,
+    copilotController.limelightButton).onTrue(new AprilTagAlign(drivebase,
+    limelight, Arm.speakerAlignTagArea, tagToAlign));
+
+    new JoystickButton(CoPilotController,
+    copilotController.speakerButton).onTrue(new MoveArmToPosition(arm,
+    limelight.calculateArmShootAngle()).alongWith(Commands.runOnce(() -> speakerShot = true)));
+    new JoystickButton(CoPilotController, copilotController.ampButton).onTrue(new
+    MoveArmToPosition(arm, Arm.ampArmAngle).alongWith(Commands.runOnce(() -> speakerShot = false))); */
+
   }
 
   public static final BooleanSupplier creepBoolean =
@@ -192,6 +252,11 @@ public class RobotContainer {
 
   public void setDriveMode() {
     // drivebase.setDefaultCommand();
+  }
+
+  public void stopArm() {
+    arm.enableBrake();
+    arm.stopArm();
   }
 
   public void setMotorBrake(boolean brake) {

@@ -13,15 +13,19 @@ public class MoveArmToPosition extends Command {
   private boolean reachedSetpoint;
   // private boolean safeToMove = true;
 
-  private /*double*/ DoubleSupplier angleSetpoint;
+  private DoubleSupplier angleSetpoint;
 
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
 
-  public MoveArmToPosition(ArmSubsystem arm, /*double*/ DoubleSupplier angleSetpoint) {
+  public MoveArmToPosition(ArmSubsystem arm, DoubleSupplier angleSetpoint) {
     this.arm = arm;
     this.angleSetpoint = angleSetpoint;
 
     addRequirements(arm);
+  }
+
+  public MoveArmToPosition(ArmSubsystem arm, double angleSetpoint) {
+    this(arm, () -> angleSetpoint);
   }
 
   @Override

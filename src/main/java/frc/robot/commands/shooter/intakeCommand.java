@@ -2,6 +2,8 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.LightSubsystem.lightStates;
+import frc.robot.subsystems.LightSubsystem;
 import java.time.Clock;
 
 public class intakeCommand extends Command {
@@ -17,6 +19,8 @@ public class intakeCommand extends Command {
   boolean notelock = false;
   boolean notelock2 = false;
   boolean shooterHasNotePrev = false;
+
+  private LightSubsystem lights = LightSubsystem.getInstance();
 
   public intakeCommand(double intakeRPM, double pullBackRPM, double correctPositioningRPM, ShooterSubsystem shooter) {
     this.intakeRPM = intakeRPM;
@@ -68,6 +72,7 @@ public class intakeCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.stopIntakeMotor();
+    lights.SetLightState(lightStates.NotePickedUp);
     System.out.println("Intake Command ShutDown");
   }
 }

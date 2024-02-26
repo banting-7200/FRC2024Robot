@@ -2,13 +2,17 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.LightSubsystem.lightStates;
+
 import java.time.Clock;
 import java.util.function.IntSupplier;
+import frc.robot.subsystems.LightSubsystem;
 
 public class shootCommand extends Command {
 
   public ShooterSubsystem shooter;
   private boolean hasNotBeenDetected = false;
+  LightSubsystem lights = LightSubsystem.getInstance();
   Clock currentTime = Clock.systemDefaultZone();
   long startedMillis = currentTime.millis();
   long currentMillis;
@@ -63,5 +67,6 @@ public class shootCommand extends Command {
     shooter.stopShootMotor();
     shooter.stopIntakeMotor();
     System.out.println("Shooting Done");
+    lights.SetLightState(lightStates.ReadyForPickup);
   }
 }

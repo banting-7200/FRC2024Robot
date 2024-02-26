@@ -100,28 +100,34 @@ public class ArmSubsystem extends SubsystemBase {
     int smartMotionSlot = Arm.smartMotionSlot;
 
     double[] PIDvalues = shuffleboard.getPID("arm");
+    Arm.p = PIDvalues[0];
+    Arm.i = PIDvalues[1];
+    Arm.d = PIDvalues[2];
+    Arm.f = PIDvalues[3];
+    Arm.iz = PIDvalues[4];
+
     // Configure PID
-    if (Arm.p != PIDvalues[0]) {
-      Arm.p = PIDvalues[0];
-    }
-    if (Arm.i != PIDvalues[1]) {
-      Arm.i = PIDvalues[1];
-    }
-    if (Arm.d != PIDvalues[2]) {
-      Arm.d = PIDvalues[2];
-    }
-    if (Arm.f != PIDvalues[3]) {
-      Arm.f = PIDvalues[3];
-    }
-    if (Arm.iz != PIDvalues[4]) {
-      Arm.iz = PIDvalues[4];
-    }
-    if (Arm.pidOutputMin != shuffleboard.getNumber("arm min output")) {
+    // if (Arm.p != PIDvalues[0]) {
+    //   Arm.p = PIDvalues[0];
+    // }
+    // if (Arm.i != PIDvalues[1]) {
+    //   Arm.i = PIDvalues[1];
+    // }
+    // if (Arm.d != PIDvalues[2]) {
+    //   Arm.d = PIDvalues[2];
+    // }
+    // if (Arm.f != PIDvalues[3]) {
+    //   Arm.f = PIDvalues[3];
+    // }
+    // if (Arm.iz != PIDvalues[4]) {
+    //   Arm.iz = PIDvalues[4];
+    // }
+    //if (Arm.pidOutputMin != shuffleboard.getNumber("arm min output")) {
       Arm.pidOutputMin = shuffleboard.getNumber("arm min output");
-    }
-    if (Arm.pidOutputMax != shuffleboard.getNumber("arm max output")) {
+    //}
+    //if (Arm.pidOutputMax != shuffleboard.getNumber("arm max output")) {
       Arm.pidOutputMax = shuffleboard.getNumber("arm max output");
-    }
+    //}
     pidController.setP(PIDvalues[0], smartMotionSlot);
     pidController.setI(PIDvalues[1], smartMotionSlot);
     pidController.setD(PIDvalues[2], smartMotionSlot);

@@ -111,7 +111,7 @@ public class Robot extends TimedRobot {
     shootCommandWaitTime = shuffle.getNumber("Shoot Command Wait Time");
     shuffle.setNumber("Intake Speed", shooter.getIntakeRPM());*/
 
-    System.out.println("INTAKERPM: " + intakeCommandRPM);
+    // System.out.println("INTAKERPM: " + intakeCommandRPM);
 
     // System.out.println("shuffleboard input: " +
     // m_robotContainer.getDoubleSupplier());

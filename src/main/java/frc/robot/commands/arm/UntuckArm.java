@@ -3,11 +3,15 @@ package frc.robot.commands.arm;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Arm;
 import frc.robot.subsystems.ArmSubsystem;
+import java.time.Clock;
 
 public class UntuckArm extends Command {
 
   private ArmSubsystem arm;
   private boolean ranUntuckCommand = false;
+
+  Clock timer = Clock.systemDefaultZone();
+  long startTime;
 
   public UntuckArm(ArmSubsystem arm) {
     this.arm = arm;
@@ -18,6 +22,8 @@ public class UntuckArm extends Command {
   public void initialize() {
     arm.disableBrake();
     System.out.println("Untuck Arm");
+    startTime = timer.millis();
+    System.out.println("start time is: " + startTime);
   }
 
   @Override
@@ -42,5 +48,6 @@ public class UntuckArm extends Command {
   @Override
   public void end(boolean interrupted) {
     arm.stopArm();
+    System.out.println("elapsed time is: " + (timer.millis() - startTime));
   }
 }

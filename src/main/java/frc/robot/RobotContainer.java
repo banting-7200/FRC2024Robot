@@ -17,6 +17,7 @@ import frc.robot.Constants.copilotController;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.arm.MoveArmToPosition;
 import frc.robot.commands.arm.TuckArm;
+import frc.robot.commands.arm.UntuckArm;
 import frc.robot.commands.shooter.intakeCommand;
 import frc.robot.commands.shooter.shootCommand;
 import frc.robot.subsystems.ArmSubsystem;
@@ -187,32 +188,25 @@ public class RobotContainer {
         // // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new
         // // InstantCommand(drivebase::lock, drivebase)));
 
-        /*
-         * Trigger t = new Trigger(creepBoolean);
-         * t.onTrue(new InstantCommand(() -> drivebase.setDriveSpeeds(true)))
-         * .onFalse(new InstantCommand(() -> drivebase.setDriveSpeeds(false)));
-         */
-        new JoystickButton(driverXbox, XboxController.Button.kX.value)
-                .onTrue(new MoveArmToPosition(arm, shuffleboardAngle));
-        // Move to position outlined on shuffleboard position
+    /*
+     * Trigger t = new Trigger(creepBoolean);
+     * t.onTrue(new InstantCommand(() -> drivebase.setDriveSpeeds(true)))
+     * .onFalse(new InstantCommand(() -> drivebase.setDriveSpeeds(false)));
+     */
+    new JoystickButton(driverXbox, XboxController.Button.kX.value)
+        .onTrue(new TuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle)));
+    // Move to position outlined on shuffleboard position
 
-        /*
-         * new JoystickButton(driverXbox, XboxController.Button.kX.value)
-         * .onTrue(
-         * new TuckArm(arm)
-         * .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
-         * .andThen(
-         * new UntuckArm(arm)
-         * .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
-         * .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))));
-         */
+        new JoystickButton(driverXbox, XboxController.Button.kX.value)
+                .onTrue(new TuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle)));
+
         new JoystickButton(driverXbox, XboxController.Button.kA.value)
-                .onTrue(Commands.runOnce(() -> arm.disableShooterSolenoids()));
+                .onTrue(new UntuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle)));
         new JoystickButton(driverXbox, XboxController.Button.kB.value)
-                .onTrue(Commands.runOnce(() -> arm.toggleShooterState()));
+                .onTrue(new UntuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.ampArmAngle)));
 
         new JoystickButton(driverXbox, XboxController.Button.kY.value)
-                .onTrue(Commands.runOnce(() -> arm.disableBrake()));
+                .onTrue(Commands.runOnce(() -> arm.toggleShooterState()));
 
         /*
          * new POVButton(driverXbox, 270).onTrue(new intakeCommand(500, shooter));
@@ -229,14 +223,13 @@ public class RobotContainer {
         new JoystickButton(CoPilotController, copilotController.downButton)
                 .onTrue(new MoveArm(arm, axis));
 
-        new JoystickButton(CoPilotController, copilotController.brakeButton)
-                .onTrue(
-                        Commands.runOnce(
-                                () -> stopArm())); // Does this have to brake everything or just the arm.
-        new JoystickButton(CoPilotController, copilotController.pickupButton)
-                .onTrue(
-                        new intakeCommand(Shooter.intakeRPM, Shooter.pullBackRPM, Shooter.correctPositioningRPM,
-                                shooter)); // From what positions will we intake?
+    new JoystickButton(CoPilotController, copilotController.brakeButton)
+        .onTrue(
+            Commands.runOnce(
+                () -> stopArm())); // Does this have to brake everything or just the arm.
+    new JoystickButton(CoPilotController, copilotController.pickupButton)
+        .onTrue(
+            new intakeCommand(Shooter.intakeRPM, Shooter.pullBackRPM, Shooter.correctPositioningRPM, shooter)); // From what positions will we intake?
 
         new JoystickButton(CoPilotController, copilotController.hookButton)
                 .onTrue(Commands.runOnce(() -> arm.toggleHook()));

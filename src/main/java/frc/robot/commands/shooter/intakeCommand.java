@@ -36,7 +36,7 @@ public class intakeCommand extends Command {
   public void execute() {
 
     if (notelock == false) {
-      shooter.spinIntakeToNegativeRPM(6000);
+      shooter.spinIntakeToNegativeRPM(intakeRPM);
       if (shooter.shooterHasNote() == true && override == false) {
         startedMillis = currentTime.millis() + 100;
         stopDryRun = true;

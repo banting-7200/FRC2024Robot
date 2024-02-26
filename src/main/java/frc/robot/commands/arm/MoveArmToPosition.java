@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LightSubsystem;
 import frc.robot.subsystems.ShuffleboardSubsystem;
+import java.time.Clock;
 import java.util.function.DoubleSupplier;
 
 public class MoveArmToPosition extends Command {
@@ -16,6 +17,9 @@ public class MoveArmToPosition extends Command {
   private DoubleSupplier angleSetpoint;
 
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
+
+  Clock timer = Clock.systemDefaultZone();
+  long startTime;
 
   public MoveArmToPosition(ArmSubsystem arm, DoubleSupplier angleSetpoint) {
     this.arm = arm;
@@ -38,6 +42,8 @@ public class MoveArmToPosition extends Command {
     // supplier assignment goes here
     arm.disableBrake();
     System.out.println("Move Arm To Position. setpoint is: " + angleSetpoint.getAsDouble());
+    startTime = timer.millis();
+    System.out.println("start time is: " + startTime);
     // see if setting set point here is good
   }
 
@@ -61,5 +67,6 @@ public class MoveArmToPosition extends Command {
   public void end(boolean interrupted) {
     arm.stopArm();
     System.out.println("Move to position command finished. interupted: " + interrupted);
+    System.out.println("elapsed time is: " + (timer.millis() - startTime));
   }
 }

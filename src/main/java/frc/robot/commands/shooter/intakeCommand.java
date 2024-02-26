@@ -19,6 +19,8 @@ public class intakeCommand extends Command {
   public intakeCommand(double rpm, ShooterSubsystem shooter) {
     this.rpm = rpm;
     this.shooter = shooter;
+
+    addRequirements(shooter);
   }
 
   @Override

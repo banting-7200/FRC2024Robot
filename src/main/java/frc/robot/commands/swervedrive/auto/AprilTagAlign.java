@@ -1,5 +1,7 @@
 package frc.robot.commands.swervedrive.auto;
 
+import java.util.function.IntSupplier;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,13 +20,13 @@ public class AprilTagAlign extends Command {
   private double tagArea;
   private double targetArea;
 
-  private int tagToAlign;
+  private IntSupplier tagToAlign;
 
   public AprilTagAlign(
       SwerveSubsystem swerveSubsystem,
       LimelightDevice limelightSubsystem,
       double targetArea,
-      int tagToAlign) {
+      IntSupplier tagToAlign) {
     this.swerveSubsystem = swerveSubsystem;
     this.limelightSubsystem = limelightSubsystem;
 
@@ -40,15 +42,23 @@ public class AprilTagAlign extends Command {
     addRequirements(swerveSubsystem, limelightSubsystem);
   }
 
+  public AprilTagAlign(SwerveSubsystem swerveSubsystem,
+      LimelightDevice limelightSubsystem,
+      double targetArea,
+      int tagToAlign){
+this(swerveSubsystem, limelightSubsystem, targetArea, () -> tagToAlign);
+  }
+
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   @Override
   public void execute() {
     double fowardAdjust = 0;
     double rotationAdjust = 0;
 
-    if (tagToAlign == limelightSubsystem.getTagID()) {
+    if (tagToAlign.getAsInt() == limelightSubsystem.getTagID()) {
       tagArea = limelightSubsystem.getTagArea();
       fowardAdjust = positionController.calculate(tagArea, targetArea);
       rotationAdjust = rotationController.calculate(limelightSubsystem.getTagX(), 0);

@@ -8,6 +8,7 @@ import com.revrobotics.SparkAbsoluteEncoder;
 import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -21,6 +22,8 @@ public class ArmSubsystem extends SubsystemBase {
   private CANSparkMax leftArmMotor, rightArmMotor;
   private AbsoluteEncoder rightEncoder;
   private SparkPIDController pidController;
+
+  private DigitalInput solenoidSwitch;
 
   DoubleSolenoidActions shooterSolenoidActions =
       new DoubleSolenoidActions(
@@ -40,6 +43,8 @@ public class ArmSubsystem extends SubsystemBase {
   public ArmSubsystem() {
     leftArmMotor = new CANSparkMax(Arm.leftArmMotorID, MotorType.kBrushless);
     rightArmMotor = new CANSparkMax(Arm.rightArmMotorID, MotorType.kBrushless);
+
+    solenoidSwitch = new DigitalInput(Arm.solenoidSwitchID);
 
     shuffleboard = ShuffleboardSubsystem.getInstance();
 
@@ -62,6 +67,8 @@ public class ArmSubsystem extends SubsystemBase {
     pidController.setFeedbackDevice(rightEncoder);
     pidController.setPositionPIDWrappingEnabled(true);
 
+    lastShooterState = solenoidSwitch.get();
+
     shuffleboard.setNumber("arm P", Arm.p);
     shuffleboard.setNumber("arm I", Arm.i);
     shuffleboard.setNumber("arm D", Arm.d);
@@ -74,11 +81,19 @@ public class ArmSubsystem extends SubsystemBase {
     shuffleboard.setNumber("ramp rate", Arm.motorRampRate);
     shuffleboard.setNumber("current limit", Arm.currentLimit);
     shuffleboard.setNumber("solenoid delay", Arm.s_stateChangeDelay);
+
+    shuffleboard.setNumber("output current right", rightArmMotor.getOutputCurrent());
+    shuffleboard.setNumber("output current left", leftArmMotor.getOutputCurrent());
     setPID();
 
     if (RobotBase.isSimulation()) {
       REVPhysicsSim.getInstance().addSparkMax(rightArmMotor, DCMotor.getNEO(1));
     }
+  }
+
+  public void setOutputVoltage() {
+    shuffleboard.setNumber("output current right", rightArmMotor.getOutputCurrent());
+    shuffleboard.setNumber("output current left", leftArmMotor.getOutputCurrent());
   }
 
   public void setPID() {
@@ -133,6 +148,10 @@ public class ArmSubsystem extends SubsystemBase {
      */
   }
 
+  public void setMotor(double speed) {
+    rightArmMotor.set(speed);
+  }
+
   public boolean moveToAngle(double angle) {
     if (rightEncoder.getPosition() >= Arm.encoderHardMax
         && angle
@@ -161,6 +180,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   double degreesToRotations(double degrees) {
     return degrees * Arm.armGearRatio;
+  }
+
+  public void getSwitch() {
+    System.out.println(solenoidSwitch.get());
   }
 
   public void getLimitSwitch() {
@@ -198,7 +221,8 @@ public class ArmSubsystem extends SubsystemBase {
   public void toggleShooterState() {
     shooterSolenoidActions.toggle();
     stateChangeTimestamp = currentTime.millis();
-    // shuffleboard.setNumber("Changed state. current time: ", currentTime.millis());
+    // shuffleboard.setNumber("Changed state. current time: ",
+    // currentTime.millis());
     System.out.println("Shooter toggled");
   }
 
@@ -209,9 +233,12 @@ public class ArmSubsystem extends SubsystemBase {
 
   public boolean isTucked() {
     if (currentTime.millis() - stateChangeTimestamp > Arm.s_stateChangeDelay
-        && lastShooterState != shooterSolenoidActions.isReversed()) {
-      lastShooterState = shooterSolenoidActions.isReversed();
-      // shuffleboard.setNumber("updated state. current time: ", currentTime.millis());
+        && lastShooterState
+            != solenoidSwitch
+                .get()) { // For this to work, the robot must start in the shooting position
+      lastShooterState = solenoidSwitch.get();
+      // shuffleboard.setNumber("updated state. current time: ",
+      // currentTime.millis());
     }
     shuffleboard.setBoolean("last shooter state", lastShooterState);
     return lastShooterState;

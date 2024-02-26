@@ -12,17 +12,21 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.shooter.intakeCommand;
 import frc.robot.commands.shooter.shootCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightDevice;
-import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ShuffleboardSubsystem;
 import java.io.File;
 import java.io.IOException;
 import swervelib.parser.SwerveParser;
+import frc.robot.subsystems.ShooterSubsystem;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the
+ * name of this class or
+ * the package after creating this project, you must also update the
+ * build.gradle file in the
  * project.
  */
 public class Robot extends TimedRobot {
@@ -30,14 +34,10 @@ public class Robot extends TimedRobot {
   private static Robot instance;
   private RobotContainer m_robotContainer;
   private Command m_autonomousCommand;
-  private Command shooterCommand;
-  public double intakeCommandRPM = 1000;
-  public double shootCommandRPM = 1000;
-  public double shootCommandWaitTime = 1000;
+  double intakeCommandRPM;
+  double shootCommandRPM;
+  double shootCommandWaitTime;
 
-  public ShooterSubsystem shooter;
-
-  // private RobotContainer m_robotContainer;
   XboxController driverXbox = new XboxController(0);
   /*
    * POVButton dpadDownButton = new POVButton(driverXbox, 180);
@@ -56,6 +56,7 @@ public class Robot extends TimedRobot {
   private Timer disabledTimer;
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
   LimelightDevice limelight;
+  ShooterSubsystem  shooter = new ShooterSubsystem(new ArmSubsystem());
 
   public Robot() {
     instance = this;
@@ -76,14 +77,14 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
-    shooter = new ShooterSubsystem(m_robotContainer.arm);
     shuffle = ShuffleboardSubsystem.getInstance();
     limelight = m_robotContainer.limelight;
-    shuffle.setNumber("Intake Command RPM", intakeCommandRPM);
+    /*shuffle.setNumber("Intake Command RPM", intakeCommandRPM);
     shuffle.setNumber("Shoot Command RPM", shootCommandRPM);
     shuffle.setNumber("Shoot Command Wait Time", shootCommandWaitTime);
 
     shuffle.setBoolean("IR sensor", shooter.shooterHasNote());
+    shuffle.setBoolean("IR sensor", shooter.shooterHasNote());*/
     // m_robotContainer.arm.disableBrake(); // Todo: put this a the start of arm
     // commands
 
@@ -96,10 +97,13 @@ public class Robot extends TimedRobot {
   }
 
   /**
-   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
+   * This function is called every 20 ms, no matter the mode. Use this for items
+   * like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
    *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
+   * <p>
+   * This runs after the mode specific periodic functions, but before LiveWindow
+   * and
    * SmartDashboard integrated updating.
    */
   @Override
@@ -122,6 +126,15 @@ public class Robot extends TimedRobot {
 
     // System.out.println("shuffleboard input: " +
     // m_robotContainer.getDoubleSupplier());
+    shuffle.setNumber("arm encoder reading", m_robotContainer.arm.getEncoderPosition());
+    // shuffle.setBoolean("brake state", m_robotContainer.arm.getBrake());
+    // System.out.println("shuffleboard input: " +
+    // m_robotContainer.getDoubleSupplier());
+    // m_robotContainer.arm.setPID();
+    // m_robotContainer.arm.getLimitSwitch();
+    m_robotContainer.arm.isTucked();
+    m_robotContainer.arm.setOutputVoltage();
+    m_robotContainer.arm.getSwitch();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -130,8 +143,7 @@ public class Robot extends TimedRobot {
     // m_robotContainer.setMotorBrake(true);
     disabledTimer.reset();
     disabledTimer.start();
-    m_robotContainer.arm.enableBrake();
-    m_robotContainer.arm.stopArm();
+    m_robotContainer.stopArm();
   }
 
   @Override
@@ -142,7 +154,10 @@ public class Robot extends TimedRobot {
     }
   }
 
-  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+  /**
+   * This autonomous runs the autonomous command selected by your
+   * {@link RobotContainer} class.
+   */
   @Override
   public void autonomousInit() {
     // m_robotContainer.setMotorBrake(true);
@@ -204,7 +219,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() // Controller inputs to create and automate commands
-      {
+  {
     /*
      * dpadDownButton.onTrue(
      * new PrintCommand("Intake Command STARTED")
@@ -218,20 +233,6 @@ public class Robot extends TimedRobot {
     // joystickShootButton.onTrue(new shootCommand(intakeCommandRPM, shooter,
     // shootCommandWaitTime));
 
-    if (driverXbox.getAButtonReleased() == true) {
-      System.out.println("A Button Pressed");
-      shooterCommand = new intakeCommand(intakeCommandRPM, shooter);
-      shooterCommand.schedule();
-    }
-
-    // shooterCommand = new readyNoteCommand(1500, shooter);
-    // shooterCommand.schedule();
-
-    if (driverXbox.getXButtonReleased() == true) {
-      System.out.println("X Button Pressed");
-      shooterCommand = new shootCommand(shootCommandRPM, shooter, shootCommandWaitTime);
-      shooterCommand.schedule();
-    }
   }
 
   @Override
@@ -247,13 +248,16 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+  }
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+  }
 }

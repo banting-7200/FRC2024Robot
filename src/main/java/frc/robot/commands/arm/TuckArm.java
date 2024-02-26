@@ -7,8 +7,6 @@ import frc.robot.subsystems.ArmSubsystem;
 public class TuckArm extends Command {
 
   private ArmSubsystem arm;
-  private boolean reachedSetpoint;
-  private boolean safeToTuck = false;
   private boolean ranTuckCommand = false;
 
   public TuckArm(ArmSubsystem arm) {
@@ -20,31 +18,25 @@ public class TuckArm extends Command {
   public void initialize() {
     arm.disableBrake();
     System.out.println("Tuck Arm");
-    if (arm.getEncoderPosition() >= Arm.tuckSafeMin
-        && arm.getEncoderPosition() <= Arm.tuckSafeMax) {
-      safeToTuck = true;
-    }
   }
 
   @Override
   public void execute() {
-    if (safeToTuck) {
+    if (arm.getEncoderPosition() >= Arm.tuckSafeMin) {
       if (!ranTuckCommand) {
         arm.tuckShooter();
         ranTuckCommand = true;
-      } else if (arm.isTucked()) {
-        reachedSetpoint = arm.moveToAngle(Arm.tuckArmAngle);
       }
     } else {
       // move to safe tuck pos
-      safeToTuck = arm.moveToAngle(Arm.tuckSafeMin);
+      arm.moveToAngle(Arm.tuckSafeMin + 2);
     }
-    System.out.println("is it safe to tuck: " + safeToTuck);
+    System.out.println("is it safe to tuck: " + (arm.getEncoderPosition() >= Arm.tuckSafeMin));
   }
 
   @Override
   public boolean isFinished() {
-    return reachedSetpoint;
+    return arm.isTucked();
   }
 
   @Override

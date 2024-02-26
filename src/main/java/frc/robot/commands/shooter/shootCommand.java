@@ -3,6 +3,7 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
 import java.time.Clock;
+import java.util.function.IntSupplier;
 
 public class shootCommand extends Command {
 
@@ -13,15 +14,21 @@ public class shootCommand extends Command {
   long currentMillis;
   long sinceNoteLeft;
   long sinceIntakeMotor;
-  double rpm;
+  IntSupplier rpm;
   Boolean hasSeenNote = false;
-  double waitTime;
+  IntSupplier waitTime;
 
-  public shootCommand(double rpm, ShooterSubsystem shooter, double waitTime) {
+  public shootCommand(IntSupplier rpm, ShooterSubsystem shooter, IntSupplier waitTime) {
     this.rpm = rpm;
     this.shooter = shooter;
     this.waitTime = waitTime;
+
+    addRequirements(shooter);
   }
+
+   public shootCommand(int rpm, ShooterSubsystem shooter, int waitTime) {
+   this(() -> rpm, shooter, () -> waitTime);
+   }
 
   @Override
   public void initialize() {
@@ -32,10 +39,10 @@ public class shootCommand extends Command {
   @Override
   public void execute() {
     currentMillis = currentTime.millis(); // records current time
-    shooter.spinShootToRPM(rpm); // spins the shooters
+    shooter.spinShootToRPM(rpm.getAsInt()); // spins the shooters
     if ((currentMillis - sinceIntakeMotor)
-        > waitTime) { // waits for 250 ms for it to turn on the shoot motor
-      shooter.spinIntakeToNegativeRPM(rpm); // runs the shoot motor
+        > waitTime.getAsInt()) { // waits for 250 ms for it to turn on the shoot motor
+      shooter.spinIntakeToNegativeRPM(rpm.getAsInt()); // runs the shoot motor
       System.out.println("Run Shooter motor");
     }
     if (shooter.shooterHasNote() == true) {

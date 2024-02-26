@@ -7,8 +7,6 @@ import frc.robot.subsystems.ArmSubsystem;
 public class UntuckArm extends Command {
 
   private ArmSubsystem arm;
-  private boolean reachedSetpoint;
-  private boolean safeToUntuck = false;
   private boolean ranUntuckCommand = false;
 
   public UntuckArm(ArmSubsystem arm) {
@@ -18,35 +16,27 @@ public class UntuckArm extends Command {
 
   @Override
   public void initialize() {
-    System.out.println("Untuck Arm");
-    if (!arm.isTucked()) {
-      reachedSetpoint = true;
-    } else if (arm.getEncoderPosition() >= Arm.tuckSafeMin
-        && arm.getEncoderPosition() <= Arm.tuckSafeMax) {
-      safeToUntuck = true;
-    }
     arm.disableBrake();
+    System.out.println("Untuck Arm");
   }
 
   @Override
   public void execute() {
-    if (safeToUntuck) {
+    if (arm.getEncoderPosition() >= Arm.tuckSafeMin) {
       if (!ranUntuckCommand) {
         arm.deployShooter();
         ranUntuckCommand = true;
-      } else if (!arm.isTucked()) {
-        reachedSetpoint = true;
       }
     } else {
       // move to safe tuck pos
-      safeToUntuck = arm.moveToAngle(Arm.tuckSafeMin);
+      arm.moveToAngle(Arm.tuckSafeMin + 2);
     }
-    System.out.println("is it safe to untuck: " + safeToUntuck);
+    System.out.println("is it safe to untuck: " + (arm.getEncoderPosition() >= Arm.tuckSafeMin));
   }
 
   @Override
   public boolean isFinished() {
-    return reachedSetpoint;
+    return !arm.isTucked();
   }
 
   @Override

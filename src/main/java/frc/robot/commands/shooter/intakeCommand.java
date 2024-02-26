@@ -6,7 +6,9 @@ import java.time.Clock;
 
 public class intakeCommand extends Command {
   public ShooterSubsystem shooter;
-  double rpm;
+  double intakeRPM;
+  double pullBackRPM;
+  double correctPositioningRPM;
   Clock currentTime = Clock.systemDefaultZone();
   long startedMillis = 0;
   boolean override = false;
@@ -16,8 +18,10 @@ public class intakeCommand extends Command {
   boolean notelock2 = false;
   boolean shooterHasNotePrev = false;
 
-  public intakeCommand(double rpm, ShooterSubsystem shooter) {
-    this.rpm = rpm;
+  public intakeCommand(double intakeRPM, double pullBackRPM, double correctPositioningRPM, ShooterSubsystem shooter) {
+    this.intakeRPM = intakeRPM;
+    this.pullBackRPM = pullBackRPM;
+    this.correctPositioningRPM = correctPositioningRPM;
     this.shooter = shooter;
 
     addRequirements(shooter);

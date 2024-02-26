@@ -11,6 +11,14 @@ import frc.robot.Constants.Arm;
 public class LimelightDevice extends SubsystemBase {
   private NetworkTable mainTable;
   public int mode;
+  private static LimelightDevice instance = null;
+
+  public static synchronized LimelightDevice getInstance() {
+    if (instance == null) {
+      instance = new LimelightDevice();
+    }
+    return instance;
+  }
 
   public LimelightDevice() { // initializes device
     mainTable =

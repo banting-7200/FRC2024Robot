@@ -11,21 +11,18 @@ import swervelib.math.Matter;
 import swervelib.parser.PIDFConfig;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean
- * constants. This class should not be used for any other purpose. All constants
- * should be declared
+ * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
+ * constants. This class should not be used for any other purpose. All constants should be declared
  * globally (i.e. public static). Do not put anything functional in this class.
  *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the
+ * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
 
   public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
-  public static final Matter CHASSIS = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
+  public static final Matter CHASSIS =
+      new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
   public static final double LOOP_TIME = 0.13; // s, 20ms + 110ms sprk max velocity lag
 
   public static final class Auton {
@@ -55,10 +52,11 @@ public final class Constants {
   }
 
   public static final class Lights {
-    public static final int lightID = 9;
-    public static final int lightStringLength = 15;
+    public static final int lightID = 1;
+    public static final int lightStringLength = 9;
   }
 
+  /* */
   public static final PneumaticHub m_pH = new PneumaticHub(3);
 
   public static final class Arm {
@@ -75,24 +73,24 @@ public final class Constants {
 
     // default arm pids
     // Todo: calibrate these
-    public static /* final */ double p = 0.15;
-    public static /* final */ double i = 0.000009;
-    public static /* final */ double d = 0.01;
-    public static /* final */ double f = 0;
-    public static /* final */ double iz = 1.9;
+    public static final double p = 0.15;
+    public static final double i = 0.000009;
+    public static final double d = 0.01;
+    public static final double f = 0;
+    public static final double iz = 1.9;
 
-    public static /* final */ double pidOutputMin = -1;
-    public static /* final */ double pidOutputMax = 1;
+    public static final double pidOutputMin = -1;
+    public static final double pidOutputMax = 1;
 
     public static final double motorSpeed = 0.2; // 0 - 1 range
 
-    public static /* final */ double motorRampRate = 0.6;
-    public static /* final */ int currentLimit = 20;
+    public static final double motorRampRate = 0.6;
+    public static final int currentLimit = 20;
     public static final double speakerAlignTagArea = 2;
 
-    public static /* final */ double stopRange = 0.3;
+    public static final double stopRange = 0.3;
     public static final double encoderHardMax = 34;
-    public static /* final */ long s_stateChangeDelay = 8;
+    public static final long s_stateChangeDelay = 8;
 
     public static final int smartMotionSlot = 0;
     /*
@@ -105,7 +103,8 @@ public final class Constants {
 
     // Arm movement constants
     // Todo: find the min-max safe range to tuck the shooter
-    public static final double tuckSafeMin = 25; // Robot hard max 11 ticks, min must be further tuned later
+    public static final double tuckSafeMin =
+        25; // Robot hard max 11 ticks, min must be further tuned later
     public static final double armGearRatio = 400;
 
     public static final double tuckArmAngle = 24;
@@ -113,17 +112,21 @@ public final class Constants {
     public static final double ampArmAngle = 31.3;
     public static final double liftArmAngle = 21;
 
-    public static final int kMeasuredPosHorizontal = 21; // Default position measured when arm is horizontal from
-                                                         // example. Todo: find the value
+    public static final int kMeasuredPosHorizontal =
+        21; // Default position measured when arm is horizontal from
+    // example. Todo: find the value
     // for our arm.
-    public static /* final */ double maxGravityFF = 0.07; // Todo: Find the best gravity feed forward for our arm
+    public static final double maxGravityFF =
+        0.07; // Todo: Find the best gravity feed forward for our arm
 
     // Arm angle calculation constants
-    public static final double armToSpeakerHeight = 0.1524; // from the motor axel to speaker(goal - arm height from
-                                                            // ground)
+    public static final double armToSpeakerHeight =
+        0.1524; // from the motor axel to speaker(goal - arm height from
+    // ground)
     public static final double armToShooterAngle = 45;
-    public static final double limelightToSpeakerHeight = 0.1520; // from camera lens to speaker(goal - limelight height
-                                                                  // from ground)
+    public static final double limelightToSpeakerHeight =
+        0.1520; // from camera lens to speaker(goal - limelight height
+    // from ground)
     public static final double limelightMountAngle = 31;
     public static final double armToLimelightDistance = 0.04;
   }

@@ -105,7 +105,6 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    // m_robotContainer.arm.getLimitSwitch();
     /*intakeCommandRPM = shuffle.getNumber("Intake Command RPM");
     shootCommandRPM = shuffle.getNumber("Intake Command RPM");
     shootCommandWaitTime = shuffle.getNumber("Shoot Command Wait Time");
@@ -116,12 +115,7 @@ public class Robot extends TimedRobot {
     // System.out.println("shuffleboard input: " +
     // m_robotContainer.getDoubleSupplier());
     shuffle.setNumber("arm encoder reading", m_robotContainer.arm.getEncoderPosition());
-    // shuffle.setBoolean("brake state", m_robotContainer.arm.getBrake());
-    // System.out.println("shuffleboard input: " +
-    // m_robotContainer.getDoubleSupplier());
-    // m_robotContainer.arm.setPID();
-    // m_robotContainer.arm.getLimitSwitch();
-    m_robotContainer.arm.isTucked();
+    m_robotContainer.arm.getLimitSwitch();
     m_robotContainer.arm.setOutputVoltage();
     // m_robotContainer.arm.getSwitch();
   }

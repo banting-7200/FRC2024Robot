@@ -1,12 +1,11 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.LightSubsystem;
 import frc.robot.subsystems.LightSubsystem.lightStates;
-
+import frc.robot.subsystems.ShooterSubsystem;
 import java.time.Clock;
 import java.util.function.IntSupplier;
-import frc.robot.subsystems.LightSubsystem;
 
 public class shootCommand extends Command {
 

@@ -61,14 +61,14 @@ public class ArmSubsystem extends SubsystemBase {
 
     rightEncoder = rightArmMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     rightEncoder.setPositionConversionFactor(
-        42 /* * Arm.armGearRatio */); // Amount of ticks in a Neo encoder rotation unit. Converted
+        42); // Amount of ticks in a Neo encoder rotation unit. Converted
     // for gravity feedfoward later on.
     pidController = rightArmMotor.getPIDController();
     pidController.setFeedbackDevice(rightEncoder);
     pidController.setPositionPIDWrappingEnabled(true);
 
-    lastShooterState = solenoidSwitch.get();
-
+    lastShooterState = !solenoidSwitch.get();
+    /*
     shuffleboard.setNumber("arm P", Arm.p);
     shuffleboard.setNumber("arm I", Arm.i);
     shuffleboard.setNumber("arm D", Arm.d);
@@ -83,7 +83,7 @@ public class ArmSubsystem extends SubsystemBase {
     shuffleboard.setNumber("solenoid delay", Arm.s_stateChangeDelay);
 
     shuffleboard.setNumber("output current right", rightArmMotor.getOutputCurrent());
-    shuffleboard.setNumber("output current left", leftArmMotor.getOutputCurrent());
+    shuffleboard.setNumber("output current left", leftArmMotor.getOutputCurrent()); */
     setPID();
 
     if (RobotBase.isSimulation()) {
@@ -99,12 +99,12 @@ public class ArmSubsystem extends SubsystemBase {
   public void setPID() {
     int smartMotionSlot = Arm.smartMotionSlot;
 
-    double[] PIDvalues = shuffleboard.getPID("arm");
+    /* double[] PIDvalues = shuffleboard.getPID("arm");
     Arm.p = PIDvalues[0];
     Arm.i = PIDvalues[1];
     Arm.d = PIDvalues[2];
     Arm.f = PIDvalues[3];
-    Arm.iz = PIDvalues[4];
+    Arm.iz = PIDvalues[4]; */
 
     // Configure PID
     // if (Arm.p != PIDvalues[0]) {
@@ -122,25 +122,21 @@ public class ArmSubsystem extends SubsystemBase {
     // if (Arm.iz != PIDvalues[4]) {
     //   Arm.iz = PIDvalues[4];
     // }
-    //if (Arm.pidOutputMin != shuffleboard.getNumber("arm min output")) {
-      Arm.pidOutputMin = shuffleboard.getNumber("arm min output");
-    //}
-    //if (Arm.pidOutputMax != shuffleboard.getNumber("arm max output")) {
-      Arm.pidOutputMax = shuffleboard.getNumber("arm max output");
-    //}
-    pidController.setP(PIDvalues[0], smartMotionSlot);
-    pidController.setI(PIDvalues[1], smartMotionSlot);
-    pidController.setD(PIDvalues[2], smartMotionSlot);
-    pidController.setFF(PIDvalues[3], smartMotionSlot);
-    pidController.setIZone(PIDvalues[4], smartMotionSlot);
-    pidController.setOutputRange(
-        shuffleboard.getNumber("arm min output"),
-        shuffleboard.getNumber("arm max output"),
-        smartMotionSlot);
+    // if (Arm.pidOutputMin != shuffleboard.getNumber("arm min output")) {
+    // Arm.pidOutputMin = shuffleboard.getNumber("arm min output");
+    // }
+    // if (Arm.pidOutputMax != shuffleboard.getNumber("arm max output")) {
+    // Arm.pidOutputMax = shuffleboard.getNumber("arm max output");
+    // }
+    pidController.setP(Arm.p, smartMotionSlot);
+    pidController.setI(Arm.i, smartMotionSlot);
+    pidController.setD(Arm.d, smartMotionSlot);
+    pidController.setFF(Arm.f, smartMotionSlot);
+    pidController.setIZone(Arm.iz, smartMotionSlot);
+    pidController.setOutputRange(Arm.pidOutputMin, Arm.pidOutputMax, smartMotionSlot);
 
-    rightArmMotor.setClosedLoopRampRate(shuffleboard.getNumber("ramp rate"));
-    rightArmMotor.setSmartCurrentLimit((int) shuffleboard.getNumber("current limit"));
-    Arm.s_stateChangeDelay = (long) shuffleboard.getNumber("solenoid delay");
+    rightArmMotor.setClosedLoopRampRate(Arm.motorRampRate);
+    rightArmMotor.setSmartCurrentLimit(Arm.currentLimit);
 
     // Configure smart motion
     /*
@@ -180,7 +176,7 @@ public class ArmSubsystem extends SubsystemBase {
       pidController.setReference(
           angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot, getArbFF());
       // System.out.println("motor angle: " + rightEncoder.getPosition());
-      return Math.abs(rightEncoder.getPosition() - angle) < shuffleboard.getNumber("stop range");
+      return Math.abs(rightEncoder.getPosition() - angle) < Arm.stopRange;
     }
   }
 
@@ -192,7 +188,7 @@ public class ArmSubsystem extends SubsystemBase {
     double radians = java.lang.Math.toRadians(degrees);
     double cosineScalar = java.lang.Math.cos(radians);
 
-    return shuffleboard.getNumber("gravity FF") * cosineScalar;
+    return Arm.maxGravityFF * cosineScalar;
   }
 
   double degreesToRotations(double degrees) {
@@ -200,7 +196,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void getSwitch() {
-    System.out.println(solenoidSwitch.get());
+    System.out.println(!solenoidSwitch.get());
   }
 
   public void getLimitSwitch() {
@@ -225,9 +221,9 @@ public class ArmSubsystem extends SubsystemBase {
 
   // Shooter
   public void tuckShooter() {
+    System.out.println("Shooter tucked");
     shooterSolenoidActions.setReverse();
     stateChangeTimestamp = currentTime.millis();
-    System.out.println("Shooter tucked");
   }
 
   public void deployShooter() {
@@ -252,9 +248,9 @@ public class ArmSubsystem extends SubsystemBase {
   public boolean isTucked() {
     if (currentTime.millis() - stateChangeTimestamp > Arm.s_stateChangeDelay
         && lastShooterState
-            != solenoidSwitch
+            != !solenoidSwitch
                 .get()) { // For this to work, the robot must start in the shooting position
-      lastShooterState = solenoidSwitch.get();
+      lastShooterState = !solenoidSwitch.get();
       // shuffleboard.setNumber("updated state. current time: ",
       // currentTime.millis());
     }

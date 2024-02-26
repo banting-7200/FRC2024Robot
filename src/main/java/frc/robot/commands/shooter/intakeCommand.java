@@ -1,9 +1,9 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.LightSubsystem.lightStates;
 import frc.robot.subsystems.LightSubsystem;
+import frc.robot.subsystems.LightSubsystem.lightStates;
+import frc.robot.subsystems.ShooterSubsystem;
 import java.time.Clock;
 
 public class intakeCommand extends Command {
@@ -22,7 +22,11 @@ public class intakeCommand extends Command {
 
   private LightSubsystem lights = LightSubsystem.getInstance();
 
-  public intakeCommand(double intakeRPM, double pullBackRPM, double correctPositioningRPM, ShooterSubsystem shooter) {
+  public intakeCommand(
+      double intakeRPM,
+      double pullBackRPM,
+      double correctPositioningRPM,
+      ShooterSubsystem shooter) {
     this.intakeRPM = intakeRPM;
     this.pullBackRPM = pullBackRPM;
     this.correctPositioningRPM = correctPositioningRPM;

@@ -24,10 +24,12 @@ public class TuckArm extends Command {
     System.out.println("Tuck Arm");
     startTime = timer.millis();
     System.out.println("start time is: " + startTime);
+    ranTuckCommand = false;
   }
 
   @Override
   public void execute() {
+    //System.out.println(ranTuckCommand);
     if (arm.getEncoderPosition() >= Arm.tuckSafeMin) {
       if (!ranTuckCommand) {
         arm.tuckShooter();
@@ -37,7 +39,7 @@ public class TuckArm extends Command {
       // move to safe tuck pos
       arm.moveToAngle(Arm.tuckSafeMin + 2);
     }
-    System.out.println("is it safe to tuck: " + (arm.getEncoderPosition() >= Arm.tuckSafeMin));
+    //System.out.println("is it safe to tuck: " + (arm.getEncoderPosition() >= Arm.tuckSafeMin));
   }
 
   @Override

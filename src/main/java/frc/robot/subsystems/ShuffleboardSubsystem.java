@@ -5,215 +5,215 @@
  * switch layout previous after pid functions etc. so new functions dont get added to them.
  */
 
- package frc.robot.subsystems;
+package frc.robot.subsystems;
 
- import edu.wpi.first.networktables.GenericEntry;
- import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
- import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
- import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
- import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
- import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
- import edu.wpi.first.wpilibj2.command.Command;
- import java.util.ArrayList;
- import java.util.List;
- 
- public class ShuffleboardSubsystem {
-   private static ShuffleboardSubsystem instance = null;
-   ShuffleboardLayout layout;
-   ShuffleboardTab tab;
-   List<String> entryNames = new ArrayList<String>();
-   List<GenericEntry> entries = new ArrayList<GenericEntry>();
-   SendableChooser<String> autos;
- 
-   private ShuffleboardSubsystem() {}
- 
-   public static synchronized ShuffleboardSubsystem getInstance() {
-     if (instance == null) {
-       instance = new ShuffleboardSubsystem();
-     }
-     return instance;
-   }
- 
-   public void setTab(String tabName) { // sets which tab to put values to.
-     tab = Shuffleboard.getTab(tabName);
-   }
- 
-   public void setLayout(
-       String layoutName,
-       int x,
-       int y) { // sets which layout to put values to. Putting values of the same name in two
-     // different layouts may mess with code.
-     layout = tab.getLayout(layoutName, "List Layout").withSize(x, y);
-   }
- 
-   public void setLayout(
-       String layoutName) { // sets which layout to put values to. Putting values of the same name in
-     // two
-     // different layouts may mess with code.
-     if (layoutName == null) {
-       layout = null;
-     } else {
-       layout = tab.getLayout(layoutName, "List Layout");
-     }
-   }
- 
-   public void setNumber(
-       String name, double value) { // creates or sets a double on the shuffleboard.
-     GenericEntry entry;
-     int index = entryNames.indexOf(name);
-     if (index == -1) {
-       if (layout != null) {
-         entry = layout.add(name, value).withWidget(BuiltInWidgets.kTextView).getEntry();
-       } else {
-         entry = tab.add(name, value).withWidget(BuiltInWidgets.kTextView).getEntry();
-       }
-       entryNames.add(name);
-       entries.add(entry);
-     } else {
-       entries.get(index).setDouble(value);
-     }
-   }
- 
-   public void setNumber(String name, double value, int x, int y) {
-     GenericEntry entry;
-     int index = entryNames.indexOf(name);
-     if (index == -1) {
-       if (layout != null) {
-         entry =
-             layout
-                 .add(name, value)
-                 .withWidget(BuiltInWidgets.kTextView)
-                 .withPosition(x, y)
-                 .getEntry();
-       } else {
-         entry =
-             tab.add(name, value).withWidget(BuiltInWidgets.kTextView).withPosition(x, y).getEntry();
-       }
-       entryNames.add(name);
-       entries.add(entry);
-     } else {
-       entries.get(index).setDouble(value);
-     }
-   }
- 
-   public void setNumber(
-       String name, double value, BuiltInWidgets type) { // creates or sets a double on the
-     // shuffleboard with a specific widget.
-     GenericEntry entry;
-     int index = entryNames.indexOf(name);
-     if (index == -1) {
-       if (layout != null) {
-         entry = layout.add(name, value).withWidget(type).getEntry();
-       } else {
-         entry = tab.add(name, value).withWidget(type).getEntry();
-       }
-       entryNames.add(name);
-       entries.add(entry);
-     } else {
-       entries.get(index).setDouble(value);
-     }
-   }
- 
-   public void setBoolean(
-       String name, boolean value) { // creates or sets a boolean on the shuffleboard.
-     GenericEntry entry;
-     int index = entryNames.indexOf(name);
-     if (index == -1) {
-       if (layout != null) {
-         entry = layout.add(name, value).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
-       } else {
-         entry = tab.add(name, value).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
-       }
-       entryNames.add(name);
-       entries.add(entry);
-     } else {
-       entries.get(index).setBoolean(value);
-     }
-   }
- 
-   public double getNumber(String name) { // returns a double from the shuffleboard.
-     int index = entryNames.indexOf(name);
-     if (index == -1) {
-       setNumber(name, 0);
-       return 0;
-     } else {
-       return entries.get(index).getDouble(0);
-     }
-   }
- 
-   public boolean getBoolean(String name) { // returns a boolean from the shuffleboard.
-     int index = entryNames.indexOf(name);
-     if (index == -1) {
-       setBoolean(name, false);
-       return false;
-     } else {
-       return entries.get(index).getBoolean(false);
-     }
-   }
- 
-   public void setSwerve(
-       String name,
-       double speed,
-       double direction) { // create a named list layout of swerve motor and
-     // direction values.
-     setLayout(name, 2, 2);
-     setNumber(name + " Speed", speed, BuiltInWidgets.kDial);
-     setNumber(name + " Direction", direction, BuiltInWidgets.kGyro);
-   }
- 
-   public void setPID(
-       String name,
-       double p,
-       double i,
-       double d,
-       double f,
-       double iz) { // create a named list layout of
-     // PID values.
-     setTab("PID");
-     setLayout(name, 2, 4);
-     setNumber(name + " P", p, 0, 0);
-     setNumber(name + " I", i, 0, 1);
-     setNumber(name + " D", d, 0, 2);
-     setNumber(name + " F", f, 0, 3);
-     setNumber(name + " IZ", iz, 0, 4);
-   }
- 
-   public double[] getPID(
-       String name) { // return an array of PID values stored under the name they were originally set
-     // with.
-     double p = getNumber(name + " P");
-     double i = getNumber(name + " I");
-     double d = getNumber(name + " D");
-     double f = getNumber(name + " F");
-     double iz = getNumber(name + " IZ");
-     return new double[] {p, i, d, f, iz};
-   }
- 
-   public void newCommandButton(
-       String name,
-       Command command) { // creates button which automatically runs the command it was set with.
-     tab.add(name, command);
-   }
- 
-   public void newAutoChooser(
-       SendableChooser<String>
-           inAutos) { // creates drop down containing autos, doesn't add any functionality to the
-     // basic function, just contains everything in the subsystem
-     setTab("Pre-Match");
-     autos = inAutos;
-     tab.add("Autos", autos).withSize(2, 1);
-     autos.setDefaultOption("No Auto Selected", "None");
-   }
- 
-   public String getAuto() { // returns auto from drop down;
-     return (autos.getSelected());
-   }
- 
-   public void addCamera(String name, String camera, String url) {
-    tab.addCamera(name, camera, url).withSize(2, 2); //doesnt add any functionaly again
-   }
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
+import java.util.ArrayList;
+import java.util.List;
 
-   public void setText(String name, String text){ //puts text to the dashboard
+public class ShuffleboardSubsystem {
+  private static ShuffleboardSubsystem instance = null;
+  ShuffleboardLayout layout;
+  ShuffleboardTab tab;
+  List<String> entryNames = new ArrayList<String>();
+  List<GenericEntry> entries = new ArrayList<GenericEntry>();
+  SendableChooser<String> autos;
+
+  private ShuffleboardSubsystem() {}
+
+  public static synchronized ShuffleboardSubsystem getInstance() {
+    if (instance == null) {
+      instance = new ShuffleboardSubsystem();
+    }
+    return instance;
+  }
+
+  public void setTab(String tabName) { // sets which tab to put values to.
+    tab = Shuffleboard.getTab(tabName);
+  }
+
+  public void setLayout(
+      String layoutName,
+      int x,
+      int y) { // sets which layout to put values to. Putting values of the same name in two
+    // different layouts may mess with code.
+    layout = tab.getLayout(layoutName, "List Layout").withSize(x, y);
+  }
+
+  public void setLayout(
+      String layoutName) { // sets which layout to put values to. Putting values of the same name in
+    // two
+    // different layouts may mess with code.
+    if (layoutName == null) {
+      layout = null;
+    } else {
+      layout = tab.getLayout(layoutName, "List Layout");
+    }
+  }
+
+  public void setNumber(
+      String name, double value) { // creates or sets a double on the shuffleboard.
+    GenericEntry entry;
+    int index = entryNames.indexOf(name);
+    if (index == -1) {
+      if (layout != null) {
+        entry = layout.add(name, value).withWidget(BuiltInWidgets.kTextView).getEntry();
+      } else {
+        entry = tab.add(name, value).withWidget(BuiltInWidgets.kTextView).getEntry();
+      }
+      entryNames.add(name);
+      entries.add(entry);
+    } else {
+      entries.get(index).setDouble(value);
+    }
+  }
+
+  public void setNumber(String name, double value, int x, int y) {
+    GenericEntry entry;
+    int index = entryNames.indexOf(name);
+    if (index == -1) {
+      if (layout != null) {
+        entry =
+            layout
+                .add(name, value)
+                .withWidget(BuiltInWidgets.kTextView)
+                .withPosition(x, y)
+                .getEntry();
+      } else {
+        entry =
+            tab.add(name, value).withWidget(BuiltInWidgets.kTextView).withPosition(x, y).getEntry();
+      }
+      entryNames.add(name);
+      entries.add(entry);
+    } else {
+      entries.get(index).setDouble(value);
+    }
+  }
+
+  public void setNumber(
+      String name, double value, BuiltInWidgets type) { // creates or sets a double on the
+    // shuffleboard with a specific widget.
+    GenericEntry entry;
+    int index = entryNames.indexOf(name);
+    if (index == -1) {
+      if (layout != null) {
+        entry = layout.add(name, value).withWidget(type).getEntry();
+      } else {
+        entry = tab.add(name, value).withWidget(type).getEntry();
+      }
+      entryNames.add(name);
+      entries.add(entry);
+    } else {
+      entries.get(index).setDouble(value);
+    }
+  }
+
+  public void setBoolean(
+      String name, boolean value) { // creates or sets a boolean on the shuffleboard.
+    GenericEntry entry;
+    int index = entryNames.indexOf(name);
+    if (index == -1) {
+      if (layout != null) {
+        entry = layout.add(name, value).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+      } else {
+        entry = tab.add(name, value).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+      }
+      entryNames.add(name);
+      entries.add(entry);
+    } else {
+      entries.get(index).setBoolean(value);
+    }
+  }
+
+  public double getNumber(String name) { // returns a double from the shuffleboard.
+    int index = entryNames.indexOf(name);
+    if (index == -1) {
+      setNumber(name, 0);
+      return 0;
+    } else {
+      return entries.get(index).getDouble(0);
+    }
+  }
+
+  public boolean getBoolean(String name) { // returns a boolean from the shuffleboard.
+    int index = entryNames.indexOf(name);
+    if (index == -1) {
+      setBoolean(name, false);
+      return false;
+    } else {
+      return entries.get(index).getBoolean(false);
+    }
+  }
+
+  public void setSwerve(
+      String name,
+      double speed,
+      double direction) { // create a named list layout of swerve motor and
+    // direction values.
+    setLayout(name, 2, 2);
+    setNumber(name + " Speed", speed, BuiltInWidgets.kDial);
+    setNumber(name + " Direction", direction, BuiltInWidgets.kGyro);
+  }
+
+  public void setPID(
+      String name,
+      double p,
+      double i,
+      double d,
+      double f,
+      double iz) { // create a named list layout of
+    // PID values.
+    setTab("PID");
+    setLayout(name, 2, 4);
+    setNumber(name + " P", p, 0, 0);
+    setNumber(name + " I", i, 0, 1);
+    setNumber(name + " D", d, 0, 2);
+    setNumber(name + " F", f, 0, 3);
+    setNumber(name + " IZ", iz, 0, 4);
+  }
+
+  public double[] getPID(
+      String name) { // return an array of PID values stored under the name they were originally set
+    // with.
+    double p = getNumber(name + " P");
+    double i = getNumber(name + " I");
+    double d = getNumber(name + " D");
+    double f = getNumber(name + " F");
+    double iz = getNumber(name + " IZ");
+    return new double[] {p, i, d, f, iz};
+  }
+
+  public void newCommandButton(
+      String name,
+      Command command) { // creates button which automatically runs the command it was set with.
+    tab.add(name, command);
+  }
+
+  public void newAutoChooser(
+      SendableChooser<String>
+          inAutos) { // creates drop down containing autos, doesn't add any functionality to the
+    // basic function, just contains everything in the subsystem
+    setTab("Pre-Match");
+    autos = inAutos;
+    tab.add("Autos", autos).withSize(2, 1);
+    autos.setDefaultOption("No Auto Selected", "None");
+  }
+
+  public String getAuto() { // returns auto from drop down;
+    return (autos.getSelected());
+  }
+
+  public void addCamera(String name, String camera, String url) {
+    tab.addCamera(name, camera, url).withSize(2, 2); // doesnt add any functionaly again
+  }
+
+  public void setText(String name, String text) { // puts text to the dashboard
     GenericEntry entry;
     int index = entryNames.indexOf(name);
     if (index == -1) {
@@ -227,9 +227,9 @@
     } else {
       entries.get(index).setString(text);
     }
-   }
+  }
 
-   public String getText(String name){ //returns text from shuffleboard
+  public String getText(String name) { // returns text from shuffleboard
     int index = entryNames.indexOf(name);
     if (index == -1) {
       setText(name, " ");
@@ -237,6 +237,5 @@
     } else {
       return entries.get(index).getString(" ");
     }
-   }
- }
- 
+  }
+}

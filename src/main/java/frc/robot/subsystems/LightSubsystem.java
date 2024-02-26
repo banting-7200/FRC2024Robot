@@ -3,9 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import frc.robot.Constants.Lights;
-import frc.robot.subsystems.ShuffleboardSubsystem;
 import java.awt.Color;
-import frc.robot.subsystems.LimelightDevice;
 
 public class LightSubsystem {
   private final AddressableLED statusLights;
@@ -14,7 +12,7 @@ public class LightSubsystem {
   private ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
   private Color colour1 = new Color(127, 127, 127);
   private Color colour2 = new Color(127, 127, 127);
-  private LimelightDevice limelight = new LimelightDevice();
+  private LimelightDevice limelight = LimelightDevice.getInstance();
 
   public enum lightStates {
     ReadyForPickup,
@@ -31,7 +29,8 @@ public class LightSubsystem {
     shuffle.setNumber("Mode", -1);
   }
 
-  public static synchronized LightSubsystem getInstance() { // if no instance has been made, create one.
+  public static synchronized LightSubsystem
+      getInstance() { // if no instance has been made, create one.
     // Otherwise, reference the already made instance.
     // Ensures only one instance can be made.
     if (instance == null) {
@@ -100,17 +99,17 @@ public class LightSubsystem {
 
   public void setColor(int r, int g, int b) { // set to specific colour
     for (int i = 0; i < statusBuffer.getLength(); i++) {
-        statusBuffer.setRGB(i, r, g, b);
-      }
+      statusBuffer.setRGB(i, r, g, b);
+    }
     statusLights.setData(statusBuffer);
   }
 
-  public void setColourMode(){
+  public void setColourMode() {
     for (int i = 0; i < statusBuffer.getLength(); i++) {
       if (Math.floor(i / 4) % 2 == 0) {
         statusBuffer.setRGB(i, colour1.getGreen(), colour1.getRed(), colour1.getBlue());
       } else {
-      statusBuffer.setRGB(i, colour2.getGreen(), colour2.getRed(), colour2.getBlue());
+        statusBuffer.setRGB(i, colour2.getGreen(), colour2.getRed(), colour2.getBlue());
       }
     }
   }

@@ -41,7 +41,6 @@ public class UntuckArm extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    arm.enableBrake();
     arm.stopArm();
-  }
+      }
 }

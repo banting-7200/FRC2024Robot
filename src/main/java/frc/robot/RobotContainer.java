@@ -19,7 +19,6 @@ import frc.robot.commands.arm.MoveArmToPosition;
 import frc.robot.commands.arm.TuckArm;
 import frc.robot.commands.shooter.intakeCommand;
 import frc.robot.commands.shooter.shootCommand;
-import frc.robot.commands.swervedrive.auto.AprilTagAlign;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -29,12 +28,9 @@ import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
 
 /**
- * This class is where the bulk of the robot should be declared. Since
- * Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in
- * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
- * the robot (including
+ * This class is where the bulk of the robot should be declared. Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
@@ -58,15 +54,14 @@ public class RobotContainer {
   LimelightDevice limelight;
   private static ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
 
-  static boolean isRedAliance = DriverStation.getAlliance().isPresent()
-      ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red
-      : false;
+  static boolean isRedAliance =
+      DriverStation.getAlliance().isPresent()
+          ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+          : false;
 
   static boolean speakerShot = false;
 
-  /**
-   * The container for the robot. Contains subsystems, OI devices, and commands.
-   */
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     arm = new ArmSubsystem();
@@ -131,45 +126,40 @@ public class RobotContainer {
   }
 
   /**
-   * Use this method to define your trigger->command mappings. Triggers can be
-   * created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with
-   * an arbitrary
+   * Use this method to define your trigger->command mappings. Triggers can be created via the
+   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
    * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-   * {@link
-   * CommandXboxController
-   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or
-   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}. Use this method to define your trigger->command mappings.
-   * Triggers can be created
-   * via the {@link Trigger#Trigger(java.util.function.BooleanSupplier)}
-   * constructor with an
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * joysticks}. Use this method to define your trigger->command mappings. Triggers can be created
+   * via the {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an
    * arbitrary predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for
-   * {@link
-   * CommandXboxController
-   * Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or
-   * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
+   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
+   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
+   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  public static final DoubleSupplier shuffleboardAngle = () -> {
-    return shuffle.getNumber("arm angle");
-  };
+  public static final DoubleSupplier shuffleboardAngle =
+      () -> {
+        return shuffle.getNumber("arm angle");
+      };
 
   public static final IntSupplier tagToAlign = () -> isRedAliance ? 4 : 7;
 
-  public static final IntSupplier shooterRPM = () -> speakerShot ? Shooter.speakerShootRPM : Shooter.ampShootRPM;
+  public static final IntSupplier shooterRPM =
+      () -> speakerShot ? Shooter.speakerShootRPM : Shooter.ampShootRPM;
 
-  public static final IntSupplier shooterWaitTime = () -> speakerShot ? Shooter.speakerWaitTime : Shooter.ampWaitTime;
+  public static final IntSupplier shooterWaitTime =
+      () -> speakerShot ? Shooter.speakerWaitTime : Shooter.ampWaitTime;
 
-  static JoystickButton upButton = new JoystickButton(CoPilotController, copilotController.upButton);
-  static JoystickButton downButton = new JoystickButton(CoPilotController, copilotController.downButton);
+  static JoystickButton upButton =
+      new JoystickButton(CoPilotController, copilotController.upButton);
+  static JoystickButton downButton =
+      new JoystickButton(CoPilotController, copilotController.downButton);
 
-  public static final DoubleSupplier axis = () -> upButton.getAsBoolean() == true ? 1
-      : downButton.getAsBoolean() == true ? -1 : 0;
+  public static final DoubleSupplier axis =
+      () -> upButton.getAsBoolean() == true ? 1 : downButton.getAsBoolean() == true ? -1 : 0;
 
   private void configureBindings() {
     // // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
@@ -220,42 +210,48 @@ public class RobotContainer {
     shooter, 1000))); */
 
     // Todo: make suppliers for conditional commands
-    new JoystickButton(CoPilotController,
-    copilotController.upButton).onTrue(new MoveArm(arm, axis));
-    new JoystickButton(CoPilotController,
-    copilotController.downButton).onTrue(new MoveArm(arm, axis));
+    new JoystickButton(CoPilotController, copilotController.upButton)
+        .onTrue(new MoveArm(arm, axis));
+    new JoystickButton(CoPilotController, copilotController.downButton)
+        .onTrue(new MoveArm(arm, axis));
 
     new JoystickButton(CoPilotController, copilotController.brakeButton)
-    .onTrue(Commands.runOnce(() -> stopArm()));//Does this have to brake everything or just the arm.
+        .onTrue(
+            Commands.runOnce(
+                () -> stopArm())); // Does this have to brake everything or just the arm.
     new JoystickButton(CoPilotController, copilotController.pickupButton)
-    .onTrue(new intakeCommand(Shooter.intakeRPM, shooter));// From what positions will we intake?
+        .onTrue(
+            new intakeCommand(Shooter.intakeRPM, shooter)); // From what positions will we intake?
 
-    new JoystickButton(CoPilotController,
-    copilotController.hookButton).onTrue(Commands.runOnce(() ->
-    arm.toggleHook()));
-    new JoystickButton(CoPilotController,
-    copilotController.carryButton).onTrue(Commands.runOnce(() ->
-    shooter.stopIntakeMotor()).andThen(new TuckArm(arm)));
-    new JoystickButton(CoPilotController,
-    copilotController.extendButton).onTrue(Commands.runOnce(() ->
-    arm.toggleShooterState()));
+    new JoystickButton(CoPilotController, copilotController.hookButton)
+        .onTrue(Commands.runOnce(() -> arm.toggleHook()));
+    new JoystickButton(CoPilotController, copilotController.carryButton)
+        .onTrue(
+            Commands.runOnce(() -> shooter.stopIntakeMotor())
+                .andThen(new TuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))));
+    new JoystickButton(CoPilotController, copilotController.extendButton)
+        .onTrue(Commands.runOnce(() -> arm.toggleShooterState()));
 
-    new JoystickButton(CoPilotController, copilotController.shootButton).onTrue(new shootCommand(shooterRPM, shooter, shooterWaitTime));
+    new JoystickButton(CoPilotController, copilotController.shootButton)
+        .onTrue(new shootCommand(shooterRPM, shooter, shooterWaitTime));
     /*new JoystickButton(CoPilotController,
     copilotController.limelightButton).onTrue(new AprilTagAlign(drivebase,
     limelight, Arm.speakerAlignTagArea, tagToAlign));*/
 
-    new JoystickButton(CoPilotController,
-    copilotController.speakerButton).onTrue(new MoveArmToPosition(arm,
-    limelight.calculateArmShootAngle()).alongWith(Commands.runOnce(() -> speakerShot = true)));
-    new JoystickButton(CoPilotController, copilotController.ampButton).onTrue(new
-    MoveArmToPosition(arm, Arm.ampArmAngle).alongWith(Commands.runOnce(() -> speakerShot = false)));
-
+    new JoystickButton(CoPilotController, copilotController.speakerButton)
+        .onTrue(
+            new MoveArmToPosition(arm, limelight.calculateArmShootAngle())
+                .alongWith(Commands.runOnce(() -> speakerShot = true)));
+    new JoystickButton(CoPilotController, copilotController.ampButton)
+        .onTrue(
+            new MoveArmToPosition(arm, Arm.ampArmAngle)
+                .alongWith(Commands.runOnce(() -> speakerShot = false)));
   }
 
-  public static final BooleanSupplier creepBoolean = () -> {
-    return driverXbox.getLeftTriggerAxis() > 0.5;
-  };
+  public static final BooleanSupplier creepBoolean =
+      () -> {
+        return driverXbox.getLeftTriggerAxis() > 0.5;
+      };
 
   public double getDoubleSupplier() {
     return shuffleboardAngle.getAsDouble();

@@ -10,23 +10,16 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.shooter.intakeCommand;
-import frc.robot.commands.shooter.shootCommand;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.ShuffleboardSubsystem;
 import java.io.File;
 import java.io.IOException;
 import swervelib.parser.SwerveParser;
-import frc.robot.subsystems.ShooterSubsystem;
 
 /**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the
- * name of this class or
- * the package after creating this project, you must also update the
- * build.gradle file in the
+ * The VM is configured to automatically run this class, and to call the functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the name of this class or
+ * the package after creating this project, you must also update the build.gradle file in the
  * project.
  */
 public class Robot extends TimedRobot {
@@ -56,7 +49,6 @@ public class Robot extends TimedRobot {
   private Timer disabledTimer;
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
   LimelightDevice limelight;
-  ShooterSubsystem  shooter = new ShooterSubsystem(new ArmSubsystem());
 
   public Robot() {
     instance = this;
@@ -97,13 +89,10 @@ public class Robot extends TimedRobot {
   }
 
   /**
-   * This function is called every 20 ms, no matter the mode. Use this for items
-   * like diagnostics
+   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
    *
-   * <p>
-   * This runs after the mode specific periodic functions, but before LiveWindow
-   * and
+   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
    * SmartDashboard integrated updating.
    */
   @Override
@@ -117,10 +106,10 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     // m_robotContainer.arm.getLimitSwitch();
-    intakeCommandRPM = shuffle.getNumber("Intake Command RPM");
+    /*intakeCommandRPM = shuffle.getNumber("Intake Command RPM");
     shootCommandRPM = shuffle.getNumber("Intake Command RPM");
     shootCommandWaitTime = shuffle.getNumber("Shoot Command Wait Time");
-    shuffle.setNumber("Intake Speed", shooter.getIntakeRPM());
+    shuffle.setNumber("Intake Speed", shooter.getIntakeRPM());*/
 
     System.out.println("INTAKERPM: " + intakeCommandRPM);
 
@@ -134,7 +123,7 @@ public class Robot extends TimedRobot {
     // m_robotContainer.arm.getLimitSwitch();
     m_robotContainer.arm.isTucked();
     m_robotContainer.arm.setOutputVoltage();
-    m_robotContainer.arm.getSwitch();
+    // m_robotContainer.arm.getSwitch();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -154,10 +143,7 @@ public class Robot extends TimedRobot {
     }
   }
 
-  /**
-   * This autonomous runs the autonomous command selected by your
-   * {@link RobotContainer} class.
-   */
+  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
     // m_robotContainer.setMotorBrake(true);
@@ -219,7 +205,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() // Controller inputs to create and automate commands
-  {
+      {
     /*
      * dpadDownButton.onTrue(
      * new PrintCommand("Intake Command STARTED")
@@ -248,16 +234,13 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {
-  }
+  public void testPeriodic() {}
 
   /** This function is called once when the robot is first started up. */
   @Override
-  public void simulationInit() {
-  }
+  public void simulationInit() {}
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {
-  }
+  public void simulationPeriodic() {}
 }

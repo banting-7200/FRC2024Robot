@@ -59,7 +59,6 @@ public class MoveArmToPosition extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    arm.enableBrake();
     arm.stopArm();
     System.out.println("Move to position command finished. interupted: " + interrupted);
   }

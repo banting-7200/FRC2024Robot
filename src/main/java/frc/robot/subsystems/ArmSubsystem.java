@@ -148,8 +148,19 @@ public class ArmSubsystem extends SubsystemBase {
      */
   }
 
-  public void setMotor(double speed) {
-    rightArmMotor.set(speed);
+  public void setMotorSpeed(double speed) {
+    if (rightEncoder.getPosition() >= Arm.encoderHardMax
+        && speed > 0) { // Check if the arm is beyond the encoder hard
+      // max before we
+      // move. If it is beyond the hard max then stop the motor and end the movement
+      stopArm();
+    } else {
+      rightArmMotor.set(speed);
+    }
+  }
+
+  public double getMotorSpeed() {
+    return rightArmMotor.get();
   }
 
   public boolean moveToAngle(double angle) {
@@ -197,6 +208,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void stopArm() {
     rightArmMotor.stopMotor();
+    enableBrake();
   }
 
   public double getEncoderPosition() {
@@ -265,13 +277,19 @@ public class ArmSubsystem extends SubsystemBase {
     System.out.println("Hook disabled");
   }
 
+  public boolean isHookDeployed() {
+    return !hookSolenoidActions.isReversed();
+  }
+
   // Brake
   public void enableBrake() {
     brakeSolenoidActions.setOff();
+    System.out.println("Brake enabled");
   }
 
   public void disableBrake() {
     brakeSolenoidActions.setOn();
+    System.out.println("Brake disabled");
   }
 
   public boolean getBrake() {

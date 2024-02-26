@@ -26,9 +26,9 @@ public class shootCommand extends Command {
     addRequirements(shooter);
   }
 
-   public shootCommand(int rpm, ShooterSubsystem shooter, int waitTime) {
-   this(() -> rpm, shooter, () -> waitTime);
-   }
+  public shootCommand(int rpm, ShooterSubsystem shooter, int waitTime) {
+    this(() -> rpm, shooter, () -> waitTime);
+  }
 
   @Override
   public void initialize() {

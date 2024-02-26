@@ -1,41 +1,49 @@
 package frc.robot.commands.arm;
 
-import java.util.function.DoubleSupplier;
-import java.util.function.IntSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Arm;
 import frc.robot.subsystems.ArmSubsystem;
+import java.util.function.DoubleSupplier;
 
 public class MoveArm extends Command {
-    private ArmSubsystem arm;
-    private DoubleSupplier axis;
+  private ArmSubsystem arm;
+  private DoubleSupplier axis;
+  private double rampRate;
 
-    public MoveArm(ArmSubsystem arm, DoubleSupplier axis) {
-        this.arm = arm;
-        this.axis = axis;
+  public MoveArm(ArmSubsystem arm, DoubleSupplier axis) {
+    this.arm = arm;
+    this.axis = axis;
+    rampRate = Arm.motorRampRate;
 
-        addRequirements(arm);
+    addRequirements(arm);
+  }
+
+  @Override
+  public void initialize() {
+    arm.disableBrake();
+  }
+
+  @Override
+  public void execute() {
+
+    double motorTargetSpeed = axis.getAsDouble() * Arm.motorSpeed;
+    double motorSpeed = arm.getMotorSpeed();
+    if ((motorTargetSpeed - motorSpeed) > rampRate) {
+      arm.setMotorSpeed(motorSpeed += rampRate);
+    } else if ((motorSpeed - motorTargetSpeed) > rampRate) {
+      arm.setMotorSpeed(motorSpeed -= rampRate);
+    } else {
+      arm.setMotorSpeed(motorTargetSpeed);
     }
+  }
 
-    @Override
-    public void initialize() {
+  @Override
+  public boolean isFinished() {
+    return axis.getAsDouble() == 0;
+  }
 
-    }
-
-    @Override
-    public void execute() {
-        arm.setMotor(axis.getAsDouble() * Arm.motorSpeed);
-    }
-
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        arm.stopArm();
-        arm.enableBrake();
-    }
+  @Override
+  public void end(boolean interrupted) {
+    arm.stopArm();
+  }
 }

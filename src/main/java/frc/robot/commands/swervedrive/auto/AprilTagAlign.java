@@ -1,13 +1,12 @@
 package frc.robot.commands.swervedrive.auto;
 
-import java.util.function.IntSupplier;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import java.util.function.IntSupplier;
 
 public class AprilTagAlign extends Command {
 
@@ -42,16 +41,16 @@ public class AprilTagAlign extends Command {
     addRequirements(swerveSubsystem, limelightSubsystem);
   }
 
-  public AprilTagAlign(SwerveSubsystem swerveSubsystem,
+  public AprilTagAlign(
+      SwerveSubsystem swerveSubsystem,
       LimelightDevice limelightSubsystem,
       double targetArea,
-      int tagToAlign){
-this(swerveSubsystem, limelightSubsystem, targetArea, () -> tagToAlign);
+      int tagToAlign) {
+    this(swerveSubsystem, limelightSubsystem, targetArea, () -> tagToAlign);
   }
 
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {

@@ -41,7 +41,6 @@ public class TuckArm extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    arm.enableBrake();
     arm.stopArm();
   }
 }

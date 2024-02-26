@@ -16,8 +16,8 @@ public class UntuckArm extends Command {
 
   @Override
   public void initialize() {
-    System.out.println("Untuck Arm");
     arm.disableBrake();
+    System.out.println("Untuck Arm");
   }
 
   @Override

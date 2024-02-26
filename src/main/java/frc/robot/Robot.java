@@ -59,10 +59,10 @@ public class Robot extends TimedRobot {
 
     shuffle = ShuffleboardSubsystem.getInstance();
     limelight = m_robotContainer.limelight;
-    shuffle.setNumber("Intake Command RPM", intakeCommandRPM);
+    /*shuffle.setNumber("Intake Command RPM", intakeCommandRPM);
     shuffle.setNumber("Shoot Command RPM", shootCommandRPM);
     shuffle.setNumber("Shoot Command Wait Time", shootCommandWaitTime);
-    shuffle.setBoolean("IR sensor", shooter.shooterHasNote());
+    shuffle.setBoolean("IR sensor", shooter.shooterHasNote());*/
     // m_robotContainer.arm.disableBrake(); // Todo: put this a the start of arm
     // commands
 

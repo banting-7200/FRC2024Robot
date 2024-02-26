@@ -11,14 +11,22 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.Arm;
 import frc.robot.Constants.Shooter;
+import frc.robot.Constants.copilotController;
+import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.arm.MoveArmToPosition;
+import frc.robot.commands.arm.TuckArm;
+import frc.robot.commands.shooter.intakeCommand;
+import frc.robot.commands.shooter.shootCommand;
+import frc.robot.commands.swervedrive.auto.AprilTagAlign;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ShuffleboardSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
+import java.util.function.IntSupplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -52,7 +60,7 @@ public class RobotContainer {
           ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red
           : false;
 
-  static boolean speakerShot;
+  static boolean speakerShot = false;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -138,13 +146,18 @@ public class RobotContainer {
         return shuffle.getNumber("arm angle");
       };
 
-  /*  public static final IntSupplier tagToAlign = () -> isRedAliance ? 4 : 7; */
+  public static final IntSupplier tagToAlign = () -> isRedAliance ? 4 : 7; 
 
-  public static final DoubleSupplier shooterRPM =
+  public static final IntSupplier shooterRPM =
       () -> speakerShot ? Shooter.speakerShootRPM : Shooter.ampShootRPM;
 
-  public static final DoubleSupplier shooterWaitTime =
+  public static final IntSupplier shooterWaitTime =
       () -> speakerShot ? Shooter.speakerWaitTime : Shooter.ampWaitTime;
+
+  static JoystickButton upButton = new JoystickButton(CoPilotController, copilotController.upButton);
+  static JoystickButton downButton = new JoystickButton(CoPilotController, copilotController.downButton);
+
+  public static final DoubleSupplier axis = () -> upButton.getAsBoolean() == true ? 1 : downButton.getAsBoolean() == true ? -1 : 0;
 
   private void configureBindings() {
     // // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
@@ -195,17 +208,15 @@ public class RobotContainer {
     shooter, 1000))); */
 
     // Todo: make suppliers for conditional commands
-    /* new JoystickButton(CoPilotController,
-    copilotController.upButton).onTrue(Commands.runOnce(() ->
-    arm.setMotor(Arm.motorSpeed))).onFalse(Commands.runOnce(() -> stopArm()));
     new JoystickButton(CoPilotController,
-    copilotController.downButton).onTrue(Commands.runOnce(() ->
-    arm.setMotor(-Arm.motorSpeed))).onFalse(Commands.runOnce(() -> stopArm()));
+    copilotController.upButton).onTrue(new MoveArm(arm, axis));
+    new JoystickButton(CoPilotController,
+    copilotController.downButton).onTrue(new MoveArm(arm, axis));
 
     new JoystickButton(CoPilotController, copilotController.brakeButton)
-    .onTrue(Commands.runOnce(() -> stopArm()));
+    .onTrue(Commands.runOnce(() -> stopArm()));//Does this have to brake everything or just the arm.
     new JoystickButton(CoPilotController, copilotController.pickupButton)
-    .onTrue(new intakeCommand(Shooter.intakeRPM, shooter)); // Todo: change rpm to a constant value
+    .onTrue(new intakeCommand(Shooter.intakeRPM, shooter));// From what positions will we intake?
 
     new JoystickButton(CoPilotController,
     copilotController.hookButton).onTrue(Commands.runOnce(() ->
@@ -218,15 +229,15 @@ public class RobotContainer {
     arm.toggleShooterState()));
 
     new JoystickButton(CoPilotController, copilotController.shootButton).onTrue(new shootCommand(shooterRPM, shooter, shooterWaitTime));
-    new JoystickButton(CoPilotController,
+    /*new JoystickButton(CoPilotController,
     copilotController.limelightButton).onTrue(new AprilTagAlign(drivebase,
-    limelight, Arm.speakerAlignTagArea, tagToAlign));
+    limelight, Arm.speakerAlignTagArea, tagToAlign));*/
 
     new JoystickButton(CoPilotController,
     copilotController.speakerButton).onTrue(new MoveArmToPosition(arm,
     limelight.calculateArmShootAngle()).alongWith(Commands.runOnce(() -> speakerShot = true)));
     new JoystickButton(CoPilotController, copilotController.ampButton).onTrue(new
-    MoveArmToPosition(arm, Arm.ampArmAngle).alongWith(Commands.runOnce(() -> speakerShot = false))); */
+    MoveArmToPosition(arm, Arm.ampArmAngle).alongWith(Commands.runOnce(() -> speakerShot = false)));
 
   }
 

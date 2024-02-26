@@ -5,12 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.arm.MoveArmToPosition;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.ShuffleboardSubsystem;
@@ -31,7 +27,6 @@ public class RobotContainer {
   // "swerve/neo"));
   // CommandJoystick rotationController = new CommandJoystick(1);
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  CommandJoystick driverController = new CommandJoystick(1);
 
   // CommandJoystick driverController = new
   // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
@@ -148,26 +143,33 @@ public class RobotContainer {
      * t.onTrue(new InstantCommand(() -> drivebase.setDriveSpeeds(true)))
      * .onFalse(new InstantCommand(() -> drivebase.setDriveSpeeds(false)));
      */
-    new JoystickButton(driverXbox, XboxController.Button.kX.value)
-        .onTrue(new MoveArmToPosition(arm, shuffleboardAngle));
+    /*
+     * new JoystickButton(driverXbox, XboxController.Button.kX.value)
+     * .onTrue(new MoveArmToPosition(arm, shuffleboardAngle));
+     */
     // Move to position outlined on shuffleboard
     // position
 
-    /*  new JoystickButton(driverXbox, XboxController.Button.kX.value)
-    .onTrue(
-        new TuckArm(arm)
-            .andThen(
-                new UntuckArm(arm)
-                    .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
-                    .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))));*/
+    /*
+     * new JoystickButton(driverXbox, XboxController.Button.kX.value)
+     * .onTrue(
+     * new TuckArm(arm)
+     * .andThen(
+     * new UntuckArm(arm)
+     * .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
+     * .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))));
+     */
 
-    new JoystickButton(driverXbox, XboxController.Button.kA.value)
-        .onTrue(Commands.runOnce(() -> arm.disableShooterSolenoids()));
-    new JoystickButton(driverXbox, XboxController.Button.kB.value)
-        .onTrue(Commands.runOnce(() -> arm.toggleShooterState()));
-
-    new JoystickButton(driverXbox, XboxController.Button.kY.value)
-        .onTrue(Commands.runOnce(() -> arm.disableBrake()));
+    /*
+     * new JoystickButton(driverXbox, XboxController.Button.kA.value)
+     * .onTrue(Commands.runOnce(() -> arm.disableShooterSolenoids()));
+     * new JoystickButton(driverXbox, XboxController.Button.kB.value)
+     * .onTrue(Commands.runOnce(() -> arm.toggleShooterState()));
+     *
+     * new JoystickButton(driverXbox, XboxController.Button.kY.value)
+     * .onTrue(Commands.runOnce(() -> arm.disableBrake()));
+     */
+    // new POVButton(driverXbox, 0).onTrue(null)
   }
 
   public static final BooleanSupplier creepBoolean =

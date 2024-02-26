@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.shooter.intakeCommand;
 import frc.robot.commands.shooter.shootCommand;
 import frc.robot.subsystems.LimelightDevice;
@@ -41,9 +39,19 @@ public class Robot extends TimedRobot {
 
   // private RobotContainer m_robotContainer;
   XboxController driverXbox = new XboxController(0);
-  POVButton dpadDownButton = new POVButton(driverXbox, 180);
-  POVButton dpadLeftButton = new POVButton(driverXbox, 270);
-  POVButton dpadUpButton = new POVButton(driverXbox, 0);
+  /*
+   * POVButton dpadDownButton = new POVButton(driverXbox, 180);
+   * POVButton dpadLeftButton = new POVButton(driverXbox, 270);
+   * POVButton dpadUpButton = new POVButton(driverXbox, 0);
+   */
+
+  /*
+   * static Joystick CoPilotController = new Joystick(1);
+   * JoystickButton joystickIntakeButton = new JoystickButton(CoPilotController,
+   * 2);
+   * JoystickButton joystickShootButton = new JoystickButton(CoPilotController,
+   * 3);
+   */
 
   private Timer disabledTimer;
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
@@ -74,6 +82,7 @@ public class Robot extends TimedRobot {
     shuffle.setNumber("Intake Command RPM", intakeCommandRPM);
     shuffle.setNumber("Shoot Command RPM", shootCommandRPM);
     shuffle.setNumber("Shoot Command Wait Time", shootCommandWaitTime);
+
     shuffle.setBoolean("IR sensor", shooter.shooterHasNote());
     // m_robotContainer.arm.disableBrake(); // Todo: put this a the start of arm
     // commands
@@ -104,19 +113,15 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     // m_robotContainer.arm.getLimitSwitch();
-    shuffle.setNumber("arm encoder reading", m_robotContainer.arm.getEncoderPosition());
-    shuffle.setBoolean("brake state", m_robotContainer.arm.getBrake());
-    shuffle.setBoolean("IR sensor", shooter.shooterHasNote());
-
     intakeCommandRPM = shuffle.getNumber("Intake Command RPM");
     shootCommandRPM = shuffle.getNumber("Intake Command RPM");
     shootCommandWaitTime = shuffle.getNumber("Shoot Command Wait Time");
+    shuffle.setNumber("Intake Speed", shooter.getIntakeRPM());
+
+    System.out.println("INTAKERPM: " + intakeCommandRPM);
 
     // System.out.println("shuffleboard input: " +
     // m_robotContainer.getDoubleSupplier());
-    m_robotContainer.arm.setPID();
-    m_robotContainer.arm.getLimitSwitch();
-    m_robotContainer.arm.isTucked();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -200,17 +205,33 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() // Controller inputs to create and automate commands
       {
-    dpadDownButton.onTrue(
-        new PrintCommand("Intake Command STARTED")
-            .andThen(new intakeCommand(intakeCommandRPM, shooter)));
-    dpadLeftButton.onTrue(
-        new PrintCommand("Shoot Command Started")
-            .andThen(new shootCommand(shootCommandRPM, shooter, shootCommandWaitTime)));
     /*
-     * dpadUpButton.onTrue(
-     * new intakeCommand(intakeCommandRPM, shooter)
+     * dpadDownButton.onTrue(
+     * new PrintCommand("Intake Command STARTED")
+     * .andThen(new intakeCommand(intakeCommandRPM, shooter)));
+     * dpadLeftButton.onTrue(
+     * new PrintCommand("Shoot Command Started")
      * .andThen(new shootCommand(shootCommandRPM, shooter, shootCommandWaitTime)));
      */
+
+    // joystickIntakeButton.onTrue(new intakeCommand(intakeCommandRPM, shooter));
+    // joystickShootButton.onTrue(new shootCommand(intakeCommandRPM, shooter,
+    // shootCommandWaitTime));
+
+    if (driverXbox.getAButtonReleased() == true) {
+      System.out.println("A Button Pressed");
+      shooterCommand = new intakeCommand(intakeCommandRPM, shooter);
+      shooterCommand.schedule();
+    }
+
+    // shooterCommand = new readyNoteCommand(1500, shooter);
+    // shooterCommand.schedule();
+
+    if (driverXbox.getXButtonReleased() == true) {
+      System.out.println("X Button Pressed");
+      shooterCommand = new shootCommand(shootCommandRPM, shooter, shootCommandWaitTime);
+      shooterCommand.schedule();
+    }
   }
 
   @Override

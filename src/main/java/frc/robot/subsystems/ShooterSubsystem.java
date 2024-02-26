@@ -14,7 +14,6 @@ public class ShooterSubsystem extends SubsystemBase {
   VelocityVoltage m_velocity = new VelocityVoltage(0);
 
   private DigitalInput shootIR;
-
   private ArmSubsystem arm;
 
   public ShooterSubsystem(ArmSubsystem _arm) {
@@ -81,5 +80,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void stopIntakeMotor() {
     m_intake.setControl(m_velocity.withVelocity(0));
+  }
+
+  public double getIntakeRPM() {
+    return m_intake.getVelocity().getValue();
   }
 }

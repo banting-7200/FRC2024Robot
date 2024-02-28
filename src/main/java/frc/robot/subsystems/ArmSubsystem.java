@@ -61,14 +61,14 @@ public class ArmSubsystem extends SubsystemBase {
 
     rightEncoder = rightArmMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
     rightEncoder.setPositionConversionFactor(
-        42); // Amount of ticks in a Neo encoder rotation unit. Converted
+        42 /* * Arm.armGearRatio */); // Amount of ticks in a Neo encoder rotation unit. Converted
     // for gravity feedfoward later on.
     pidController = rightArmMotor.getPIDController();
     pidController.setFeedbackDevice(rightEncoder);
     pidController.setPositionPIDWrappingEnabled(true);
 
     lastShooterState = !solenoidSwitch.get();
-    /*
+
     shuffleboard.setNumber("arm P", Arm.p);
     shuffleboard.setNumber("arm I", Arm.i);
     shuffleboard.setNumber("arm D", Arm.d);
@@ -83,7 +83,7 @@ public class ArmSubsystem extends SubsystemBase {
     shuffleboard.setNumber("solenoid delay", Arm.s_stateChangeDelay);
 
     shuffleboard.setNumber("output current right", rightArmMotor.getOutputCurrent());
-    shuffleboard.setNumber("output current left", leftArmMotor.getOutputCurrent()); */
+    shuffleboard.setNumber("output current left", leftArmMotor.getOutputCurrent());
     setPID();
 
     if (RobotBase.isSimulation()) {
@@ -97,6 +97,8 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void setPID() {
+    int smartMotionSlot = Arm.smartMotionSlot;
+/* public void setPID() {
     int smartMotionSlot = Arm.smartMotionSlot;
 
     /* double[] PIDvalues = shuffleboard.getPID("arm");
@@ -176,7 +178,7 @@ public class ArmSubsystem extends SubsystemBase {
       pidController.setReference(
           angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot, getArbFF());
       // System.out.println("motor angle: " + rightEncoder.getPosition());
-      return Math.abs(rightEncoder.getPosition() - angle) < Arm.stopRange;
+      return Math.abs(rightEncoder.getPosition() - angle) < shuffleboard.getNumber("stop range");
     }
   }
 
@@ -188,7 +190,7 @@ public class ArmSubsystem extends SubsystemBase {
     double radians = java.lang.Math.toRadians(degrees);
     double cosineScalar = java.lang.Math.cos(radians);
 
-    return Arm.maxGravityFF * cosineScalar;
+    return shuffleboard.getNumber("gravity FF") * cosineScalar;
   }
 
   double degreesToRotations(double degrees) {
@@ -196,7 +198,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void getSwitch() {
-    System.out.println(!solenoidSwitch.get());
+    System.out.println(solenoidSwitch.get());
   }
 
   public void getLimitSwitch() {
@@ -221,9 +223,9 @@ public class ArmSubsystem extends SubsystemBase {
 
   // Shooter
   public void tuckShooter() {
-    System.out.println("Shooter tucked");
     shooterSolenoidActions.setReverse();
     stateChangeTimestamp = currentTime.millis();
+    System.out.println("Shooter tucked");
   }
 
   public void deployShooter() {
@@ -246,16 +248,13 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public boolean isTucked() {
-    if (currentTime.millis() - stateChangeTimestamp > Arm.s_stateChangeDelay
-        && lastShooterState
-            != !solenoidSwitch
-                .get()) { // For this to work, the robot must start in the shooting position
-      lastShooterState = !solenoidSwitch.get();
-      // shuffleboard.setNumber("updated state. current time: ",
-      // currentTime.millis());
-    }
     shuffleboard.setBoolean("last shooter state", lastShooterState);
-    return lastShooterState;
+    if (currentTime.millis() - stateChangeTimestamp > Arm.s_stateChangeDelay) {
+      return lastShooterState;
+    }
+    stateChangeTimestamp = currentTime.millis();
+    lastShooterState = solenoidSwitch.get();
+    return solenoidSwitch.get();
   }
 
   // Hook

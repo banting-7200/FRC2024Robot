@@ -10,6 +10,12 @@
           "data": {
             "pathName": "Mid Pickup"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
         }
       ]
     }

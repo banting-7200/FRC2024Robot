@@ -4,14 +4,21 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Arm;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.Shooter;
 import frc.robot.Constants.copilotController;
 import frc.robot.commands.arm.MoveArm;
@@ -20,12 +27,16 @@ import frc.robot.commands.arm.TuckArm;
 import frc.robot.commands.arm.UntuckArm;
 import frc.robot.commands.shooter.intakeCommand;
 import frc.robot.commands.shooter.shootCommand;
+import frc.robot.commands.swervedrive.auto.AprilTagAlign;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LightSubsystem;
 import frc.robot.subsystems.LightSubsystem.lightStates;
+import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.ShuffleboardSubsystem;
+
+import java.io.File;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
@@ -33,12 +44,12 @@ import java.util.function.IntSupplier;
 import com.pathplanner.lib.auto.NamedCommands;
 
 /**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
+ * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
+ * little robot logic should actually be handled in the {@link Robot} periodic methods (other than the scheduler calls).
+ * Instead, the structure of the robot (including subsystems, commands, and trigger mappings) should be declared here.
  */
-public class RobotContainer {
+public class RobotContainer
+{
 
   // The robot's subsystems and commands are defined here..
 
@@ -50,10 +61,9 @@ public class RobotContainer {
   static Joystick CoPilotController = new Joystick(1);
 
   // Subsystem Declaration
-  /*
-   * private final SwerveSubsystem drivebase =
-   * new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve/neo"));
-   */
+  
+    private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve/neo"));
+   
   ArmSubsystem arm;
   private ShooterSubsystem shooter;
   LimelightDevice limelight;
@@ -67,65 +77,18 @@ public class RobotContainer {
 
   static boolean speakerShot = false;
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
+  /**
+   * The container for the robot. Contains subsystems, OI devices, and commands.
+   */
+  public RobotContainer()
+  {
     // Configure the trigger bindings
-    arm = new ArmSubsystem();
+arm = new ArmSubsystem();
     shooter = new ShooterSubsystem(arm);
     limelight = new LimelightDevice();
 
     configureBindings();
-
-    /*
-     * AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
-     * () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
-     * OperatorConstants.LEFT_Y_DEADBAND),
-     * () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
-     * OperatorConstants.LEFT_X_DEADBAND),
-     * () -> MathUtil.applyDeadband(driverXbox.getRightX(),
-     * OperatorConstants.RIGHT_X_DEADBAND),
-     * driverXbox::getYButtonPressed,
-     * driverXbox::getAButtonPressed,
-     * driverXbox::getXButtonPressed,
-     * driverXbox::getBButtonPressed);
-     *
-     * // Applies deadbands and inverts controls because joysticks
-     * // are back-right positive while robot
-     * // controls are front-left positive
-     * // left stick controls translation
-     * // right stick controls the desired angle NOT angular rotation
-     * Command driveFieldOrientedDirectAngle = drivebase.driveCommand(
-     * () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
-     * OperatorConstants.LEFT_Y_DEADBAND),
-     * () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
-     * OperatorConstants.LEFT_X_DEADBAND),
-     * () -> driverXbox.getRightX(),
-     * () -> driverXbox.getRightY());
-     *
-     * // Applies deadbands and inverts controls because joysticks
-     * // are back-right positive while robot
-     * // controls are front-left positive
-     * // left stick controls translation
-     * // right stick controls the angular velocity of the robot
-     * Command driveFieldOrientedAnglularVelocity = drivebase.driveCommand(
-     * () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
-     * OperatorConstants.LEFT_Y_DEADBAND),
-     * () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
-     * OperatorConstants.LEFT_X_DEADBAND),
-     * () -> driverXbox.getRawAxis(2));
-     *
-     * Command driveFieldOrientedDirectAngleSim = drivebase.simDriveCommand(
-     * () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
-     * OperatorConstants.LEFT_Y_DEADBAND),
-     * () -> MathUtil.applyDeadband(driverXbox.getLeftX(),
-     * OperatorConstants.LEFT_X_DEADBAND),
-     * () -> driverXbox.getRawAxis(2));
-     *
-     * drivebase.setDefaultCommand(
-     * !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle :
-     * driveFieldOrientedDirectAngleSim);
-     */
-
+ 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
     // controls are front-left positive
@@ -156,6 +119,13 @@ public class RobotContainer {
         !RobotBase.isSimulation() ? driveFieldOrientedDirectAngle : driveFieldOrientedDirectAngleSim);
 
         NamedCommands.registerCommand("Print", Commands.runOnce(() -> System.out.println("Events work!!!")));
+
+        NamedCommands.registerCommand("Intake", new intakeCommand(Shooter.intakeRPM, Shooter.pullBackRPM, Shooter.correctPositioningRPM, shooter));//add note align
+        NamedCommands.registerCommand("Shoot", new shootCommand(Shooter.speakerShootRPM, shooter, Shooter.speakerWaitTime));//Add lime align
+        NamedCommands.registerCommand("Prep Intake", new MoveArmToPosition(arm, Arm.intakeArmAngle));
+        NamedCommands.registerCommand("Prep Shoot", new MoveArmToPosition(arm, Arm.shootAngle));
+        NamedCommands.registerCommand("Note Align", Commands.runOnce(() -> System.out.println("Note align")));
+        NamedCommands.registerCommand("Shoot Align", new AprilTagAlign(drivebase, limelight, 2, 12));//fill in area and tag id
   }
 
   /**
@@ -203,12 +173,12 @@ public class RobotContainer {
     // // InstantCommand(drivebase::addFakeVisionReading));
     // /*
     // * new JoystickButton(driverXbox,
-    // * 2).whileTrue(
-    // * Commands.deferredProxy(() -> drivebase.driveToPose(
-    // * new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
-    // * ));
-    // */
-    // // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new
+                       // * 2).whileTrue(
+        // * Commands.deferredProxy(() -> drivebase.driveToPose(
+                                   // * new Pose2d(new Translation2d(4, 4), Rotation2d.fromDegrees(0)))
+                              // * ));
+                              // */
+// // new JoystickButton(driverXbox, 3).whileTrue(new RepeatCommand(new
     // // InstantCommand(drivebase::lock, drivebase)));
 
     /*

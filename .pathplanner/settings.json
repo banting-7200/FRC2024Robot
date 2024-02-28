@@ -6,7 +6,9 @@
     "Left Start Paths",
     "Test Paths"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "New Folder"
+  ],
   "defaultMaxVel": 4.4196,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,

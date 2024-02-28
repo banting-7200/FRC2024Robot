@@ -4,16 +4,20 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.AprilTagID;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.ShuffleboardSubsystem;
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 import swervelib.parser.SwerveParser;
 
 /**
@@ -134,6 +138,14 @@ public class Robot extends TimedRobot {
     if (disabledTimer.hasElapsed(Constants.Drivebase.WHEEL_LOCK_TIME)) {
       // m_robotContainer.setMotorBrake(false);
       disabledTimer.stop();
+    }
+    Optional<Alliance> alliance = DriverStation.getAlliance();
+    if (alliance.get() == Alliance.Blue) {
+      m_robotContainer.speakerTag = AprilTagID.blueSpeakerMiddle;
+      m_robotContainer.ampTag = AprilTagID.blueAmp;
+    } else {
+      m_robotContainer.speakerTag = AprilTagID.redSpeakerMiddle;
+      m_robotContainer.ampTag = AprilTagID.redAmp;
     }
   }
 

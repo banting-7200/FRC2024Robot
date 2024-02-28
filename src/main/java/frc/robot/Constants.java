@@ -172,4 +172,23 @@ public final class Constants {
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT = 6;
   }
+
+  public static final class AprilTagID {
+    public static final int blueSourceInner = 1;
+    public static final int blueSourceOuter = 2;
+    public static final int redSpeakerSide = 3;
+    public static final int redSpeakerMiddle = 4;
+    public static final int redAmp = 5;
+    public static final int blueAmp = 6;
+    public static final int blueSpeakerMiddle = 7;
+    public static final int blueSpeakerSide = 8;
+    public static final int redSourceOuter = 9;
+    public static final int redSourceInner = 10;
+    public static final int redStageSourceSide = 11;
+    public static final int redStageAmpSide = 12;
+    public static final int redStageMiddle = 13;
+    public static final int blueStageMiddle = 14;
+    public static final int blueStageAmpSide = 15;
+    public static final int blueStageSourceSide = 16;
+  }
 }

@@ -123,9 +123,11 @@ arm = new ArmSubsystem();
         NamedCommands.registerCommand("Intake", new intakeCommand(Shooter.intakeRPM, Shooter.pullBackRPM, Shooter.correctPositioningRPM, shooter));//add note align
         NamedCommands.registerCommand("Shoot", new shootCommand(Shooter.speakerShootRPM, shooter, Shooter.speakerWaitTime));//Add lime align
         NamedCommands.registerCommand("Prep Intake", new MoveArmToPosition(arm, Arm.intakeArmAngle));
-        NamedCommands.registerCommand("Prep Shoot", new MoveArmToPosition(arm, Arm.shootAngle));
+        NamedCommands.registerCommand("Prep Shoot", new MoveArmToPosition(arm, Arm.armToShooterAngle));
         NamedCommands.registerCommand("Note Align", Commands.runOnce(() -> System.out.println("Note align")));
         NamedCommands.registerCommand("Shoot Align", new AprilTagAlign(drivebase, limelight, 2, 12));//fill in area and tag id
+        NamedCommands.registerCommand("Amp Align", new AprilTagAlign(drivebase, limelight, 2, 12));
+        NamedCommands.registerCommand("Prep Amp", new MoveArmToPosition(arm, Arm.ampArmAngle));
   }
 
   /**

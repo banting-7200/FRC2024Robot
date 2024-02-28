@@ -27,7 +27,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Start"
+            "pathName": "Mid Start"
           }
         },
         {
@@ -77,7 +77,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note 1 to 2 Left"
+            "pathName": "Note 1 to 2 Mid"
           }
         },
         {
@@ -127,7 +127,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note 2 to 3 Left"
+            "pathName": "Note 2 to 3 Mid"
           }
         },
         {
@@ -177,7 +177,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "To Note 4 Left"
+            "pathName": "To Note 4 Mid"
           }
         },
         {
@@ -202,7 +202,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "To Speaker Left"
+            "pathName": "To Speaker Mid"
           }
         },
         {

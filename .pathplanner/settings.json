@@ -4,10 +4,11 @@
   "holonomicMode": true,
   "pathFolders": [
     "Left Start Paths",
+    "Mid Start Paths",
     "Test Paths"
   ],
   "autoFolders": [
-    "New Folder"
+    "Test Autos"
   ],
   "defaultMaxVel": 4.4196,
   "defaultMaxAccel": 3.0,

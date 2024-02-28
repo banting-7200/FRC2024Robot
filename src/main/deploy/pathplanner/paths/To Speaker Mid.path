@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.548236363234494,
-        "y": 5.562647359246215
+        "x": 7.51,
+        "y": 7.42
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.548236363234494,
-        "y": 5.562647359246215
+        "x": 5.073198163514728,
+        "y": 6.558068465637644
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.122067353977788,
-        "y": 5.562647359246215
+        "x": 2.719320017812645,
+        "y": 5.5040931765173085
       },
       "prevControl": {
-        "x": 1.122067353977788,
-        "y": 5.562647359246215
+        "x": 4.393969643859401,
+        "y": 6.358984244359359
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,13 +32,13 @@
     {
       "waypointRelativePos": 0,
       "rotationDegrees": 180.0,
-      "rotateFast": true
+      "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Shoot n' Prep",
+      "name": "New Event Marker",
       "waypointRelativePos": 0,
       "command": {
         "type": "sequential",
@@ -47,42 +47,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Shoot"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "Prep Intake"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Note Intake and Shoot",
-      "waypointRelativePos": 1.0,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
                 "name": "Prep Shoot"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "Shoot"
               }
             }
           ]
@@ -102,9 +67,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Test Paths",
+  "folder": "Mid Start Paths",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

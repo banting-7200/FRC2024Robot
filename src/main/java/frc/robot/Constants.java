@@ -111,6 +111,7 @@ public final class Constants {
     public static final double intakeArmAngle = 21.0;
     public static final double ampArmAngle = 31.3;
     public static final double liftArmAngle = 21;
+    public static final double shootAngle = 23;
 
     public static final int kMeasuredPosHorizontal =
         21; // Default position measured when arm is horizontal from

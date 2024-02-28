@@ -5,6 +5,9 @@
   "pathFolders": [
     "Left Start Paths",
     "Mid Start Paths",
+    "Middle Start Paths",
+    "Positions",
+    "Right Start Paths",
     "Test Paths"
   ],
   "autoFolders": [

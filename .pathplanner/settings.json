@@ -4,9 +4,12 @@
   "holonomicMode": true,
   "pathFolders": [
     "Left Start Paths",
+    "Mid Start Paths",
     "Test Paths"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Test Autos"
+  ],
   "defaultMaxVel": 4.4196,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,

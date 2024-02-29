@@ -98,7 +98,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void setPID() {
     int smartMotionSlot = Arm.smartMotionSlot;
-/* public void setPID() {
+    /* public void setPID() {
     int smartMotionSlot = Arm.smartMotionSlot;
 
     /* double[] PIDvalues = shuffleboard.getPID("arm");

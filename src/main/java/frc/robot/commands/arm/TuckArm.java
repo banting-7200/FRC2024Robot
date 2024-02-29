@@ -3,12 +3,16 @@ package frc.robot.commands.arm;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Arm;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.LightSubsystem;
+import frc.robot.subsystems.LightSubsystem.lightStates;
+
 import java.time.Clock;
 
 public class TuckArm extends Command {
 
   private ArmSubsystem arm;
   private boolean ranTuckCommand = false;
+  private LightSubsystem lights = LightSubsystem.getInstance();
 
   Clock timer = Clock.systemDefaultZone();
   long startTime;
@@ -30,6 +34,7 @@ public class TuckArm extends Command {
   @Override
   public void execute() {
     // System.out.println(ranTuckCommand);
+    // System.out.println(ranTuckCommand);
     if (arm.getEncoderPosition() >= Arm.tuckSafeMin) {
       if (!ranTuckCommand) {
         arm.tuckShooter();
@@ -39,6 +44,8 @@ public class TuckArm extends Command {
       // move to safe tuck pos
       arm.moveToAngle(Arm.tuckSafeMin + 2);
     }
+    // System.out.println("is it safe to tuck: " + (arm.getEncoderPosition() >=
+    // Arm.tuckSafeMin));
     // System.out.println("is it safe to tuck: " + (arm.getEncoderPosition() >= Arm.tuckSafeMin));
   }
 
@@ -50,6 +57,9 @@ public class TuckArm extends Command {
   @Override
   public void end(boolean interrupted) {
     arm.stopArm();
+    if (!interrupted) {
+      lights.SetLightState(lightStates.CarryingNote);
+    }
     System.out.println("elapsed time is: " + (timer.millis() - startTime));
   }
 }

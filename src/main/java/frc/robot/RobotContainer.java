@@ -165,6 +165,12 @@ public class RobotContainer {
   public static final DoubleSupplier axis =
       () -> upButton.getAsBoolean() == true ? 1 : downButton.getAsBoolean() == true ? -1 : 0;
 
+  public final DoubleSupplier speakerAngle =
+      () ->
+          CoPilotController.getRawButton(copilotController.limelightButton) == true
+              ? limelight.calculateArmShootAngle()
+              : Arm.speakerArmAngle;
+
   private void configureBindings() {
     // // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
@@ -248,11 +254,7 @@ public class RobotContainer {
 
     new JoystickButton(CoPilotController, copilotController.speakerButton)
         .onTrue(
-            new MoveArmToPosition(
-                    arm,
-                    limelight
-                        .calculateArmShootAngle()) // Need redundancies for if Limelight doesn't
-                // work!!!
+            new MoveArmToPosition(arm, speakerAngle)
                 .finallyDo(() -> lights.SetLightState(lightStates.ReadyToSPEAKER))
                 .alongWith(Commands.runOnce(() -> speakerShot = true)));
     new JoystickButton(CoPilotController, copilotController.ampButton)

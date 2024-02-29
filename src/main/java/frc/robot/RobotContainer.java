@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -140,6 +141,7 @@ public class RobotContainer {
     // tag id
     NamedCommands.registerCommand("Amp Align", new AprilTagAlign(drivebase, limelight, 2, 12));
     NamedCommands.registerCommand("Prep Amp", new MoveArmToPosition(arm, Arm.ampArmAngle));
+<<<<<<< HEAD
     // Initialize sendable chooser for autos
     autos = new SendableChooser();
     autos.addOption("Left Start", "Left Start Auto");
@@ -147,6 +149,18 @@ public class RobotContainer {
     autos.addOption("Right Start", "(R) 4 in Speaker");
 
     shuffle.newAutoChooser(autos);
+=======
+
+    PathPlannerAuto auto1 =
+        new PathPlannerAuto("(R) 2 in Speaker + 2 in Amp.auto"); // initialize autos
+    PathPlannerAuto auto2 = new PathPlannerAuto("(R) 4 in Speaker.auto");
+
+    SendableChooser<PathPlannerAuto> autos = new SendableChooser<>(); // create sendable chooser
+    autos.addOption("1", auto1); // add options
+    autos.addOption("2", auto2);
+
+    shuffle.newAutoChooser(autos); // add drop down list to dashboard
+>>>>>>> 4a1ce89 (Added some autos and an example autochooser)
   }
 
   /**
@@ -294,7 +308,11 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
+<<<<<<< HEAD
     return drivebase.getAutonomousCommand(shuffle.getAuto());
+=======
+    return shuffle.getAuto();
+>>>>>>> 4a1ce89 (Added some autos and an example autochooser)
   }
 
   public void setDriveMode() {

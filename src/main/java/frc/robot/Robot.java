@@ -153,7 +153,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     // m_robotContainer.setMotorBrake(true);
-    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     // m_autonomousCommand = new UntuckArm(arm).andThen(new MoveArmToPosition(arm,
     // 26)).andThen(new
     // TuckArm(arm));

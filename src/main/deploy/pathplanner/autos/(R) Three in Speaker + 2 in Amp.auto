@@ -20,6 +20,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Shoot Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot"
           }
         },
@@ -33,6 +39,12 @@
           "type": "named",
           "data": {
             "name": "Prep Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Align"
           }
         },
         {
@@ -56,6 +68,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Shoot Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot"
           }
         },
@@ -66,15 +84,45 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "To Amp"
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Prep Shoot"
+            "name": "Prep Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Amp Align"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "To Far Left"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(L) Left Far Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "To Amp"
           }
         }
       ]

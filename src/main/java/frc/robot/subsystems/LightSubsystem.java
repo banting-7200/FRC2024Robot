@@ -44,7 +44,6 @@ public class LightSubsystem {
     statusBuffer = new AddressableLEDBuffer(stringLength);
 
     statusLights.setLength(stringLength);
-
     statusLights.start();
   }
 

@@ -53,7 +53,7 @@ public final class Constants {
 
   public static final class Lights {
     public static final int lightID = 1;
-    public static final int lightStringLength = 9;
+    public static final int lightStringLength = 10;
   }
 
   /* */
@@ -111,7 +111,6 @@ public final class Constants {
     public static final double intakeArmAngle = 21.0;
     public static final double ampArmAngle = 31.3;
     public static final double liftArmAngle = 21;
-    public static final double speakerArmAngle = 23;//Todo: find a real value for this
 
     public static final int kMeasuredPosHorizontal =
         21; // Default position measured when arm is horizontal from
@@ -137,9 +136,9 @@ public final class Constants {
     public static final int intakeID = 31;
     public static final int shootIR = 0;
 
-    public static final int intakeRPM = 1000;
-    public static final int pullBackRPM = 1000;
-    public static final int correctPositioningRPM = 1000;
+    public static final int intakeRPM = 6000;
+    public static final int pullBackRPM = 2000;
+    public static final int correctPositioningRPM = 2000;
     public static final int ampShootRPM = 2000;
     public static final int speakerShootRPM = 6000;
     public static final int ampWaitTime = 0;

@@ -155,7 +155,7 @@ public class RobotContainer {
       () -> speakerShot ? Shooter.speakerShootRPM : Shooter.ampShootRPM;
 
   public static final IntSupplier shooterWaitTime =
-      () -> speakerShot ? Shooter.speakerWaitTime : Shooter.ampWaitTime;
+      () -> speakerShot ? Shooter.ampWaitTime : Shooter.speakerWaitTime;
 
   static JoystickButton upButton =
       new JoystickButton(CoPilotController, copilotController.upButton);
@@ -164,8 +164,6 @@ public class RobotContainer {
 
   public static final DoubleSupplier axis =
       () -> upButton.getAsBoolean() == true ? 1 : downButton.getAsBoolean() == true ? -1 : 0;
-
-    public final DoubleSupplier speakerAngle = () -> CoPilotController.getRawButton(copilotController.limelightButton) == true ? limelight.calculateArmShootAngle() : Arm.speakerArmAngle;
 
   private void configureBindings() {
     // // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
@@ -250,7 +248,11 @@ public class RobotContainer {
 
     new JoystickButton(CoPilotController, copilotController.speakerButton)
         .onTrue(
-            new MoveArmToPosition(arm, speakerAngle)
+            new MoveArmToPosition(
+                    arm,
+                    limelight
+                        .calculateArmShootAngle()) // Need redundancies for if Limelight doesn't
+                // work!!!
                 .finallyDo(() -> lights.SetLightState(lightStates.ReadyToSPEAKER))
                 .alongWith(Commands.runOnce(() -> speakerShot = true)));
     new JoystickButton(CoPilotController, copilotController.ampButton)

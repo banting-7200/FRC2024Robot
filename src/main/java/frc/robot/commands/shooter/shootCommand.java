@@ -37,6 +37,7 @@ public class shootCommand extends Command {
   public void initialize() {
     sinceIntakeMotor = currentTime.millis();
     sinceNoteLeft = currentTime.millis();
+    hasSeenNote = false;
   }
 
   @Override
@@ -44,7 +45,8 @@ public class shootCommand extends Command {
     currentMillis = currentTime.millis(); // records current time
     shooter.spinShootToRPM(rpm.getAsInt()); // spins the shooters
     if ((currentMillis - sinceIntakeMotor)
-        > waitTime.getAsInt()) { // waits for 250 ms for it to turn on the shoot motor
+        > waitTime.getAsInt()) { // waits for 250 ms for it to turn on the shoot
+      // motor
       shooter.spinIntakeToNegativeRPM(rpm.getAsInt()); // runs the shoot motor
       System.out.println("Run Shooter motor");
     }
@@ -54,7 +56,9 @@ public class shootCommand extends Command {
               .millis(); // if it see's the note it will set the since note left time for current
       // time
       hasSeenNote = true;
+      System.out.println("SAW THE NOTE");
     }
+    System.out.println(hasSeenNote);
   }
 
   public boolean isFinished() {

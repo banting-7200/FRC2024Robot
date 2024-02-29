@@ -38,6 +38,13 @@ public class intakeCommand extends Command {
   @Override
   public void initialize() {
     System.out.println("I GOT TO INIT");
+    startedMillis = 0;
+    override = false;
+    openOrClosedCounter = 0;
+    stopDryRun = false;
+    notelock = false;
+    notelock2 = false;
+    shooterHasNotePrev = false;
   }
 
   @Override

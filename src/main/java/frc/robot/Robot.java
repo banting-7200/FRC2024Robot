@@ -4,17 +4,18 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.subsystems.LightSubsystem;
+import frc.robot.subsystems.LightSubsystem.lightStates;
 import frc.robot.subsystems.LimelightDevice;
 import frc.robot.subsystems.ShuffleboardSubsystem;
-import java.io.File;
-import java.io.IOException;
-import swervelib.parser.SwerveParser;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -32,11 +33,10 @@ public class Robot extends TimedRobot {
   double shootCommandWaitTime;
 
   XboxController driverXbox = new XboxController(0);
-  /*
-   * POVButton dpadDownButton = new POVButton(driverXbox, 180);
-   * POVButton dpadLeftButton = new POVButton(driverXbox, 270);
-   * POVButton dpadUpButton = new POVButton(driverXbox, 0);
-   */
+
+  POVButton dpadDownButton = new POVButton(driverXbox, 180);
+  POVButton dpadLeftButton = new POVButton(driverXbox, 270);
+  POVButton dpadUpButton = new POVButton(driverXbox, 0);
 
   /*
    * static Joystick CoPilotController = new Joystick(1);
@@ -45,6 +45,7 @@ public class Robot extends TimedRobot {
    * JoystickButton joystickShootButton = new JoystickButton(CoPilotController,
    * 3);
    */
+  LightSubsystem lights;
 
   private Timer disabledTimer;
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
@@ -71,12 +72,15 @@ public class Robot extends TimedRobot {
 
     shuffle = ShuffleboardSubsystem.getInstance();
     limelight = m_robotContainer.limelight;
-    /*shuffle.setNumber("Intake Command RPM", intakeCommandRPM);
-    shuffle.setNumber("Shoot Command RPM", shootCommandRPM);
-    shuffle.setNumber("Shoot Command Wait Time", shootCommandWaitTime);
-
-    shuffle.setBoolean("IR sensor", shooter.shooterHasNote());
-    shuffle.setBoolean("IR sensor", shooter.shooterHasNote());*/
+    lights = LightSubsystem.getInstance();
+    /*
+     * shuffle.setNumber("Intake Command RPM", intakeCommandRPM);
+     * shuffle.setNumber("Shoot Command RPM", shootCommandRPM);
+     * shuffle.setNumber("Shoot Command Wait Time", shootCommandWaitTime);
+     *
+     * shuffle.setBoolean("IR sensor", shooter.shooterHasNote());
+     * shuffle.setBoolean("IR sensor", shooter.shooterHasNote());
+     */
     // m_robotContainer.arm.disableBrake(); // Todo: put this a the start of arm
     // commands
 
@@ -105,10 +109,12 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    /*intakeCommandRPM = shuffle.getNumber("Intake Command RPM");
-    shootCommandRPM = shuffle.getNumber("Intake Command RPM");
-    shootCommandWaitTime = shuffle.getNumber("Shoot Command Wait Time");
-    shuffle.setNumber("Intake Speed", shooter.getIntakeRPM());*/
+    /*
+     * intakeCommandRPM = shuffle.getNumber("Intake Command RPM");
+     * shootCommandRPM = shuffle.getNumber("Intake Command RPM");
+     * shootCommandWaitTime = shuffle.getNumber("Shoot Command Wait Time");
+     * shuffle.setNumber("Intake Speed", shooter.getIntakeRPM());
+     */
 
     // System.out.println("INTAKERPM: " + intakeCommandRPM);
 
@@ -219,16 +225,21 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    try {
+    /* try {
       new SwerveParser(new File(Filesystem.getDeployDirectory(), "swerve"));
     } catch (IOException e) {
       throw new RuntimeException(e);
-    }
+    } */
+    lights.setColor(255, 0, 0);
   }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    dpadDownButton.onTrue(
+        new PrintCommand("Running lights")
+            .andThen(Commands.runOnce(() -> lights.SetLightState(lightStates.NotePickedUp))));
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override

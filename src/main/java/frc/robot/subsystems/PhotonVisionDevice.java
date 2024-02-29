@@ -22,15 +22,13 @@ public class PhotonVisionDevice extends SubsystemBase {
     }
 
     public double getNoteAngleOffset() {
-        double noteXPixels = photonTable.getEntry("targetPixelsX").getDouble(0);
-        double noteYPixels = photonTable.getEntry("targetPixelsX").getDouble(0);
-        double theta = Math.atan2(noteYPixels, noteXPixels);
-        return theta;
+        double noteRotation = photonTable.getEntry("targetRotation").getDouble(0);
+        return noteRotation;
     }
 
-    public double noteArea() {
-        double targetArea = photonTable.getEntry("targetArea").getDouble(0);
-        return targetArea;
+    public double noteDistance() {
+        double targetDistance = photonTable.getEntry("targetDistance").getDouble(0);
+        return targetDistance;
     }
 
     public void putTagData() { // publishes tag data to SmartDashboard
@@ -46,22 +44,6 @@ public class PhotonVisionDevice extends SubsystemBase {
         SmartDashboard.putNumber("Tag Y", ty);
         SmartDashboard.putNumber("Tag Area", ta);
         SmartDashboard.putNumber("AprilTag ID", tid);
-    }
-
-    public boolean noteDetected() { // posts limelight note pipelinedata to SmartDashboard & returns true if note
-        // is
-        // detected
-        double ntarget = photonTable.getEntry("tv").getDouble(0); // may have to be double then converted
-        double nx = photonTable.getEntry("tx").getDouble(0);
-        double ny = photonTable.getEntry("ty").getDouble(0);
-        double na = photonTable.getEntry("ta").getDouble(0);
-        boolean ndetected = ntarget == 0 ? false : true;
-
-        SmartDashboard.putBoolean("Note Detected", ndetected);
-        SmartDashboard.putNumber("Note X", nx);
-        SmartDashboard.putNumber("Note Y", ny);
-        SmartDashboard.putNumber("Note Size", na);
-        return ndetected;
     }
 
     public Pose2d getFakeTagPose() { // input fake tag values for simulation

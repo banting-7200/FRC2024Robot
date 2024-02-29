@@ -16,20 +16,20 @@ public class NoteObjectAlign extends Command {
     private final PIDController positionController;
     private final PIDController rotationController;
 
-    private double tagArea;
-    private double targetArea;
+    private double tagDistance;
+    private double targetDistance;
 
     public NoteObjectAlign(
             SwerveSubsystem swerveSubsystem,
             PhotonVisionDevice photonVisionDevice,
-            double targetArea) {
+            double targetDistance) {
         this.swerveSubsystem = swerveSubsystem;
         this.photonVisionDevice = photonVisionDevice;
 
-        this.targetArea = targetArea;
+        this.targetDistance = targetDistance;
 
         positionController = new PIDController(1, 0, 0);
-        positionController.setSetpoint(targetArea);
+        positionController.setSetpoint(targetDistance);
 
         rotationController = new PIDController(0.035, 0.0001, 0);
         rotationController.setSetpoint(0);
@@ -46,9 +46,9 @@ public class NoteObjectAlign extends Command {
         double fowardAdjust = 0;
         double rotationAdjust = 0;
 
-        if (photonVisionDevice.noteDetected()) {
-            tagArea = photonVisionDevice.noteArea();
-            fowardAdjust = positionController.calculate(tagArea, targetArea);
+        if (photonVisionDevice.seeNote()) {
+            tagDistance = photonVisionDevice.noteDistance();
+            fowardAdjust = positionController.calculate(tagDistance, targetDistance);
             rotationAdjust = rotationController.calculate(photonVisionDevice.getNoteAngleOffset(), 0);
             swerveSubsystem.drive(new Translation2d(fowardAdjust, 0), rotationAdjust, false);
         }

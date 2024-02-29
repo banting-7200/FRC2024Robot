@@ -10,6 +10,7 @@ import frc.robot.Constants.Shooter;
 public class ShooterSubsystem extends SubsystemBase {
   private TalonFX m_shoot;
   private TalonFX m_intake;
+  public boolean hasNote = false;
 
   VelocityVoltage m_velocity = new VelocityVoltage(0);
 
@@ -84,5 +85,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public double getIntakeRPM() {
     return m_intake.getVelocity().getValue();
+  }
+
+  public void setHasNoteState(boolean state) {
+    hasNote = state;
+  }
+
+  public boolean getHasNoteState() {
+    return hasNote;
   }
 }

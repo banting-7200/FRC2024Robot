@@ -49,31 +49,32 @@ public class intakeCommand extends Command {
 
   @Override
   public void execute() {
-
-    if (notelock == false) {
-      shooter.spinIntakeToNegativeRPM(intakeRPM);
-      if (shooter.shooterHasNote() == true && override == false) {
-        startedMillis = currentTime.millis() + 100;
-        stopDryRun = true;
-      }
-      if (shooter.shooterHasNote() == true && override == true) {
-        notelock = true;
-      }
-      if (currentTime.millis() > startedMillis && stopDryRun == true) {
-        shooter.spinIntakeToPositiveRPM(1000);
-        override = true;
-      }
-    } else {
-      if (notelock2 == false) {
-        shooter.spinIntakeToNegativeRPM(2000);
-        if (shooter.shooterHasNote() == false && shooterHasNotePrev == true) {
-          notelock2 = true;
+    if (shooter.getHasNoteState() == false) {
+      if (notelock == false) {
+        shooter.spinIntakeToNegativeRPM(intakeRPM);
+        if (shooter.shooterHasNote() == true && override == false) {
+          startedMillis = currentTime.millis() + 100;
+          stopDryRun = true;
+        }
+        if (shooter.shooterHasNote() == true && override == true) {
+          notelock = true;
+        }
+        if (currentTime.millis() > startedMillis && stopDryRun == true) {
+          shooter.spinIntakeToPositiveRPM(1000);
+          override = true;
         }
       } else {
-        shooter.spinIntakeToNegativeRPM(0);
+        if (notelock2 == false) {
+          shooter.spinIntakeToNegativeRPM(2000);
+          if (shooter.shooterHasNote() == false && shooterHasNotePrev == true) {
+            notelock2 = true;
+          }
+        } else {
+          shooter.spinIntakeToNegativeRPM(0);
+        }
       }
+      shooterHasNotePrev = shooter.shooterHasNote();
     }
-    shooterHasNotePrev = shooter.shooterHasNote();
   }
 
   public boolean isFinished() {
@@ -85,6 +86,7 @@ public class intakeCommand extends Command {
     shooter.stopIntakeMotor();
     lights.SetLightState(lightStates.NotePickedUp);
     System.out.println("Intake Command ShutDown");
+    shooter.setHasNoteState(true);
   }
 }
 

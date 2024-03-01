@@ -6,9 +6,10 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.LightSubsystem;
-import frc.robot.subsystems.LightSubsystem.lightStates;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
+import frc.robot.subsystems.Feedback.LightSubsystem;
+import frc.robot.subsystems.Feedback.LightSubsystem.lightStates;
+
 import java.time.Clock;
 import java.util.function.IntSupplier;
 
@@ -67,6 +68,7 @@ public class shootCommand extends Command {
       hasSeenNote = true;
       System.out.println("SAW THE NOTE");
     }
+    /* } */
     System.out.println(hasSeenNote);
   }
 
@@ -81,8 +83,5 @@ public class shootCommand extends Command {
     System.out.println("Shooting Done");
     lights.SetLightState(lightStates.ReadyForPickup);
     System.out.println("Has Note state is currently: " + shooter.getHasNoteState());
-    /* if (!interrupted) {
-      shooter.setHasNoteState(false);
-    } */
   }
 }

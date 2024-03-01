@@ -8,9 +8,10 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.LightSubsystem;
-import frc.robot.subsystems.LightSubsystem.lightStates;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
+import frc.robot.subsystems.Feedback.LightSubsystem;
+import frc.robot.subsystems.Feedback.LightSubsystem.lightStates;
+
 import java.time.Clock;
 
 public class intakeCommand extends Command {
@@ -57,6 +58,7 @@ public class intakeCommand extends Command {
 
   @Override
   public void execute() {
+    /* if (hasNote == true) { */
     if (notelock == false) {
       shooter.spinIntakeToNegativeRPM(intakeRPM);
       if (shooter.shooterHasNote() == true && override == false) {
@@ -81,6 +83,7 @@ public class intakeCommand extends Command {
       }
     }
     shooterHasNotePrev = shooter.shooterHasNote();
+    /* } */
   }
 
   public boolean isFinished() {
@@ -93,6 +96,9 @@ public class intakeCommand extends Command {
     lights.SetLightState(lightStates.NotePickedUp);
     System.out.println("Intake Command ShutDown");
     System.out.println("Has Note state is currently: " + shooter.getHasNoteState());
+    /*  if (!interrupted) {
+      shooter.setHasNoteState(true);
+    } */
   }
 }
 

@@ -5,7 +5,7 @@
  * switch layout previous after pid functions etc. so new functions dont get added to them.
  */
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.Feedback;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;

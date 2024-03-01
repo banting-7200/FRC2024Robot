@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.subsystems.Vision.LimelightDevice;
 import frc.robot.subsystems.Feedback.LightSubsystem;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
-import frc.robot.subsystems.Feedback.LightSubsystem.lightStates;
+import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
 import swervelib.parser.SwerveParser;
 import java.io.IOException;
 import java.io.File; 

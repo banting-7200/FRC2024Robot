@@ -27,7 +27,7 @@ import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
-import frc.robot.subsystems.Feedback.LightSubsystem.lightStates;
+import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -237,7 +237,7 @@ public class RobotContainer {
                                                 .finallyDo(
                                                         (boolean interrupted) -> {
                                                             if (!interrupted && shooter.hasNote)
-                                                                lights.SetLightState(lightStates.CarryingNote);
+                                                                lights.SetLightState(LightStates.CarryingNote);
                                                         }))); // From what positions will we intake?
 
         /*
@@ -265,7 +265,7 @@ public class RobotContainer {
                                                 .finallyDo(
                                                         (boolean interrupted) -> {
                                                             if (!interrupted && shooter.hasNote)
-                                                                lights.SetLightState(lightStates.CarryingNote);
+                                                                lights.SetLightState(LightStates.CarryingNote);
                                                         })));
 
         // This binding allows for direct control over the shooter solenoid to toggle
@@ -310,7 +310,7 @@ public class RobotContainer {
                                         (boolean interrupted) -> {
                                             if (!interrupted)
                                                 speakerShot = true;
-                                            lights.SetLightState(lightStates.ReadyToSPEAKER);
+                                            lights.SetLightState(LightStates.ReadyToSPEAKER);
                                         }));
 
         /*
@@ -328,7 +328,7 @@ public class RobotContainer {
                                         (boolean interrupted) -> {
                                             if (!interrupted)
                                                 speakerShot = false;
-                                            lights.SetLightState(lightStates.ReadyToAMP);
+                                            lights.SetLightState(LightStates.ReadyToAMP);
                                         }));
     }
 

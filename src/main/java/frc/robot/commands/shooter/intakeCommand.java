@@ -10,7 +10,7 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem;
-import frc.robot.subsystems.Feedback.LightSubsystem.lightStates;
+import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
 
 import java.time.Clock;
 
@@ -93,7 +93,7 @@ public class intakeCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.stopIntakeMotor();
-    lights.SetLightState(lightStates.NotePickedUp);
+    lights.SetLightState(LightStates.NotePickedUp);
     System.out.println("Intake Command ShutDown");
     System.out.println("Has Note state is currently: " + shooter.getHasNoteState());
     /*  if (!interrupted) {

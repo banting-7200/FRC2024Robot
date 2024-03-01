@@ -27,6 +27,7 @@ public class ShuffleboardSubsystem {
 
   private ShuffleboardSubsystem() {}
 
+//Singleton instance of the shuffleboard class
   public static synchronized ShuffleboardSubsystem getInstance() {
     if (instance == null) {
       instance = new ShuffleboardSubsystem();
@@ -61,8 +62,8 @@ public class ShuffleboardSubsystem {
       String name, double value) { // creates or sets a double on the shuffleboard.
     GenericEntry entry;
     int index = entryNames.indexOf(name);
-    if (index == -1) {
-      if (layout != null) {
+    if (index == -1) {//If this entry does not exist
+      if (layout != null) { //if theres no layout selected
         entry = layout.add(name, value).withWidget(BuiltInWidgets.kTextView).getEntry();
       } else {
         entry = tab.add(name, value).withWidget(BuiltInWidgets.kTextView).getEntry();
@@ -210,7 +211,7 @@ public class ShuffleboardSubsystem {
   }
 
   public void addCamera(String name, String camera, String url) {
-    tab.addCamera(name, camera, url).withSize(2, 2); // doesnt add any functionaly again
+    tab.addCamera(name, camera, url).withSize(2, 2); // doesnt add any functionalaty again
   }
 
   public void setText(String name, String text) { // puts text to the dashboard

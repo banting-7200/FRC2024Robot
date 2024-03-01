@@ -8,8 +8,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Shooter;
 
 public class ShooterSubsystem extends SubsystemBase {
+
+  // Init the motor variables used on the shooter 
   private TalonFX m_shoot;
   private TalonFX m_intake;
+
+  // Creates a boolean that determines if the note is in position
   public boolean hasNote = false;
 
   VelocityVoltage m_velocity = new VelocityVoltage(0);
@@ -17,10 +21,15 @@ public class ShooterSubsystem extends SubsystemBase {
   private DigitalInput shootIR;
   private ArmSubsystem arm;
 
-  public ShooterSubsystem(ArmSubsystem _arm) {
-    m_shoot = new TalonFX(Shooter.shooterID);
-    m_intake = new TalonFX(Shooter.intakeID);
 
+  //Define the shooter subsystem with the arm subsystem as a param 
+  public ShooterSubsystem(ArmSubsystem _arm) {
+
+    // Create Talon Motor Objects with previously defined variables 
+    m_shoot = new TalonFX(Shooter.shooterID); 
+    m_intake = new TalonFX(Shooter.intakeID); 
+
+    //Sensor value of the IR sensor used to check if the note is loaded 
     shootIR = new DigitalInput(Shooter.shootIR); // haha shooter lol, get it?
 
     arm = _arm;

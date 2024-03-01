@@ -363,7 +363,6 @@ public class RobotContainer {
      * It enables the solenoid brake on the arm and stops the arm motors.
      */
     public void stopArm() {
-        arm.enableBrake();
         arm.stopArm();
     }
 

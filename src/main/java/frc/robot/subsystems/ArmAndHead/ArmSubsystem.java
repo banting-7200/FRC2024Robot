@@ -20,59 +20,82 @@ import java.time.Clock;
 
 public class ArmSubsystem extends SubsystemBase {
 
+  // Motors that control the arm
   private CANSparkMax leftArmMotor, rightArmMotor;
-  private AbsoluteEncoder rightEncoder;
-  private SparkPIDController pidController;
+  private AbsoluteEncoder rightEncoder;// Arm encoder
+  private SparkPIDController pidController;// PID controller for arm
 
-  private DigitalInput solenoidSwitch;
+  private DigitalInput solenoidSwitch;// switch attached to the shooter solenoid to query the tuck/untucked state.
 
-  DoubleSolenoidActions shooterSolenoidActions =
-      new DoubleSolenoidActions(
-          Constants.m_pH.makeDoubleSolenoid(Arm.sForward_Channel, Arm.sReverse_Channel));
-  SolenoidActions brakeSolenoidActions =
-      new SolenoidActions(Constants.m_pH.makeSolenoid(Arm.b_Channel));
-  DoubleSolenoidActions hookSolenoidActions =
-      new DoubleSolenoidActions(
-          Constants.m_pH.makeDoubleSolenoid(Arm.hForward_Channel, Arm.hReverse_Channel));
+  DoubleSolenoidActions shooterSolenoidActions = new DoubleSolenoidActions(
+      Constants.m_pH.makeDoubleSolenoid(Arm.sForward_Channel, Arm.sReverse_Channel));// Creates a double solenoid for
+                                                                                     // the shooter
+  SolenoidActions brakeSolenoidActions = new SolenoidActions(Constants.m_pH.makeSolenoid(Arm.b_Channel));// Creates a
+                                                                                                         // solenoid for
+                                                                                                         // the brake
+  DoubleSolenoidActions hookSolenoidActions = new DoubleSolenoidActions(
+      Constants.m_pH.makeDoubleSolenoid(Arm.hForward_Channel, Arm.hReverse_Channel));// Creates a double solenoid for
+                                                                                     // the hook.
 
-  private Clock currentTime = Clock.systemDefaultZone();
-  private long stateChangeTimestamp;
-  private boolean lastShooterState;
+  //
+  private Clock currentTime = Clock.systemDefaultZone(); // Clock for using the Millis Function
+  private long stateChangeTimestamp; // The timestamp since the last change was made in terrm
+  private boolean lastShooterState; // A boolean to obfuscate the true state of the shooter solenoid so that it has
+                                    // time to move between states.
 
-  ShuffleboardSubsystem shuffleboard;
+  ShuffleboardSubsystem shuffleboard = ShuffleboardSubsystem.getInstance();// Gets shuffleboard instance
 
   public ArmSubsystem() {
+    // Define motor objects for the arm using SparkMax motor controllers
     leftArmMotor = new CANSparkMax(Arm.leftArmMotorID, MotorType.kBrushless);
     rightArmMotor = new CANSparkMax(Arm.rightArmMotorID, MotorType.kBrushless);
 
+    /*
+     * Assigns solenoidSwitch to the digital input of pin 2, which is the limit
+     * switch that lets the robot know what the shooter's position is, such as when
+     * it is tucked or not.
+     */
     solenoidSwitch = new DigitalInput(Arm.solenoidSwitchID);
 
-    shuffleboard = ShuffleboardSubsystem.getInstance();
-
+    // restores the motors to a factory default state so motor controllers can be
+    // easily switched without extra config.
     leftArmMotor.restoreFactoryDefaults();
     rightArmMotor.restoreFactoryDefaults();
 
+    // Allows left motor output to mirror that of the right motor
+    // The true state inverses the output of the right motor
     leftArmMotor.follow(rightArmMotor, true);
 
-    leftArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake); // make kBreak
+    // Sets the mode of the motors when not being commanded to brake so the arm does
+    // not slip from comamn
+    leftArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     rightArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
+    // Sets the ramp rate when moving the motor through PID to a predefine
     rightArmMotor.setClosedLoopRampRate(Arm.motorRampRate);
+    // Sets the current limit in Amperes which is defined in constants.java
     rightArmMotor.setSmartCurrentLimit(Arm.currentLimit);
 
+    // Assigns the right encoder to the encoder connected to the ri
     rightEncoder = rightArmMotor.getAbsoluteEncoder(SparkAbsoluteEncoder.Type.kDutyCycle);
-    rightEncoder.setPositionConversionFactor(
-        42 /* * Arm.armGearRatio */); // Amount of ticks in a Neo encoder rotation unit. Converted
-    // for gravity feedfoward later on.
+    rightEncoder.setPositionConversionFactor(42); // Amount of ticks in a Neo encoder rotation unit.
+
+    // Assigns pidController to the PIDController of the right Arm Spark
     pidController = rightArmMotor.getPIDController();
-    pidController.setFeedbackDevice(rightEncoder);
+    pidController.setFeedbackDevice(rightEncoder);// Assigns the feedback device for the PID control to the right
+                                                  // encoder
+    // Lets the PID controller know that the values can be wrapped for the arm. (ex.
+    // If Arm encoder reaches 40 and needs to get to one it will)
     pidController.setPositionPIDWrappingEnabled(true);
 
-    lastShooterState = solenoidSwitch.get();
+    // Sets the intial value of the last shooter state to whatever the solenoid
+    // switch reports on initialization.
     lastShooterState = solenoidSwitch.get();
 
+    // Sets the PID configs.
     setPID();
 
+    // Enables better motor simulation in sim.
     if (RobotBase.isSimulation()) {
       REVPhysicsSim.getInstance().addSparkMax(rightArmMotor, DCMotor.getNEO(1));
     }
@@ -84,110 +107,134 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void setPID() {
-    int smartMotionSlot = Arm.smartMotionSlot;
-    /* public void setPID() {
+    /*
+     * Local reference to the smart motion slot defined in constants. The smart
+     * motion slot tells the spark max which PID configuration slot to set the PID
+     * changes to.
+     */
     int smartMotionSlot = Arm.smartMotionSlot;
 
-    /* double[] PIDvalues = shuffleboard.getPID("arm");
-    Arm.p = PIDvalues[0];
-    Arm.i = PIDvalues[1];
-    Arm.d = PIDvalues[2];
-    Arm.f = PIDvalues[3];
-    Arm.iz = PIDvalues[4]; */
+    // Shuffle PID config. Todo: move to debug
+    /*
+     * /* double[] PIDvalues = shuffleboard.getPID("arm");
+     * Arm.p = PIDvalues[0];
+     * Arm.i = PIDvalues[1];
+     * Arm.d = PIDvalues[2];
+     * Arm.f = PIDvalues[3];
+     * Arm.iz = PIDvalues[4];
+     */
 
-    // Configure PID
-    // if (Arm.p != PIDvalues[0]) {
-    //   Arm.p = PIDvalues[0];
-    // }
-    // if (Arm.i != PIDvalues[1]) {
-    //   Arm.i = PIDvalues[1];
-    // }
-    // if (Arm.d != PIDvalues[2]) {
-    //   Arm.d = PIDvalues[2];
-    // }
-    // if (Arm.f != PIDvalues[3]) {
-    //   Arm.f = PIDvalues[3];
-    // }
-    // if (Arm.iz != PIDvalues[4]) {
-    //   Arm.iz = PIDvalues[4];
-    // }
-    // if (Arm.pidOutputMin != shuffleboard.getNumber("arm min output")) {
-    // Arm.pidOutputMin = shuffleboard.getNumber("arm min output");
-    // }
-    // if (Arm.pidOutputMax != shuffleboard.getNumber("arm max output")) {
-    // Arm.pidOutputMax = shuffleboard.getNumber("arm max output");
-    // }
+    /*
+     * if (Arm.p != PIDvalues[0]) {
+     * Arm.p = PIDvalues[0];
+     * }
+     * if (Arm.i != PIDvalues[1]) {
+     * Arm.i = PIDvalues[1];
+     * }
+     * if (Arm.d != PIDvalues[2]) {
+     * Arm.d = PIDvalues[2];
+     * }
+     * if (Arm.f != PIDvalues[3]) {
+     * Arm.f = PIDvalues[3];
+     * }
+     * if (Arm.iz != PIDvalues[4]) {
+     * Arm.iz = PIDvalues[4];
+     * }
+     * if (Arm.pidOutputMin != shuffleboard.getNumber("arm min output")) {
+     * Arm.pidOutputMin = shuffleboard.getNumber("arm min output");
+     * }
+     * if (Arm.pidOutputMax != shuffleboard.getNumber("arm max output")) {
+     * Arm.pidOutputMax = shuffleboard.getNumber("arm max output");
+     * }
+     * 
+     * // Re-updating ramp rate and current limit for motor ramp rate
+     * rightArmMotor.setClosedLoopRampRate(Arm.motorRampRate);
+     * rightArmMotor.setSmartCurrentLimit(Arm.currentLimit);
+     */
+
+    // Sets the PID values defined in constants to the smart motion slot on the
+    // spark max
     pidController.setP(Arm.p, smartMotionSlot);
     pidController.setI(Arm.i, smartMotionSlot);
     pidController.setD(Arm.d, smartMotionSlot);
     pidController.setFF(Arm.f, smartMotionSlot);
     pidController.setIZone(Arm.iz, smartMotionSlot);
+    // Sets the max and min motor output to the smart motion slot on the spark max
     pidController.setOutputRange(Arm.pidOutputMin, Arm.pidOutputMax, smartMotionSlot);
-
-    rightArmMotor.setClosedLoopRampRate(Arm.motorRampRate);
-    rightArmMotor.setSmartCurrentLimit(Arm.currentLimit);
-
-    // Configure smart motion
-    /*
-     * pidController.setSmartMotionMaxVelocity(Arm.maxMotorVelocity,
-     * smartMotionSlot);
-     * pidController.setSmartMotionMinOutputVelocity(Arm.minMotorVelocity,
-     * smartMotionSlot);
-     * pidController.setSmartMotionMaxAccel(Arm.maxMotorAccel, smartMotionSlot);
-     * pidController.setSmartMotionAllowedClosedLoopError(Arm.allowedPIDError,
-     * smartMotionSlot);
-     */
   }
 
   public void setMotorSpeed(double speed) {
     if (rightEncoder.getPosition() >= Arm.encoderHardMax
-        && speed > 0) { // Check if the arm is beyond the encoder hard
-      // max before we
-      // move. If it is beyond the hard max then stop the motor and end the movement
+        && speed > 0) {
+      /*
+       * Check if the arm is beyond the encoder hard max before we move.
+       * If it is beyond the hard max then stop the motor and end the movement
+       */
       stopArm();
     } else {
+
+      // Sets right (and left inversed) arm motor to the speed that is passed in
       rightArmMotor.set(speed);
     }
   }
 
+  /* Simply gets the current speed of the right arm */
   public double getMotorSpeed() {
     return rightArmMotor.get();
   }
 
   public boolean moveToAngle(double angle) {
     if (rightEncoder.getPosition() >= Arm.encoderHardMax
-        && angle
-            >= Arm.encoderHardMax) { // Check if the arm is beyond the encoder hard max before we
-      // move. If it is beyond the hard max then stop the motor and end the movement
+        && angle >= Arm.encoderHardMax) {
+      /*
+       * Check if the arm is beyond the encoder hard max before we move
+       * If it is beyond the hard max then stop the motor and end the movement
+       */
       stopArm();
       return true;
     } else {
+      /*
+       * tells the PID controller to move to the input angle, withe position control,
+       * using the PID configs in the smart motion slot defined in constants with
+       * arbitrary feedforwards from the getArbFF function.
+       */
       pidController.setReference(
           angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot, getArbFF());
-      // System.out.println("motor angle: " + rightEncoder.getPosition());
       return Math.abs(rightEncoder.getPosition() - angle) < Arm.stopRange;
+      /*
+       * Checks if the arm has entered the desired stopping range and returns true if
+       * so.
+       */
     }
   }
 
   public double getArbFF() {
     // Arbirtary feedfoward to account for gravity acting on the arm
     double kTicksPerDegree = 4096 / (360 * Arm.armGearRatio);
-    double currentPos = rightEncoder.getPosition();
+    double currentPos = rightEncoder.getPosition();// stores the current psoition of our encoder
+    /*
+     * Takes the current position of the right encoder and subtracts the encoder
+     * reading of the arm when it's completely horizontal divided by the
+     * ticksPerDegrees which then gets converted into radians in the next line
+     */
     double degrees = (currentPos - Arm.kMeasuredPosHorizontal) / kTicksPerDegree;
-    double radians = java.lang.Math.toRadians(degrees);
-    double cosineScalar = java.lang.Math.cos(radians);
+    double radians = java.lang.Math.toRadians(degrees); // Converts the degrees from encoder values ^
+    double cosineScalar = java.lang.Math.cos(radians); // Creates a scalar using the translated radians
 
-    return shuffleboard.getNumber("gravity FF") * cosineScalar;
+    // Returns that anti gravity shiiiiiiit
+    return Arm.maxGravityFF * cosineScalar;
   }
 
+  /* Simply takes the degrees multiplies it by the ArmGearRatio */
   double degreesToRotations(double degrees) {
     return degrees * Arm.armGearRatio;
   }
 
-  public void getSwitch() {
-    System.out.println(solenoidSwitch.get());
+  public boolean getIsTuckedRawr() {
+    return solenoidSwitch.get();
   }
 
+  // Debug stuff
   public void getLimitSwitch() {
     shuffleboard.setBoolean(
         "Limit switch foward",
@@ -197,93 +244,112 @@ public class ArmSubsystem extends SubsystemBase {
         rightArmMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed());
   }
 
+  /*
+   * Simple function to stop the arm. Disables output to the motors and enables
+   * the brake.
+   */
   public void stopArm() {
     rightArmMotor.stopMotor();
     enableBrake();
   }
 
+  // Return the encoder position of the right arm encoder
   public double getEncoderPosition() {
     return rightEncoder.getPosition();
   }
 
-  // Solenoid movement functions
-
   // Shooter
   public void tuckShooter() {
+    // Sets the shooter Solenoid to the reversed state
     shooterSolenoidActions.setReverse();
-    stateChangeTimestamp = currentTime.millis();
+    stateChangeTimestamp = currentTime.millis();// Set state change timer allow shooter time to tuck before arm
+                                                // movement.
     System.out.println("Shooter tucked");
   }
 
   public void deployShooter() {
+    // Sets the shooter Solenoid to the forward state
     shooterSolenoidActions.setForward();
-    stateChangeTimestamp = currentTime.millis();
+    stateChangeTimestamp = currentTime.millis(); // Set state change timer allow shooter time untuck before arm
+                                                 // movement.
     System.out.println("Shooter deployed");
   }
 
+  // Toggles the shooter between forward reversed state of solenoid
   public void toggleShooterState() {
     shooterSolenoidActions.toggle();
-    stateChangeTimestamp = currentTime.millis();
-    // shuffleboard.setNumber("Changed state. current time: ",
-    // currentTime.millis());
+    stateChangeTimestamp = currentTime.millis();// Set state change timer allow shooter time tuck/untuck before arm
+                                                // movement.
     System.out.println("Shooter toggled");
   }
 
+  // Simply disables the shooter solonoid to off as well as printing a statements
   public void disableShooterSolenoids() {
     shooterSolenoidActions.setOff();
     System.out.println("Shooter solenoids disabled");
   }
 
   public boolean isTucked() {
+    // Setting the last shooter state boolean in Shuffleboard to lastShooterState
     shuffleboard.setBoolean("last shooter state", lastShooterState);
     if (currentTime.millis() - stateChangeTimestamp > Arm.s_stateChangeDelay) {
-      return solenoidSwitch.get();
+      /*
+       * If the time elapsed since the last state change is bigger than the
+       * stateChangeDelay then set lastShooterstate as the current SolonoidState
+       */
+      lastShooterState = solenoidSwitch.get();
     }
-    lastShooterState = solenoidSwitch.get();
     return lastShooterState;
   }
 
-  // Hook
+  // HookDeploys the hook
   public void deployHook() {
     hookSolenoidActions.setForward();
     System.out.println("Hook Deployed");
   }
 
+  // Stows the hook
   public void stowHook() {
     hookSolenoidActions.setReverse();
     System.out.println("Hook Stowed");
   }
 
+  // A toggle function for the hool
   public void toggleHook() {
     hookSolenoidActions.toggle();
     System.out.println("Hook Toggled");
   }
-
+  // Disables the Hook's Solonoids
   public void disableHookSolenoids() {
     hookSolenoidActions.setOff();
     System.out.println("Hook disabled");
   }
 
+  /* Function to query if the hook is deployed. */
   public boolean isHookDeployed() {
-    return !hookSolenoidActions.isReversed();
+    return !hookSolenoidActions.isReversed();//Inverted beecause the the deployed state of the hook is forward on the solenoid.
   }
 
   // Brake
+  /*toggles the brake on(applying the brake is disabling the solenoid)*/
   public void enableBrake() {
-    brakeSolenoidActions.setOff();
+    brakeSolenoidActions.setOff(); //Turns off because solenoid is reversed as a safety feature (if power/air pressure loss brakes enable)
     System.out.println("Brake enabled");
   }
-
+  
+  /*toggles the brake off(disabling the brake is enabling the solenoid*/
   public void disableBrake() {
-    brakeSolenoidActions.setOn();
+    brakeSolenoidActions.setOn(); //Turns on because solenoid is reversed as a safety feature (if power/air pressure loss brakes enable)
     System.out.println("Brake disabled");
   }
 
-  public boolean getBrake() {
-    return !brakeSolenoidActions.getState();
+  /* Function to query if the brake is enabled. */
+  public boolean isBrakeEnabled() {
+    // Returns the state of the brake solenoid if on
+    return !brakeSolenoidActions.getState(); //Inverted because enabling the brake is disabling the solenoid.
   }
 
-  @Override
+//Run the motors in sim using REV physics simulation  @Override
   public void simulationPeriodic() {
     REVPhysicsSim.getInstance().run();
   }

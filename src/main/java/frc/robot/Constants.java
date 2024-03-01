@@ -53,7 +53,7 @@ public final class Constants {
 
   public static final class Lights {
     public static final int lightID = 1;
-    public static final int lightStringLength = 10;
+    public static final int lightStringLength = 50;
   }
 
   /* */
@@ -139,10 +139,10 @@ public final class Constants {
 
     public static final int intakeRPM = 6000;
     public static final int pullBackRPM = 2000;
-    public static final int correctPositioningRPM = 2000;
-    public static final int ampShootRPM = 2000;
-    public static final int speakerShootRPM = 6000;
-    public static final int ampWaitTime = 0;
+    public static final int correctPositioningRPM = 500;
+    public static final int ampShootRPM = 7200;
+    public static final int speakerShootRPM = 7200;
+    public static final int ampWaitTime = 1000;
     public static final int speakerWaitTime = 1000;
 
     // Default PID values to be tuned later

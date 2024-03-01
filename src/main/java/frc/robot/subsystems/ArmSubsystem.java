@@ -67,23 +67,8 @@ public class ArmSubsystem extends SubsystemBase {
     pidController.setFeedbackDevice(rightEncoder);
     pidController.setPositionPIDWrappingEnabled(true);
 
-    lastShooterState = !solenoidSwitch.get();
+    lastShooterState = solenoidSwitch.get();
 
-    shuffleboard.setNumber("arm P", Arm.p);
-    shuffleboard.setNumber("arm I", Arm.i);
-    shuffleboard.setNumber("arm D", Arm.d);
-    shuffleboard.setNumber("arm F", Arm.f);
-    shuffleboard.setNumber("arm IZ", Arm.iz);
-    shuffleboard.setNumber("arm min output", Arm.pidOutputMin);
-    shuffleboard.setNumber("arm max output", Arm.pidOutputMax);
-    shuffleboard.setNumber("stop range", Arm.stopRange);
-    shuffleboard.setNumber("gravity FF", Arm.maxGravityFF);
-    shuffleboard.setNumber("ramp rate", Arm.motorRampRate);
-    shuffleboard.setNumber("current limit", Arm.currentLimit);
-    shuffleboard.setNumber("solenoid delay", Arm.s_stateChangeDelay);
-
-    shuffleboard.setNumber("output current right", rightArmMotor.getOutputCurrent());
-    shuffleboard.setNumber("output current left", leftArmMotor.getOutputCurrent());
     setPID();
 
     if (RobotBase.isSimulation()) {
@@ -178,7 +163,7 @@ public class ArmSubsystem extends SubsystemBase {
       pidController.setReference(
           angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot, getArbFF());
       // System.out.println("motor angle: " + rightEncoder.getPosition());
-      return Math.abs(rightEncoder.getPosition() - angle) < shuffleboard.getNumber("stop range");
+      return Math.abs(rightEncoder.getPosition() - angle) < Arm.stopRange;
     }
   }
 
@@ -250,11 +235,11 @@ public class ArmSubsystem extends SubsystemBase {
   public boolean isTucked() {
     shuffleboard.setBoolean("last shooter state", lastShooterState);
     if (currentTime.millis() - stateChangeTimestamp > Arm.s_stateChangeDelay) {
-      return lastShooterState;
+      return solenoidSwitch.get();
     }
-    stateChangeTimestamp = currentTime.millis();
+    /* stateChangeTimestamp = currentTime.millis(); */
     lastShooterState = solenoidSwitch.get();
-    return solenoidSwitch.get();
+    return lastShooterState;
   }
 
   // Hook

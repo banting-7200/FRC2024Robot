@@ -24,6 +24,7 @@ public class UntuckArm extends Command {
     System.out.println("Untuck Arm");
     startTime = timer.millis();
     System.out.println("start time is: " + startTime);
+    ranUntuckCommand = false;
   }
 
   @Override

@@ -20,6 +20,7 @@ public class shootCommand extends Command {
   IntSupplier rpm;
   Boolean hasSeenNote = false;
   IntSupplier waitTime;
+  boolean hasNote;
 
   public shootCommand(IntSupplier rpm, ShooterSubsystem shooter, IntSupplier waitTime) {
     this.rpm = rpm;
@@ -38,28 +39,30 @@ public class shootCommand extends Command {
     sinceIntakeMotor = currentTime.millis();
     sinceNoteLeft = currentTime.millis();
     hasSeenNote = false;
+    hasNote = shooter.getHasNoteState();
+    shooter.stopIntakeMotor();
   }
 
   @Override
   public void execute() {
-    if (shooter.getHasNoteState() == true) {
-      currentMillis = currentTime.millis(); // records current time
-      shooter.spinShootToRPM(rpm.getAsInt()); // spins the shooters
-      if ((currentMillis - sinceIntakeMotor)
-          > waitTime.getAsInt()) { // waits for 250 ms for it to turn on the shoot
-        // motor
-        shooter.spinIntakeToNegativeRPM(rpm.getAsInt()); // runs the shoot motor
-        System.out.println("Run Shooter motor");
-      }
-      if (shooter.shooterHasNote() == true) {
-        sinceNoteLeft =
-            currentTime
-                .millis(); // if it see's the note it will set the since note left time for current
-        // time
-        hasSeenNote = true;
-        System.out.println("SAW THE NOTE");
-      }
+    /* if (hasNote == true) { */
+    currentMillis = currentTime.millis(); // records current time
+    shooter.spinShootToRPM(rpm.getAsInt()); // spins the shooters
+    if ((currentMillis - sinceIntakeMotor)
+        > waitTime.getAsInt()) { // waits for 250 ms for it to turn on the shoot
+      // motor
+      shooter.spinIntakeToNegativeRPM(rpm.getAsInt()); // runs the shoot motor
+      System.out.println("Run Shooter motor");
     }
+    if (shooter.shooterHasNote() == true) {
+      sinceNoteLeft =
+          currentTime
+              .millis(); // if it see's the note it will set the since note left time for current
+      // time
+      hasSeenNote = true;
+      System.out.println("SAW THE NOTE");
+    }
+    /* } */
     System.out.println(hasSeenNote);
   }
 
@@ -73,6 +76,9 @@ public class shootCommand extends Command {
     shooter.stopIntakeMotor();
     System.out.println("Shooting Done");
     lights.SetLightState(lightStates.ReadyForPickup);
-    shooter.setHasNoteState(false);
+    System.out.println("Has Note state is currently: " + shooter.getHasNoteState());
+    /* if (!interrupted) {
+      shooter.setHasNoteState(false);
+    } */
   }
 }

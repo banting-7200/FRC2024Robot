@@ -63,7 +63,7 @@ public class RobotContainer {
           ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red
           : false;
 
-  static boolean speakerShot = false;
+  static boolean speakerShot = true;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -259,7 +259,8 @@ public class RobotContainer {
                 .alongWith(Commands.runOnce(() -> speakerShot = true)));
     new JoystickButton(CoPilotController, copilotController.ampButton)
         .onTrue(
-            new MoveArmToPosition(arm, Arm.ampArmAngle)
+            new UntuckArm(arm)
+                .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))
                 .finallyDo(() -> lights.SetLightState(lightStates.ReadyToAMP))
                 .alongWith(Commands.runOnce(() -> speakerShot = false)));
   }

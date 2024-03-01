@@ -111,5 +111,6 @@ public class LightSubsystem {
         statusBuffer.setRGB(i, colour2.getGreen(), colour2.getRed(), colour2.getBlue());
       }
     }
+    statusLights.setData(statusBuffer);
   }
 }

@@ -129,7 +129,7 @@ public class SwerveSubsystem extends SubsystemBase {
         );
   }
 
-  public void setDriveSpeeds(boolean doCreep) {
+  public void setCreep(boolean doCreep) {
     if (doCreep) {
       speedMultiplier = 0.7; // set creep speed
     } else {

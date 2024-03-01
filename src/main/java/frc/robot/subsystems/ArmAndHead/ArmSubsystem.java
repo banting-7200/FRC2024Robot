@@ -68,6 +68,7 @@ public class ArmSubsystem extends SubsystemBase {
     pidController.setPositionPIDWrappingEnabled(true);
 
     lastShooterState = solenoidSwitch.get();
+    lastShooterState = solenoidSwitch.get();
 
     setPID();
 
@@ -236,8 +237,8 @@ public class ArmSubsystem extends SubsystemBase {
     shuffleboard.setBoolean("last shooter state", lastShooterState);
     if (currentTime.millis() - stateChangeTimestamp > Arm.s_stateChangeDelay) {
       return solenoidSwitch.get();
+      return solenoidSwitch.get();
     }
-    /* stateChangeTimestamp = currentTime.millis(); */
     lastShooterState = solenoidSwitch.get();
     return lastShooterState;
   }

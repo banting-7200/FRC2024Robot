@@ -380,6 +380,10 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveDrive.zeroGyro();
   }
 
+  public void resetOdometry(){
+    swerveDrive.resetOdometry(getPose());
+  }
+
   /**
    * Sets the drive motors to brake/coast mode.
    *

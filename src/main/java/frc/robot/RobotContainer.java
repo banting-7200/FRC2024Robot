@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -198,7 +200,10 @@ public class RobotContainer {
     // Move to position outlined on shuffleboard position
 
     new JoystickButton(driverXbox, XboxController.Button.kX.value)
-        .onTrue(new TuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle)));
+        .onTrue(
+            new TuckArm(arm)
+                .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
+                .finallyDo(() -> lights.SetLightState(lightStates.CarryingNote)));
 
     new JoystickButton(driverXbox, XboxController.Button.kA.value)
         .onTrue(new UntuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle)));
@@ -223,24 +228,36 @@ public class RobotContainer {
     new JoystickButton(CoPilotController, copilotController.downButton)
         .onTrue(new MoveArm(arm, axis));
 
-    new JoystickButton(CoPilotController, copilotController.brakeButton)
-        .onTrue(
-            Commands.runOnce(
-                () -> stopArm())); // Does this have to brake everything or just the arm.
+    /*new JoystickButton(CoPilotController, copilotController.brakeButton)
+        .toggleOnTrue(new RepeatCommand(new InstantCommand(drivebase::resetOdometry, drivebase)));*/ // Brakes the swerve modules
     new JoystickButton(CoPilotController, copilotController.pickupButton)
         .onTrue(
             new intakeCommand(
                 Shooter.intakeRPM,
                 Shooter.pullBackRPM,
                 Shooter.correctPositioningRPM,
-                shooter)); // From what positions will we intake?
+                shooter).andThen(
+                    new TuckArm(arm)
+                        .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
+                        .finallyDo(
+                            (boolean interrupted) -> {
+                              if (!interrupted && shooter.hasNote)
+                                lights.SetLightState(lightStates.CarryingNote);
+                            }))); // From what positions will we intake?
 
     new JoystickButton(CoPilotController, copilotController.hookButton)
         .onTrue(Commands.runOnce(() -> arm.toggleHook()));
     new JoystickButton(CoPilotController, copilotController.carryButton)
         .onTrue(
             Commands.runOnce(() -> shooter.stopIntakeMotor())
-                .andThen(new TuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))));
+                .andThen(
+                    new TuckArm(arm)
+                        .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
+                        .finallyDo(
+                            (boolean interrupted) -> {
+                              if (!interrupted && shooter.hasNote)
+                                lights.SetLightState(lightStates.CarryingNote);
+                            })));
     new JoystickButton(CoPilotController, copilotController.extendButton)
         .onTrue(Commands.runOnce(() -> arm.toggleShooterState()));
 
@@ -255,13 +272,18 @@ public class RobotContainer {
     new JoystickButton(CoPilotController, copilotController.speakerButton)
         .onTrue(
             new MoveArmToPosition(arm, speakerAngle)
-                .finallyDo(() -> lights.SetLightState(lightStates.ReadyToSPEAKER))
+                .finallyDo(
+                    (boolean interrupted) -> {
+                      if (!interrupted) lights.SetLightState(lightStates.ReadyToSPEAKER);
+                    })
                 .alongWith(Commands.runOnce(() -> speakerShot = true)));
     new JoystickButton(CoPilotController, copilotController.ampButton)
         .onTrue(
-            new UntuckArm(arm)
-                .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))
-                .finallyDo(() -> lights.SetLightState(lightStates.ReadyToAMP))
+            new MoveArmToPosition(arm, Arm.ampArmAngle)
+                .finallyDo(
+                    (boolean interrupted) -> {
+                      if (!interrupted) lights.SetLightState(lightStates.ReadyToAMP);
+                    })
                 .alongWith(Commands.runOnce(() -> speakerShot = false)));
   }
 

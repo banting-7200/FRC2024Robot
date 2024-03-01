@@ -1,3 +1,8 @@
+/* 
+ * This command is extremely simple as it shoots the note and ends after one second of it leaving
+ * the shooter.
+ */
+
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,7 +50,7 @@ public class shootCommand extends Command {
 
   @Override
   public void execute() {
-    /* if (hasNote == true) { */
+  
     currentMillis = currentTime.millis(); // records current time
     shooter.spinShootToRPM(rpm.getAsInt()); // spins the shooters
     if ((currentMillis - sinceIntakeMotor)
@@ -62,7 +67,6 @@ public class shootCommand extends Command {
       hasSeenNote = true;
       System.out.println("SAW THE NOTE");
     }
-    /* } */
     System.out.println(hasSeenNote);
   }
 

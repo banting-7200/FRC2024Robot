@@ -1,10 +1,9 @@
-/* 
+/*
  * Essentially this command is supposed to pull in the note and once it does
- * it will pull it back and then correct it until the IR sensor sees it and 
+ * it will pull it back and then correct it until the IR sensor sees it and
  * doesn't see it again. Therefore why there are three different 3 different
- * RPM's. 
+ * RPM's.
  */
-
 
 package frc.robot.commands.shooter;
 

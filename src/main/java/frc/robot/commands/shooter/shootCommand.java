@@ -1,4 +1,4 @@
-/* 
+/*
  * This command is extremely simple as it shoots the note and ends after one second of it leaving
  * the shooter.
  */
@@ -50,7 +50,7 @@ public class shootCommand extends Command {
 
   @Override
   public void execute() {
-  
+
     currentMillis = currentTime.millis(); // records current time
     shooter.spinShootToRPM(rpm.getAsInt()); // spins the shooters
     if ((currentMillis - sinceIntakeMotor)

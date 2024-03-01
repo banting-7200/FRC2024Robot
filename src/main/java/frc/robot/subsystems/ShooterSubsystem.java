@@ -80,12 +80,23 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void stopIntakeMotor() {
-    m_intake.setControl(m_velocity.withVelocity(0));
+    /* Stops motor a different way due to the difference in modes that the intake and shooter
+     * motors use in Phoenix Tuner X
+     */
+    m_intake.setControl(m_velocity.withVelocity(0)); 
   }
 
+  /*
+   * This function was used to display the RPM of the Motors for trouble shooting
+   */
   public double getIntakeRPM() {
     return m_intake.getVelocity().getValue();
   }
+
+  /* The next two functions simply set the state and get the state of a variable which
+   * determines whether the intake and shoot commands can run again depending on the 
+   * variables state. s
+   */
 
   public void setHasNoteState(boolean state) {
     hasNote = state;

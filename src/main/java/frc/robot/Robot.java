@@ -12,10 +12,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.subsystems.LightSubsystem;
-import frc.robot.subsystems.LightSubsystem.lightStates;
-import frc.robot.subsystems.LimelightDevice;
-import frc.robot.subsystems.ShuffleboardSubsystem;
+import frc.robot.subsystems.Vision.LimelightDevice;
+import frc.robot.subsystems.Feedback.LightSubsystem;
+import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
+import frc.robot.subsystems.Feedback.LightSubsystem.lightStates;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to

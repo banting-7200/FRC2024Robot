@@ -2,9 +2,10 @@ package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Arm;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.LightSubsystem;
-import frc.robot.subsystems.LightSubsystem.lightStates;
+import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
+import frc.robot.subsystems.Feedback.LightSubsystem;
+import frc.robot.subsystems.Feedback.LightSubsystem.lightStates;
+
 import java.time.Clock;
 
 public class TuckArm extends Command {

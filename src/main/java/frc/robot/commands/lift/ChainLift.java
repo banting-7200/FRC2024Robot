@@ -2,7 +2,7 @@ package frc.robot.commands.lift;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Arm;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class ChainLift extends Command {

@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.ArmAndHead;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Arm;
+import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Solenoids.DoubleSolenoidActions;
 import frc.robot.subsystems.Solenoids.SolenoidActions;
 import java.time.Clock;
@@ -236,7 +237,6 @@ public class ArmSubsystem extends SubsystemBase {
   public boolean isTucked() {
     shuffleboard.setBoolean("last shooter state", lastShooterState);
     if (currentTime.millis() - stateChangeTimestamp > Arm.s_stateChangeDelay) {
-      return solenoidSwitch.get();
       return solenoidSwitch.get();
     }
     lastShooterState = solenoidSwitch.get();

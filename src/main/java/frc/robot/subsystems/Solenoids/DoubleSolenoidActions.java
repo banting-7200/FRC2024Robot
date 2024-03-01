@@ -4,44 +4,53 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 public class DoubleSolenoidActions {
-  private DoubleSolenoid SOLENOID;
+  private DoubleSolenoid McDoubleSolenoid;// mc == master class
 
-  public DoubleSolenoidActions(DoubleSolenoid s) {
-    SOLENOID = s;
+  public DoubleSolenoidActions(DoubleSolenoid solenoid) {
+    McDoubleSolenoid = solenoid;
     setOff();
   }
 
-  public void toggle() { // Todo:get rid of the if statement after testing is complete
-    if (SOLENOID.get() == DoubleSolenoid.Value.kOff) {
-      SOLENOID.set(Value.kForward);
+  public DoubleSolenoidActions(DoubleSolenoid solenoid, boolean startForward) {
+    this(solenoid);
+    if (startForward) {
+      setForward();
     } else {
-      SOLENOID.toggle();
+      setReverse();
+    }
+  }
+
+  public void toggle() {
+    if (McDoubleSolenoid.get() == DoubleSolenoid.Value.kOff) {//Set the solenoid forward if no state is set.
+      McDoubleSolenoid.set(Value.kForward);
+    } else {
+      McDoubleSolenoid.toggle();
     }
   }
 
   public void setOff() {
-    SOLENOID.set(Value.kOff);
+    McDoubleSolenoid.set(Value.kOff);
   }
 
   public void setReverse() {
-    SOLENOID.set(Value.kReverse);
+    McDoubleSolenoid.set(Value.kReverse);
   }
 
   public void setForward() {
-    SOLENOID.set(Value.kForward);
+    McDoubleSolenoid.set(Value.kForward);
   }
 
   public void reportSolenoid() {
     System.out.println(
         "solenoid state: "
-            + SOLENOID.get()
+            + McDoubleSolenoid.get()
             + ", forward solenoid channel: "
-            + SOLENOID.getFwdChannel()
+            + McDoubleSolenoid.getFwdChannel()
             + ", reverse solenoid channel: "
-            + SOLENOID.getRevChannel());
+            + McDoubleSolenoid.getRevChannel());
   }
 
   public boolean isReversed() {
-    return SOLENOID.get() == Value.kReverse;
+    return McDoubleSolenoid.get() == Value.kReverse;
   }
 }

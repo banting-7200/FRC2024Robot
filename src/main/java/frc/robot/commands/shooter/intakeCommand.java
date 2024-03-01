@@ -1,3 +1,11 @@
+/* 
+ * Essentially this command is supposed to pull in the note and once it does
+ * it will pull it back and then correct it until the IR sensor sees it and 
+ * doesn't see it again. Therefore why there are three different 3 different
+ * RPM's. 
+ */
+
+
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -50,7 +58,6 @@ public class intakeCommand extends Command {
 
   @Override
   public void execute() {
-    /* if (hasNote == true) { */
     if (notelock == false) {
       shooter.spinIntakeToNegativeRPM(intakeRPM);
       if (shooter.shooterHasNote() == true && override == false) {
@@ -75,7 +82,6 @@ public class intakeCommand extends Command {
       }
     }
     shooterHasNotePrev = shooter.shooterHasNote();
-    /* } */
   }
 
   public boolean isFinished() {
@@ -88,9 +94,6 @@ public class intakeCommand extends Command {
     lights.SetLightState(lightStates.NotePickedUp);
     System.out.println("Intake Command ShutDown");
     System.out.println("Has Note state is currently: " + shooter.getHasNoteState());
-    /*  if (!interrupted) {
-      shooter.setHasNoteState(true);
-    } */
   }
 }
 

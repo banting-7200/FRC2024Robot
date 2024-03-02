@@ -61,6 +61,10 @@ public class ArmSubsystem extends SubsystemBase {
     leftArmMotor = new CANSparkMax(Arm.leftArmMotorID, MotorType.kBrushless);
     rightArmMotor = new CANSparkMax(Arm.rightArmMotorID, MotorType.kBrushless);
 
+    //Assign the limit switches to the ones connected to the right spark
+    forwardLimitSwitch = rightArmMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+    reverseLimitSwitch = rightArmMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
+
     /*
      * Assigns solenoidSwitch to the digital input of pin 2, which is the limit
      * switch that lets the robot know what the shooter's position is, such as when
@@ -248,16 +252,6 @@ public class ArmSubsystem extends SubsystemBase {
 
   public boolean getIsTuckedRaw() {
     return solenoidSwitch.get();
-  }
-
-  // Debug stuff
-  public void getLimitSwitch() {
-    shuffleboard.setBoolean(
-        "Limit switch foward",
-        rightArmMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed());
-    shuffleboard.setBoolean(
-        "Limit switch reverse",
-        rightArmMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen).isPressed());
   }
 
   /*

@@ -387,5 +387,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     shuffleboard.setBoolean("Is Forward Limit Pressed", forwardLimitSwitch.isPressed());
     shuffleboard.setBoolean("Is Reverse Limit Pressed", reverseLimitSwitch.isPressed());
+
+    shuffleboard.setNumber("right output voltage", rightArmMotor.getOutputCurrent());
+    shuffleboard.setNumber("left output voltage", leftArmMotor.getOutputCurrent());
   }
 }

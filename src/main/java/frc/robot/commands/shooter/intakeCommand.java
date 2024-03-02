@@ -66,30 +66,36 @@ public class intakeCommand extends Command {
       if (notelock == false) { // if note is not in position
         shooter.spinIntakeToNegativeRPM(intakeRPM); // intake
         if (shooter.shooterHasNote() == true && override == false) {
-          startedMillis = currentTime.millis() + 100; // run for an extra 100ms after note has been detected
+          startedMillis =
+              currentTime.millis() + 100; // run for an extra 100ms after note has been detected
           stopDryRun = true; // 100ms is finished
         }
-        if (shooter.shooterHasNote() == true && override == true) {// If we have the note and can override
-          notelock = true;// enable the first lock
+        if (shooter.shooterHasNote() == true
+            && override == true) { // If we have the note and can override
+          notelock = true; // enable the first lock
         }
-        if (currentTime.millis() > startedMillis && stopDryRun == true) {// If the timer has elapsed and we have entered
-                                                                         // the dry run
-          shooter.spinIntakeToPositiveRPM(pullBackRPM);// Pull back the note
+        if (currentTime.millis() > startedMillis
+            && stopDryRun == true) { // If the timer has elapsed and we have entered
+          // the dry run
+          shooter.spinIntakeToPositiveRPM(pullBackRPM); // Pull back the note
           override = true;
         }
       } else {
-        if (notelock2 == false) {// If we have not started correcting
-          shooter.spinIntakeToNegativeRPM(correctPositioningRPM);// Start Correcting
-          if (shooter.shooterHasNote() == false && shooterHasNotePrev == true) {// If we no longer have a note, but a
-                                                                                // note was detected last robot loop
+        if (notelock2 == false) { // If we have not started correcting
+          shooter.spinIntakeToNegativeRPM(correctPositioningRPM); // Start Correcting
+          if (shooter.shooterHasNote() == false
+              && shooterHasNotePrev == true) { // If we no longer have a note, but a
+            // note was detected last robot loop
             notelock2 = true;
           }
-        } else {// Stop correcting
+        } else { // Stop correcting
           shooter.spinIntakeToNegativeRPM(0);
         }
       }
-      shooterHasNotePrev = shooter.shooterHasNote();// Store the status of the note this loop to check against the next
-                                                    // loop.
+      shooterHasNotePrev =
+          shooter
+              .shooterHasNote(); // Store the status of the note this loop to check against the next
+      // loop.
     }
   }
 

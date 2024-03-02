@@ -114,7 +114,8 @@ public class SwerveSubsystem extends SubsystemBase {
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in
             // your Constants class
             new PIDConstants(
-                5.0, 0.0, 0.0), // todo: check to see if this is necessary (removed in example code)
+                5.0, 0.0,
+                0.0), /*swerveDrive.swerveController.config.TranslationPID.p, swerveDrive.swerveController.config.TranslationPID.i, swerveDrive.swerveController.config.TranslationPID.d)*/ // todo: check to see if this is necessary (removed in example code)
             // Translation PID constants
             new PIDConstants(
                 swerveDrive.swerveController.config.headingPIDF.p,

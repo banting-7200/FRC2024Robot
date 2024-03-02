@@ -35,6 +35,7 @@ import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
+import frc.robot.subsystems.Feedback.NetworkTables;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Vision.LimelightDevice;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -58,6 +59,8 @@ public class RobotContainer {
   private SendableChooser<String> autos = new SendableChooser<>();
   int speakerTag;
   int ampTag;
+
+  NetworkTables swerveNetworkTables = new NetworkTables();
 
   // Subsystem Declaration
   private final SwerveSubsystem drivebase =
@@ -408,5 +411,6 @@ public class RobotContainer {
   public void setShuffleboard() {
     arm.setShuffleboard();
     shooter.setShooterShuffleBoard();
+    swerveNetworkTables.setSwerveShuffleboard();
   }
 }

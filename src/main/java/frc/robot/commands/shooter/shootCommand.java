@@ -22,11 +22,12 @@ public class shootCommand extends Command {
   long currentMillis; // current time
   long sinceNoteLeft; // time since note left shooter
   long sinceIntakeMotor; // time since intake motor turned on
-  IntSupplier rpm;// Int supplier for different shoot rpm's(speaker/amp)
+  IntSupplier rpm; // Int supplier for different shoot rpm's(speaker/amp)
   Boolean hasSeenNote = false; // if note has been detected yet
-  IntSupplier waitTime;// Int supplier for different wait times(speaker/amp)
+  IntSupplier waitTime; // Int supplier for different wait times(speaker/amp)
   boolean hasNote; // This variables is used for telling whether the note is already in the shooter
-                   // or not
+
+  // or not
 
   public shootCommand(IntSupplier rpm, ShooterSubsystem shooter, IntSupplier waitTime) {
     this.rpm = rpm;
@@ -48,7 +49,7 @@ public class shootCommand extends Command {
     startedMillis = currentTime.millis();
     hasSeenNote = false;
     hasNote = shooter.getHasNoteState();
-    shooter.stopIntakeMotor();// Stop the intake motor(failsafe)
+    shooter.stopIntakeMotor(); // Stop the intake motor(failsafe)
   }
 
   @Override
@@ -56,14 +57,16 @@ public class shootCommand extends Command {
     if (hasNote == true) {
       currentMillis = currentTime.millis(); // records current time
       shooter.spinShootToRPM(rpm.getAsInt()); // spins the shooters
-      if ((currentMillis - sinceIntakeMotor) > waitTime.getAsInt()) { // waits for 250 ms for it to turn on the shoot
+      if ((currentMillis - sinceIntakeMotor)
+          > waitTime.getAsInt()) { // waits for 250 ms for it to turn on the shoot
         // motor
         shooter.spinIntakeToNegativeRPM(rpm.getAsInt()); // runs the shoot motor
         System.out.println("Run Shooter motor");
       }
       if (shooter.shooterHasNote() == true) {
-        sinceNoteLeft = currentTime
-            .millis(); // if it see's the note it will set the since note left time for current
+        sinceNoteLeft =
+            currentTime
+                .millis(); // if it see's the note it will set the since note left time for current
         // time
         hasSeenNote = true;
         System.out.println("SAW THE NOTE");

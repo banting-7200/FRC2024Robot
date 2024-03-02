@@ -74,32 +74,59 @@ public class LimelightDevice extends SubsystemBase {
   }
 
   public boolean tagDetected() { // returns true if tag is detected
-    double ttarget = mainTable.getEntry("tv").getDouble(0);
+    double ttarget = 0;
+    try {
+      ttarget = mainTable.getEntry("tv").getDouble(0);
+    } catch (NullPointerException e) {
+      System.out.println("ttarget ERROR, EXCEPTION: " + e);
+    }
     boolean tdetected = ttarget == 0 ? false : true;
     shuffle.setBoolean("Tag Detected", tdetected);
     return tdetected;
   }
 
   public int getTagID() { // returns id of apriltag or -1 if no tag is detected.
-    int tid = (int) mainTable.getEntry("tid").getDouble(-1);
+    int tid = 0;
+    try {
+      tid = (int) mainTable.getEntry("tid").getDouble(-1);
+    } catch (NullPointerException e) {
+      System.out.println("tid ERROR, EXCEPTION: " + e);
+    }
     shuffle.setNumber("Tag ID", tid);
     return tid;
   }
 
   public double getTagArea() { // return tag area
-    double ta = mainTable.getEntry("ta").getDouble(0);
+    double ta = 0;
+    try {
+      ta = mainTable.getEntry("ta").getDouble(0);
+
+    } catch (NullPointerException e) {
+      System.out.println("Tag Area ERROR, EXCEPTION: " + e);
+    }
     shuffle.setNumber("Tag Area", ta);
     return ta;
   }
 
   public double getTagX() { // return tag x value (horizontal across camera screen)
-    double tx = mainTable.getEntry("tx").getDouble(0);
+    double tx = 0;
+    try {
+      tx = mainTable.getEntry("tx").getDouble(0);
+    } catch (NullPointerException e) {
+      System.out.println("tx ERROR, EXCEPTION: " + e);
+    }
     shuffle.setNumber("Tag X", tx);
     return tx;
   }
 
   public double getTagY() { // return tag y value (vertical across camera screen)
-    double ty = mainTable.getEntry("ty").getDouble(0);
+    double ty = 0;
+    try {
+      ty = mainTable.getEntry("ty").getDouble(0);
+    } catch (NullPointerException e) {
+      System.out.println("ty ERROR, EXCEPTION: " + e);
+    }
+
     shuffle.setNumber("Tag Y", ty);
     return ty;
   }

@@ -66,8 +66,7 @@ public class ShooterSubsystem extends SubsystemBase {
   /* Spins the intake to a negative passed in RPM */
   public void spinIntakeToNegativeRPM(double targetRPM) {
     m_velocity.Slot = 1;
-    m_intake.setControl(
-        m_velocity.withVelocity(-targetRPM / 60)); // convert rpm to rps then apply
+    m_intake.setControl(m_velocity.withVelocity(-targetRPM / 60)); // convert rpm to rps then apply
   }
 
   /* Spins shoot motors to passed in RPM */

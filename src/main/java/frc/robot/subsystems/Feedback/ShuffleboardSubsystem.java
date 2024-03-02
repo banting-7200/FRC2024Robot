@@ -13,9 +13,11 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import java.awt.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ShuffleboardSubsystem {
   private static ShuffleboardSubsystem instance = null;
@@ -27,6 +29,7 @@ public class ShuffleboardSubsystem {
 
   private ShuffleboardSubsystem() {}
 
+//Singleton instance of the shuffleboard class
   public static synchronized ShuffleboardSubsystem getInstance() {
     if (instance == null) {
       instance = new ShuffleboardSubsystem();
@@ -61,8 +64,8 @@ public class ShuffleboardSubsystem {
       String name, double value) { // creates or sets a double on the shuffleboard.
     GenericEntry entry;
     int index = entryNames.indexOf(name);
-    if (index == -1) {
-      if (layout != null) {
+    if (index == -1) {//If this entry does not exist
+      if (layout != null) { //if theres no layout selected
         entry = layout.add(name, value).withWidget(BuiltInWidgets.kTextView).getEntry();
       } else {
         entry = tab.add(name, value).withWidget(BuiltInWidgets.kTextView).getEntry();
@@ -210,7 +213,7 @@ public class ShuffleboardSubsystem {
   }
 
   public void addCamera(String name, String camera, String url) {
-    tab.addCamera(name, camera, url).withSize(2, 2); // doesnt add any functionaly again
+    tab.addCamera(name, camera, url).withSize(2, 2); // doesnt add any functionalaty again
   }
 
   public void setText(String name, String text) { // puts text to the dashboard
@@ -236,6 +239,20 @@ public class ShuffleboardSubsystem {
       return " ";
     } else {
       return entries.get(index).getString(" ");
+    }
+  }
+
+     public void setColour(String name, Color colour){ //custom colour widget
+    GenericEntry entry;
+    int index = entryNames.indexOf(name);
+      if (layout != null) {
+        entry = layout.add(name, true).withProperties(Map.of("colorWhenTrue", colour)).getEntry();
+      } else {
+        entry = tab.add(name, true).withWidget(BuiltInWidgets.kBooleanBox).withProperties(Map.of("colorWhenTrue", colour)).getEntry();
+      }
+    if (index == -1) {
+      entryNames.add(name);
+      entries.add(entry);
     }
   }
 }

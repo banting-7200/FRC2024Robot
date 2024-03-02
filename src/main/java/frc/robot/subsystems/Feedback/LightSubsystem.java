@@ -4,37 +4,36 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import frc.robot.Constants.Lights;
 import frc.robot.subsystems.Vision.LimelightDevice;
-
 import java.awt.Color;
 
 public class LightSubsystem {
+
   private final AddressableLED statusLights;
   private final AddressableLEDBuffer statusBuffer;
-  private static LightSubsystem instance = null; // creates Singleton instance
-  private ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
-  private Color colour1 = new Color(127, 127, 127);
-  private Color colour2 = new Color(127, 127, 127);
-  private LimelightDevice limelight = LimelightDevice.getInstance();
 
-  public enum lightStates {
-    ReadyForPickup,
-    NotePickedUp,
-    CarryingNote,
-    ReadyToSPEAKER,
-    ReadyToAMP,
-    ReadyToShoot,
-    AprilTagFound
+  private static LightSubsystem instance = null; // creates Singleton instance
+  private ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();//Gets shuffleboard instance
+
+  private LimelightDevice limelight = LimelightDevice.getInstance();//Gets limelight instance
+
+  public enum LightStates {
+    ReadyForPickup, //in intake position and intake on
+    NotePickedUp, //note detected in intake
+    CarryingNote, //in carry position with note in intake
+    ReadyToSPEAKER, //in position to score in speaker
+    ReadyToAMP, //in position to score in amp
   }
 
+  //Initializes shuffleboard
   public void shuffleSetup() {
     shuffle.setTab("Lights");
-    shuffle.setNumber("Mode", -1);
+    shuffle.setText("Mode", "No Mode Selected");
   }
 
-  public static synchronized LightSubsystem
-      getInstance() { // if no instance has been made, create one.
-    // Otherwise, reference the already made instance.
-    // Ensures only one instance can be made.
+  // if no instance has been made, create one.
+  // Otherwise, reference the already made instance.
+  // Ensures only one instance can be made.
+  public static synchronized LightSubsystem getInstance() { 
     if (instance == null) {
       instance = new LightSubsystem(Lights.lightID, Lights.lightStringLength);
     }
@@ -42,77 +41,64 @@ public class LightSubsystem {
   }
 
   private LightSubsystem(int lightPort, int stringLength) {
-    statusLights = new AddressableLED(lightPort);
-    statusBuffer = new AddressableLEDBuffer(stringLength);
-
+    statusLights = new AddressableLED(lightPort);//Inititalizes light string with passed in values
+    statusBuffer = new AddressableLEDBuffer(stringLength);//Inititalizes light buffer with passed in values
     statusLights.setLength(stringLength);
-
     statusLights.start();
   }
 
-  // Singleton instance of lights to call in other classes.
-
-  public void SetLightState(lightStates stateToSet) { // Set to predefined colours
+  public void SetLightState(LightStates stateToSet) { // Set to predefined colours
     int id = -1;
     switch (stateToSet) {
-      case ReadyForPickup: // in pickup position & intake on
-        colour1 = Color.RED;
-        colour2 = colour1;
-        shuffle.setText("Mode", "ReadyForPickup");
+      case ReadyForPickup:
+       setSolid(Color.RED);
         break;
-      case NotePickedUp: // note picked up but not in position position
-        colour1 = Color.GREEN;
-        colour2 = colour1;
-        shuffle.setText("Mode", "NotePickedUp");
+      case NotePickedUp:
+       setSolid(Color.GREEN);
         break;
-      case CarryingNote: // note picked up and in carry position
-        colour1 = Color.ORANGE;
-        colour2 = colour1;
-        shuffle.setText("Mode", "CarryingNote");
+      case CarryingNote:
+        setSolid(Color.ORANGE);
         break;
-      case ReadyToAMP: // in position to score in AMP
-        colour1 = Color.BLUE;
-        id = limelight.getTagID();
-        if (id == 3 || id == 4 || id == 7 || id == 8) {
-          colour2 = colour1;
+      case ReadyToAMP:
+        id = limelight.getTagID(); //todo: remove limelight subsystem from here and replace with function for limelight subsystem
+        if (id == 3 || id == 4 || id == 7 || id == 8) { //todo: set speaker id in constants on startup based on aliance colour
+          setSolid(Color.BLUE);
         } else {
-          colour2 = Color.BLACK;
+          setDashed(Color.BLUE, Color.BLACK);
         }
-        shuffle.setText("Mode", "ReadyToAMP");
         break;
-      case ReadyToSPEAKER: // in position to score in SPEAKER
-        colour1 = Color.PINK;
+      case ReadyToSPEAKER:
         id = limelight.getTagID();
-        if (id == 5 || id == 6) {
-          colour2 = colour1;
+        if (id == 5 || id == 6) { //todo: same here with amp id
+          setSolid(Color.PINK);
         } else {
-          colour2 = Color.BLACK;
+          setDashed(Color.PINK, Color.BLACK);
         }
-        shuffle.setText("Mode", "ReadyToSPEAKER");
         break;
       default:
-        colour1 = Color.BLACK;
-        colour2 = colour1;
-        shuffle.setText("Mode", "Error");
+        setSolid(Color.GRAY);
         break;
     }
-    setColourMode();
+    shuffle.setText("Mode", stateToSet.toString());
   }
-
-  public void setColor(int r, int g, int b) { // set to specific colour
+  
+  public void setSolid(Color colour) { // set to specific colour
     for (int i = 0; i < statusBuffer.getLength(); i++) {
-      statusBuffer.setRGB(i, r, g, b);
+      statusBuffer.setRGB(i, colour.getGreen(), colour.getRed(), colour.getBlue());
     }
     statusLights.setData(statusBuffer);
   }
 
-  public void setColourMode() {
+
+  public void setDashed(Color colour1, Color colour2) {
     for (int i = 0; i < statusBuffer.getLength(); i++) {
       if (Math.floor(i / 4) % 2 == 0) {
         statusBuffer.setRGB(i, colour1.getGreen(), colour1.getRed(), colour1.getBlue());
       } else {
         statusBuffer.setRGB(i, colour2.getGreen(), colour2.getRed(), colour2.getBlue());
       }
+      shuffle.setTab("Lights");
+      shuffle.setColour("Light Colour", colour1);
     }
     statusLights.setData(statusBuffer);
   }

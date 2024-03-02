@@ -1,9 +1,16 @@
+/*
+ * Essentially this command is supposed to pull in the note and once it does
+ * it will pull it back and then correct it until the IR sensor sees it and
+ * doesn't see it again. Therefore why there are three different 3 different
+ * RPM's.
+ */
+
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem;
-import frc.robot.subsystems.Feedback.LightSubsystem.lightStates;
+import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
 
 import java.time.Clock;
 
@@ -86,7 +93,7 @@ public class intakeCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.stopIntakeMotor();
-    lights.SetLightState(lightStates.NotePickedUp);
+    lights.SetLightState(LightStates.NotePickedUp);
     System.out.println("Intake Command ShutDown");
     System.out.println("Has Note state is currently: " + shooter.getHasNoteState());
     /*  if (!interrupted) {

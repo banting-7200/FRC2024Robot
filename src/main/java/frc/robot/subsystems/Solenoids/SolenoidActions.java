@@ -3,31 +3,31 @@ package frc.robot.subsystems.Solenoids;
 import edu.wpi.first.wpilibj.Solenoid;
 
 public class SolenoidActions {
-  private final Solenoid SOLENOID;
+  private final Solenoid jrSolenoid;// jr = java reticulating
 
-  public SolenoidActions(Solenoid s) {
-    SOLENOID = s;
+  public SolenoidActions(Solenoid solenoid) {
+    jrSolenoid = solenoid;
     setOff();
   }
 
   public void toggle() {
-    SOLENOID.set(!SOLENOID.get());
+    jrSolenoid.set(!jrSolenoid.get());
   }
 
   public void setOff() {
-    SOLENOID.set(false);
+    jrSolenoid.set(false);
   }
 
   public void setOn() {
-    SOLENOID.set(true);
+    jrSolenoid.set(true);
   }
 
   public void reportSolenoid() {
     System.out.println(
-        "solenoid state: " + SOLENOID.get() + ", solenoid channel: " + SOLENOID.getChannel());
+        "solenoid state: " + jrSolenoid.get() + ", solenoid channel: " + jrSolenoid.getChannel());
   }
 
   public boolean getState() {
-    return SOLENOID.get();
+    return jrSolenoid.get();
   }
 }

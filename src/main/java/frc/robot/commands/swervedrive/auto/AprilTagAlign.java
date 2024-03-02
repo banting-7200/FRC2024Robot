@@ -2,18 +2,19 @@ package frc.robot.commands.swervedrive.auto;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.maxCommandWaitTime;
 import frc.robot.subsystems.Vision.LimelightDevice;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.time.Clock;
 import java.util.function.IntSupplier;
+import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 
 public class AprilTagAlign extends Command {
 
   private final SwerveSubsystem swerveSubsystem;
   private final LimelightDevice limelightSubsystem;
+  private ShuffleboardSubsystem shuffle;
 
   private final PIDController positionController;
   private final PIDController rotationController;
@@ -57,6 +58,7 @@ public class AprilTagAlign extends Command {
 
   @Override
   public void initialize() {
+    shuffle = ShuffleboardSubsystem.getInstance();
     startedMillis = currentTime.millis();
   }
 
@@ -74,13 +76,13 @@ public class AprilTagAlign extends Command {
       rotationAdjust = rotationController.calculate(limelightSubsystem.getTagX(), 0);
       swerveSubsystem.drive(new Translation2d(fowardAdjust, 0), rotationAdjust, false);
     }
+    shuffle.setTab("Debug");
+    shuffle.setNumber("Tag Area", tagArea);
+    shuffle.setNumber("Target Area", targetArea);
+    shuffle.setBoolean("At Position?", positionController.atSetpoint());
 
-    SmartDashboard.putNumber("tagArea", tagArea);
-    SmartDashboard.putNumber("targetArea", targetArea);
-    SmartDashboard.putBoolean("at position", positionController.atSetpoint());
-
-    SmartDashboard.putNumber("tag offset", rotationAdjust);
-    SmartDashboard.putBoolean("at rotation", rotationController.atSetpoint());
+    shuffle.setNumber("Tag Offset", rotationAdjust);
+    shuffle.setBoolean("At Rotation?", rotationController.atSetpoint());
   }
 
   @Override

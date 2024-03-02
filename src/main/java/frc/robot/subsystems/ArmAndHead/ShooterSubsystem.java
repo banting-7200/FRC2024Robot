@@ -59,27 +59,21 @@ public class ShooterSubsystem extends SubsystemBase {
 
   /* Spins the intake to a positive passed in RPM */
   public void spinIntakeToPositiveRPM(double targetRPM) {
-    if (arm.isTucked() == false) {
-      m_velocity.Slot = 1;
-      m_intake.setControl(m_velocity.withVelocity(targetRPM / 60)); // convert rpm to rps then apply
-    }
+    m_velocity.Slot = 1;
+    m_intake.setControl(m_velocity.withVelocity(targetRPM / 60)); // convert rpm to rps then apply
   }
 
   /* Spins the intake to a negative passed in RPM */
   public void spinIntakeToNegativeRPM(double targetRPM) {
-    if (arm.isTucked() == false) {
-      m_velocity.Slot = 1;
-      m_intake.setControl(
-          m_velocity.withVelocity(-targetRPM / 60)); // convert rpm to rps then apply
-    }
+    m_velocity.Slot = 1;
+    m_intake.setControl(
+        m_velocity.withVelocity(-targetRPM / 60)); // convert rpm to rps then apply
   }
 
   /* Spins shoot motors to passed in RPM */
   public void spinShootToRPM(double targetRPM) {
-    if (arm.isTucked() == false) {
-      m_velocity.Slot = 0;
-      m_shoot.setControl(m_velocity.withVelocity(targetRPM / 60)); // convert rpm to rps then apply
-    }
+    m_velocity.Slot = 0;
+    m_shoot.setControl(m_velocity.withVelocity(targetRPM / 60)); // convert rpm to rps then apply
   }
 
   /* Querys the state of the IR sensor */

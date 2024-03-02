@@ -16,17 +16,17 @@ import java.util.function.IntSupplier;
 public class shootCommand extends Command {
 
   public ShooterSubsystem shooter;
-  private boolean hasNotBeenDetected = false;
   LightSubsystem lights = LightSubsystem.getInstance();
   Clock currentTime = Clock.systemDefaultZone();
-  long startedMillis;
-  long currentMillis;
-  long sinceNoteLeft;
-  long sinceIntakeMotor;
-  IntSupplier rpm;
-  Boolean hasSeenNote = false;
-  IntSupplier waitTime;
-  boolean hasNote;
+  long startedMillis; // time when started
+  long currentMillis; // current time
+  long sinceNoteLeft; // time since note left shooter
+  long sinceIntakeMotor; // time since intake motor turned on
+  IntSupplier rpm;// Int supplier for different shoot rpm's(speaker/amp)
+  Boolean hasSeenNote = false; // if note has been detected yet
+  IntSupplier waitTime;// Int supplier for different wait times(speaker/amp)
+  boolean hasNote; // This variables is used for telling whether the note is already in the shooter
+                   // or not
 
   public shootCommand(IntSupplier rpm, ShooterSubsystem shooter, IntSupplier waitTime) {
     this.rpm = rpm;
@@ -42,33 +42,31 @@ public class shootCommand extends Command {
 
   @Override
   public void initialize() {
+    // Initialize values
     sinceIntakeMotor = currentTime.millis();
     sinceNoteLeft = currentTime.millis();
     startedMillis = currentTime.millis();
     hasSeenNote = false;
     hasNote = shooter.getHasNoteState();
-    shooter.stopIntakeMotor();
+    shooter.stopIntakeMotor();// Stop the intake motor(failsafe)
   }
 
   @Override
   public void execute() {
     currentMillis = currentTime.millis(); // records current time
     shooter.spinShootToRPM(rpm.getAsInt()); // spins the shooters
-    if ((currentMillis - sinceIntakeMotor)
-        > waitTime.getAsInt()) { // waits for 250 ms for it to turn on the shoot
+    if ((currentMillis - sinceIntakeMotor) > waitTime.getAsInt()) { // waits for 250 ms for it to turn on the shoot
       // motor
       shooter.spinIntakeToNegativeRPM(rpm.getAsInt()); // runs the shoot motor
       System.out.println("Run Shooter motor");
     }
     if (shooter.shooterHasNote() == true) {
-      sinceNoteLeft =
-          currentTime
-              .millis(); // if it see's the note it will set the since note left time for current
+      sinceNoteLeft = currentTime
+          .millis(); // if it see's the note it will set the since note left time for current
       // time
       hasSeenNote = true;
       System.out.println("SAW THE NOTE");
     }
-    /* } */
     System.out.println(hasSeenNote);
   }
 
@@ -79,11 +77,12 @@ public class shootCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-
     shooter.stopShootMotor();
     shooter.stopIntakeMotor();
     System.out.println("Shooting Done");
-    lights.SetLightState(LightStates.ReadyForPickup);
+    if (!interrupted) {
+      lights.SetLightState(LightStates.ReadyForPickup);
+    }
     System.out.println("Has Note state is currently: " + shooter.getHasNoteState());
   }
 }

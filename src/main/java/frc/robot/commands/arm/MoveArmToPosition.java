@@ -13,7 +13,6 @@ public class MoveArmToPosition extends Command {
   private ArmSubsystem arm;
   private LightSubsystem lights = LightSubsystem.getInstance();
   private boolean reachedSetpoint;
-  // private boolean safeToMove = true;
 
   private DoubleSupplier angleSetpoint;
 
@@ -35,17 +34,11 @@ public class MoveArmToPosition extends Command {
 
   @Override
   public void initialize() {
-    /*
-     * if (arm.isTucked()) {
-     * new UntuckArm(arm);
-     * }
-     */
     // supplier assignment goes here
     arm.disableBrake();
     System.out.println("Move Arm To Position. setpoint is: " + angleSetpoint.getAsDouble());
     startTime = timer.millis();
     System.out.println("start time is: " + startTime);
-    // see if setting set point here is good
   }
 
   @Override
@@ -53,11 +46,7 @@ public class MoveArmToPosition extends Command {
     reachedSetpoint = arm.moveToAngle(angleSetpoint.getAsDouble());
     shuffle.setNumber("command setpoint", angleSetpoint.getAsDouble());
     shuffle.setBoolean("reached setpoint", reachedSetpoint);
-    // System.out.println("execute arm");
   }
-
-  // Might need an angle supplier function if an object of this command is created
-  // thats constanly referenced
 
   @Override
   public boolean isFinished() {

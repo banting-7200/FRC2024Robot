@@ -33,7 +33,6 @@ public class TuckArm extends Command {
 
   @Override
   public void execute() {
-    // System.out.println(ranTuckCommand);
     if (arm.getEncoderPosition() >= Arm.tuckSafeMin) {
       if (!ranTuckCommand) {
         arm.tuckShooter();
@@ -43,7 +42,8 @@ public class TuckArm extends Command {
       // move to safe tuck pos
       arm.moveToAngle(Arm.tuckSafeMin + 2);
     }
-    // System.out.println("is it safe to tuck: " + (arm.getEncoderPosition() >= Arm.tuckSafeMin));
+    // System.out.println("is it safe to tuck: " + (arm.getEncoderPosition() >=
+    // Arm.tuckSafeMin));
   }
 
   @Override
@@ -54,9 +54,11 @@ public class TuckArm extends Command {
   @Override
   public void end(boolean interrupted) {
     arm.stopArm();
-    if (!interrupted) {
-      lights.SetLightState(LightStates.CarryingNote);
-    }
+    /*
+     * if (!interrupted) {
+     * lights.SetLightState(LightStates.CarryingNote);
+     * }
+     */
     System.out.println("elapsed time is: " + (timer.millis() - startTime));
   }
 }

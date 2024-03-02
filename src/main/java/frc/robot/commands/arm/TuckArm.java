@@ -5,7 +5,6 @@ import frc.robot.Constants.Arm;
 import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
-
 import java.time.Clock;
 
 public class TuckArm extends Command {

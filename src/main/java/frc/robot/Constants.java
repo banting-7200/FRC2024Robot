@@ -93,18 +93,10 @@ public final class Constants {
     public static final long s_stateChangeDelay = 8;
 
     public static final int smartMotionSlot = 0;
-    /*
-     * public static final double maxMotorVelocity = 1700; // max motor velocity in
-     * rpm
-     * public static final double minMotorVelocity = 0;
-     * public static final double maxMotorAccel = 1400;
-     * public static final double allowedPIDError = 0;
-     */
 
     // Arm movement constants
-    // Todo: find the min-max safe range to tuck the shooter
     public static final double tuckSafeMin =
-        25; // Robot hard max 11 ticks, min must be further tuned later
+        25; // Robot hard min 25 ticks, min must be further tuned later
     public static final double armGearRatio = 400;
 
     public static final double tuckArmAngle = 24;
@@ -162,6 +154,7 @@ public final class Constants {
 
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
+    public static final double creepSpeedMultiplier = 0.7;
   }
 
   public static class OperatorConstants {
@@ -171,5 +164,24 @@ public final class Constants {
     public static final double LEFT_Y_DEADBAND = 0.1;
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT = 6;
+  }
+
+  public static final class AprilTagID {
+    public static final int blueSourceInner = 1;
+    public static final int blueSourceOuter = 2;
+    public static final int redSpeakerSide = 3;
+    public static final int redSpeakerMiddle = 4;
+    public static final int redAmp = 5;
+    public static final int blueAmp = 6;
+    public static final int blueSpeakerMiddle = 7;
+    public static final int blueSpeakerSide = 8;
+    public static final int redSourceOuter = 9;
+    public static final int redSourceInner = 10;
+    public static final int redStageSourceSide = 11;
+    public static final int redStageAmpSide = 12;
+    public static final int redStageMiddle = 13;
+    public static final int blueStageMiddle = 14;
+    public static final int blueStageAmpSide = 15;
+    public static final int blueStageSourceSide = 16;
   }
 }

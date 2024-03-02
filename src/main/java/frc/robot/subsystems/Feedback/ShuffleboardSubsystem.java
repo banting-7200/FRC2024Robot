@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import java.awt.Color;
 import edu.wpi.first.wpilibj2.command.Command;
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class ShuffleboardSubsystem {
 
   private ShuffleboardSubsystem() {}
 
-//Singleton instance of the shuffleboard class
+  // Singleton instance of the shuffleboard class
   public static synchronized ShuffleboardSubsystem getInstance() {
     if (instance == null) {
       instance = new ShuffleboardSubsystem();
@@ -64,8 +64,8 @@ public class ShuffleboardSubsystem {
       String name, double value) { // creates or sets a double on the shuffleboard.
     GenericEntry entry;
     int index = entryNames.indexOf(name);
-    if (index == -1) {//If this entry does not exist
-      if (layout != null) { //if theres no layout selected
+    if (index == -1) { // If this entry does not exist
+      if (layout != null) { // if theres no layout selected
         entry = layout.add(name, value).withWidget(BuiltInWidgets.kTextView).getEntry();
       } else {
         entry = tab.add(name, value).withWidget(BuiltInWidgets.kTextView).getEntry();
@@ -160,8 +160,8 @@ public class ShuffleboardSubsystem {
       double direction) { // create a named list layout of swerve motor and
     // direction values.
     setLayout(name, 2, 2);
-    setNumber(name + " Speed", speed, BuiltInWidgets.kDial);
-    setNumber(name + " Direction", direction, BuiltInWidgets.kGyro);
+    setNumber(name + " Speed", speed, BuiltInWidgets.kDial); //todo:see if max and mins needs to be set.
+    setNumber(name + " Direction", direction, BuiltInWidgets.kGyro); //same here
   }
 
   public void setPID(
@@ -242,14 +242,18 @@ public class ShuffleboardSubsystem {
     }
   }
 
-     public void setColour(String name, Color colour){ //custom colour widget
+  public void setColour(String name, Color colour) { // custom colour widget
     GenericEntry entry;
     int index = entryNames.indexOf(name);
-      if (layout != null) {
-        entry = layout.add(name, true).withProperties(Map.of("colorWhenTrue", colour)).getEntry();
-      } else {
-        entry = tab.add(name, true).withWidget(BuiltInWidgets.kBooleanBox).withProperties(Map.of("colorWhenTrue", colour)).getEntry();
-      }
+    if (layout != null) {
+      entry = layout.add(name, true).withProperties(Map.of("colorWhenTrue", colour)).getEntry();
+    } else {
+      entry =
+          tab.add(name, true)
+              .withWidget(BuiltInWidgets.kBooleanBox)
+              .withProperties(Map.of("colorWhenTrue", colour))
+              .getEntry();
+    }
     if (index == -1) {
       entryNames.add(name);
       entries.add(entry);

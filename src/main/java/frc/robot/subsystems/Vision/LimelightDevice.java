@@ -3,15 +3,19 @@ package frc.robot.subsystems.Vision;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.AprilTagID;
 import frc.robot.Constants.Arm;
+import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 
 public class LimelightDevice extends SubsystemBase {
   private NetworkTable mainTable;
   public int mode;
   private static LimelightDevice instance = null;
+  ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
+  public int speakerMiddleTag;
+  public int speakerSideTag;
+  public int ampTag;
 
   public static synchronized LimelightDevice getInstance() {
     if (instance == null) {
@@ -20,52 +24,83 @@ public class LimelightDevice extends SubsystemBase {
     return instance;
   }
 
-  public LimelightDevice() { // initializes device
-    mainTable =
-        NetworkTableInstance.getDefault().getTable("limelight"); // gets the network table with key
-    // "limelight"
-    mode = 0;
+  public void shuffleSetUp() {
+    shuffle.setTab("Limelight Data");
 
-    // m_XP = ShuffleboardInfo.getInsatnce().
+    shuffle.addCamera("Limelight Stream", "Limelight", "10.72.0.11:5800");
+
+    shuffle.setLayout("Limelight Config");
+    shuffle.setBoolean("LEDs On", false);
+    shuffle.setNumber("Pipeline", -1);
+
+    shuffle.setLayout("Tag", 2, 4);
+    shuffle.setBoolean("Tag Detected", false);
+    shuffle.setNumber("Tag ID", -1);
+    shuffle.setNumber("Tag X", -1);
+    shuffle.setNumber("Tag Y", -1);
+    shuffle.setNumber("Tag Area", -1);
+    shuffle.setLayout(null);
+  }
+
+  public void shuffleUpdate() {
+    double ledMode = mainTable.getEntry("ledMode").getDouble(0);
+    double pipeline = mainTable.getEntry("pipeline").getDouble(0);
+    double ttarget = mainTable.getEntry("tv").getDouble(0);
+    double tid = mainTable.getEntry("tid").getDouble(-1);
+    double tx = mainTable.getEntry("tx").getDouble(0);
+    double ty = mainTable.getEntry("ty").getDouble(0);
+    double ta = mainTable.getEntry("ta").getDouble(0);
+
+    boolean ledOn = ledMode == 3 ? true : false;
+    boolean tdetected = ttarget == 0 ? false : true;
+
+    shuffle.setBoolean("LEDs On", ledOn);
+    shuffle.setNumber("Pipeline", pipeline);
+    shuffle.setBoolean("Tag Detected", tdetected);
+    shuffle.setNumber("Tag ID", tid);
+    shuffle.setNumber("Tag X", tx);
+    shuffle.setNumber("Tag Y", ty);
+    shuffle.setNumber("Tag Area", ta);
   }
 
   public void setLight(boolean on) { // toggles lights (true for on, false for off)
     mainTable.getEntry("ledMode").setNumber(on ? 3 : 1);
+    shuffle.setBoolean("LEDs On", on);
   }
 
-  public void setMode(int selection) {
-    mode = selection;
+  public void setMode(int selection) { // sets pipeline
     mainTable.getEntry("pipeline").setNumber(selection);
-  }
-
-  public int getTagID() { // returns id of apriltag or -1 if no tag is detected.
-    double tid = mainTable.getEntry("tid").getDouble(-1);
-    SmartDashboard.putNumber("AprilTag ID", tid);
-    return (int) tid;
+    shuffle.setNumber("Pipeline", selection);
   }
 
   public boolean tagDetected() { // returns true if tag is detected
     double ttarget = mainTable.getEntry("tv").getDouble(0);
     boolean tdetected = ttarget == 0 ? false : true;
-    SmartDashboard.putBoolean("AprilTag Detected", tdetected);
+    shuffle.setBoolean("Tag Detected", tdetected);
     return tdetected;
+  }
+
+  public int getTagID() { // returns id of apriltag or -1 if no tag is detected.
+    int tid = (int) mainTable.getEntry("tid").getDouble(-1);
+    shuffle.setNumber("Tag ID", tid);
+    return tid;
   }
 
   public double getTagArea() { // return tag area
     double ta = mainTable.getEntry("ta").getDouble(0);
-    SmartDashboard.putNumber("Tag Area", ta);
+    shuffle.setNumber("Tag Area", ta);
     return ta;
   }
 
   public double getTagX() { // return tag x value (horizontal across camera screen)
     double tx = mainTable.getEntry("tx").getDouble(0);
-    SmartDashboard.putNumber("Tag X", tx);
+    shuffle.setNumber("Tag X", tx);
     return tx;
   }
 
   public double getTagY() { // return tag y value (vertical across camera screen)
     double ty = mainTable.getEntry("ty").getDouble(0);
-    SmartDashboard.putNumber("Tag Y", ty);
+    shuffle.setNumber("Tag Y", ty);
     return ty;
   }
 
@@ -81,40 +116,33 @@ public class LimelightDevice extends SubsystemBase {
         * (180.0 / 3.14159);
   }
 
-  public void putTagData() { // publishes tag data to SmartDashboard
-    double ttarget = mainTable.getEntry("tv").getDouble(0); // may have to be double then converted
-    double tx = mainTable.getEntry("tx").getDouble(0);
-    double ty = mainTable.getEntry("ty").getDouble(0);
-    double ta = mainTable.getEntry("ta").getDouble(0);
-    double tid = mainTable.getEntry("tid").getDouble(-1);
-    boolean tdetected = ttarget == 0 ? false : true;
-
-    SmartDashboard.putBoolean("AprilTag Detected", tdetected);
-    SmartDashboard.putNumber("Tag X", tx);
-    SmartDashboard.putNumber("Tag Y", ty);
-    SmartDashboard.putNumber("Tag Area", ta);
-    SmartDashboard.putNumber("AprilTag ID", tid);
-  }
-
-  public boolean
-      noteDetected() { // posts limelight note pipelinedata to SmartDashboard & returns true if note
-    // is
-    // detected
-    double ntarget = mainTable.getEntry("tv").getDouble(0); // may have to be double then converted
-    double nx = mainTable.getEntry("tx").getDouble(0);
-    double ny = mainTable.getEntry("ty").getDouble(0);
-    double na = mainTable.getEntry("ta").getDouble(0);
-    boolean ndetected = ntarget == 0 ? false : true;
-
-    SmartDashboard.putBoolean("Note Detected", ndetected);
-    SmartDashboard.putNumber("Note X", nx);
-    SmartDashboard.putNumber("Note Y", ny);
-    SmartDashboard.putNumber("Note Size", na);
-    return ndetected;
-  }
-
   public Pose2d getFakeTagPose() { // input fake tag values for simulation
-    // Can't take negative values because it is trying to pathfind out of the feild
+    // Can't take negative values because it is trying to pathfind out of the field
     return new Pose2d(2.98, 4, new Rotation2d(33));
+  }
+
+  public void refreshRelevantTags(
+      boolean isRed) { // sets april tag ids depending on alliance from driverstation
+    if (isRed) {
+      speakerMiddleTag = AprilTagID.redSpeakerMiddle;
+      speakerSideTag = AprilTagID.redSpeakerSide;
+      ampTag = AprilTagID.redAmp;
+    } else {
+      speakerMiddleTag = AprilTagID.blueSpeakerMiddle;
+      speakerSideTag = AprilTagID.blueSpeakerSide;
+      ampTag = AprilTagID.blueAmp;
+    }
+  }
+
+  public int getSpeakerMiddleTag() {
+    return speakerMiddleTag;
+  }
+
+  public int getSpeakerSideTag() {
+    return speakerSideTag;
+  }
+
+  public int getAmpTag() {
+    return ampTag;
   }
 }

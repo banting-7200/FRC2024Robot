@@ -3,7 +3,7 @@ package frc.robot.subsystems.Solenoids;
 import edu.wpi.first.wpilibj.Solenoid;
 
 public class SolenoidActions {
-  private final Solenoid jrSolenoid;// jr = java reticulating
+  private final Solenoid jrSolenoid; // jr = java reticulating
 
   public SolenoidActions(Solenoid solenoid) {
     jrSolenoid = solenoid;

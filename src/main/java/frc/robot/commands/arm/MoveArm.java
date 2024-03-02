@@ -3,7 +3,6 @@ package frc.robot.commands.arm;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Arm;
 import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
-
 import java.util.function.DoubleSupplier;
 
 public class MoveArm extends Command {

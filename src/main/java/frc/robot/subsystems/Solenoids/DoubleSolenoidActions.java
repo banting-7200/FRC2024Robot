@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 public class DoubleSolenoidActions {
-  private DoubleSolenoid McDoubleSolenoid;// mc == master class
+  private DoubleSolenoid McDoubleSolenoid; // mc == master class
 
   public DoubleSolenoidActions(DoubleSolenoid solenoid) {
     McDoubleSolenoid = solenoid;
@@ -21,7 +21,8 @@ public class DoubleSolenoidActions {
   }
 
   public void toggle() {
-    if (McDoubleSolenoid.get() == DoubleSolenoid.Value.kOff) {//Set the solenoid forward if no state is set.
+    if (McDoubleSolenoid.get()
+        == DoubleSolenoid.Value.kOff) { // Set the solenoid forward if no state is set.
       McDoubleSolenoid.set(Value.kForward);
     } else {
       McDoubleSolenoid.toggle();

@@ -12,19 +12,20 @@ public class LightSubsystem {
   private final AddressableLEDBuffer statusBuffer;
 
   private static LightSubsystem instance = null; // creates Singleton instance
-  private ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();//Gets shuffleboard instance
+  private ShuffleboardSubsystem shuffle =
+      ShuffleboardSubsystem.getInstance(); // Gets shuffleboard instance
 
-  private LimelightDevice limelight = LimelightDevice.getInstance();//Gets limelight instance
+  private LimelightDevice limelight = LimelightDevice.getInstance(); // Gets limelight instance
 
   public enum LightStates {
-    ReadyForPickup, //in intake position and intake on
-    NotePickedUp, //note detected in intake
-    CarryingNote, //in carry position with note in intake
-    ReadyToSPEAKER, //in position to score in speaker
-    ReadyToAMP, //in position to score in amp
+    ReadyForPickup, // in intake position and intake on
+    NotePickedUp, // note detected in intake
+    CarryingNote, // in carry position with note in intake
+    ReadyToSPEAKER, // in position to score in speaker
+    ReadyToAMP, // in position to score in amp
   }
 
-  //Initializes shuffleboard
+  // Initializes shuffleboard
   public void shuffleSetup() {
     shuffle.setTab("Lights");
     shuffle.setText("Mode", "No Mode Selected");
@@ -33,7 +34,7 @@ public class LightSubsystem {
   // if no instance has been made, create one.
   // Otherwise, reference the already made instance.
   // Ensures only one instance can be made.
-  public static synchronized LightSubsystem getInstance() { 
+  public static synchronized LightSubsystem getInstance() {
     if (instance == null) {
       instance = new LightSubsystem(Lights.lightID, Lights.lightStringLength);
     }
@@ -41,8 +42,9 @@ public class LightSubsystem {
   }
 
   private LightSubsystem(int lightPort, int stringLength) {
-    statusLights = new AddressableLED(lightPort);//Inititalizes light string with passed in values
-    statusBuffer = new AddressableLEDBuffer(stringLength);//Inititalizes light buffer with passed in values
+    statusLights = new AddressableLED(lightPort); // Inititalizes light string with passed in values
+    statusBuffer =
+        new AddressableLEDBuffer(stringLength); // Inititalizes light buffer with passed in values
     statusLights.setLength(stringLength);
     statusLights.start();
   }
@@ -51,17 +53,21 @@ public class LightSubsystem {
     int id = -1;
     switch (stateToSet) {
       case ReadyForPickup:
-       setSolid(Color.RED);
+        setSolid(Color.RED);
         break;
       case NotePickedUp:
-       setSolid(Color.GREEN);
+        setSolid(Color.GREEN);
         break;
       case CarryingNote:
         setSolid(Color.ORANGE);
         break;
       case ReadyToAMP:
-        id = limelight.getTagID(); //todo: remove limelight subsystem from here and replace with function for limelight subsystem
-        if (id == 3 || id == 4 || id == 7 || id == 8) { //todo: set speaker id in constants on startup based on aliance colour
+        id =
+            limelight
+                .getTagID(); // todo: remove limelight subsystem from here and replace with function
+        // for limelight subsystem
+        if (id == 3 || id == 4 || id == 7
+            || id == 8) { // todo: set speaker id in constants on startup based on aliance colour
           setSolid(Color.BLUE);
         } else {
           setDashed(Color.BLUE, Color.BLACK);
@@ -69,7 +75,7 @@ public class LightSubsystem {
         break;
       case ReadyToSPEAKER:
         id = limelight.getTagID();
-        if (id == 5 || id == 6) { //todo: same here with amp id
+        if (id == 5 || id == 6) { // todo: same here with amp id
           setSolid(Color.PINK);
         } else {
           setDashed(Color.PINK, Color.BLACK);
@@ -81,14 +87,15 @@ public class LightSubsystem {
     }
     shuffle.setText("Mode", stateToSet.toString());
   }
-  
+
   public void setSolid(Color colour) { // set to specific colour
     for (int i = 0; i < statusBuffer.getLength(); i++) {
       statusBuffer.setRGB(i, colour.getGreen(), colour.getRed(), colour.getBlue());
     }
     statusLights.setData(statusBuffer);
+    shuffle.setTab("Data");
+    shuffle.setColour("Lights", colour);
   }
-
 
   public void setDashed(Color colour1, Color colour2) {
     for (int i = 0; i < statusBuffer.getLength(); i++) {
@@ -97,8 +104,8 @@ public class LightSubsystem {
       } else {
         statusBuffer.setRGB(i, colour2.getGreen(), colour2.getRed(), colour2.getBlue());
       }
-      shuffle.setTab("Lights");
-      shuffle.setColour("Light Colour", colour1);
+      shuffle.setTab("Data");
+      shuffle.setColour("Light Colour", colour1.darker());
     }
     statusLights.setData(statusBuffer);
   }

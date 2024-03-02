@@ -5,24 +5,15 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.subsystems.Vision.LimelightDevice;
-import frc.robot.subsystems.Feedback.LightSubsystem;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
-import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
-import swervelib.parser.SwerveParser;
+import java.io.File;
 import java.io.IOException;
-import java.io.File; 
-import edu.wpi.first.wpilibj.Filesystem;
-
-
+import swervelib.parser.SwerveParser;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -33,11 +24,11 @@ import edu.wpi.first.wpilibj.Filesystem;
 public class Robot extends TimedRobot {
 
   private static Robot instance; // Creates tehe Robotn.java instance
-  private RobotContainer m_robotContainer; // Creates the Robotcontainer instance 
-  private Command m_autonomousCommand;//The command that stores our auto
+  private RobotContainer m_robotContainer; // Creates the Robotcontainer instance
+  private Command m_autonomousCommand; // The command that stores our auto
 
   private Timer disabledTimer; // Normal Robot container instance
-  ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance(); 
+  ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
 
   public Robot() {
     instance = this;
@@ -58,14 +49,12 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
 
- 
     // immediately when disabled, but then also let it be pushed more
     disabledTimer = new Timer();
 
-
-    //start capture of connect camera to rio for the live stream camera
-    //displays output of stream to shuffle board 
-     CameraServer.startAutomaticCapture("Front Camera", 0);
+    // start capture of connect camera to rio for the live stream camera
+    // displays output of stream to shuffle board
+    CameraServer.startAutomaticCapture("Front Camera", 0);
   }
 
   /**
@@ -85,6 +74,8 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+
+    m_robotContainer.setShuffleboard();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -102,13 +93,14 @@ public class Robot extends TimedRobot {
       m_robotContainer.setMotorBrake(false);
       disabledTimer.stop();
     }
+    m_robotContainer.refreshTagIDs();
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    //m_robotContainer.setMotorBrake(true);
-    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // m_robotContainer.setMotorBrake(true);
+    // m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -134,17 +126,17 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic(){}
+  public void teleopPeriodic() {}
 
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-     try {
+    try {
       new SwerveParser(new File(Filesystem.getDeployDirectory(), "swerve"));
     } catch (IOException e) {
       throw new RuntimeException(e);
-    } 
+    }
   }
 
   /** This function is called periodically during test mode. */

@@ -8,6 +8,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.maxCommandWaitTime;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
@@ -27,6 +28,7 @@ public class intakeCommand extends Command {
   boolean notelock2 = false;
   boolean shooterHasNotePrev = false;
   boolean hasNote;
+  long commandInitMillis;
 
   private LightSubsystem lights = LightSubsystem.getInstance();
 
@@ -53,6 +55,7 @@ public class intakeCommand extends Command {
     notelock = false;
     notelock2 = false;
     shooterHasNotePrev = false;
+    commandInitMillis = currentTime.millis();
   }
 
   @Override
@@ -86,7 +89,8 @@ public class intakeCommand extends Command {
   }
 
   public boolean isFinished() {
-    return shooter.shooterHasNote() == false && openOrClosedCounter == 1;
+    return (shooter.shooterHasNote() == false && openOrClosedCounter == 1)
+        || (currentTime.millis() - commandInitMillis > maxCommandWaitTime.intakeCommandWaitTime);
   }
 
   @Override
@@ -95,9 +99,11 @@ public class intakeCommand extends Command {
     lights.SetLightState(LightStates.NotePickedUp);
     System.out.println("Intake Command ShutDown");
     System.out.println("Has Note state is currently: " + shooter.getHasNoteState());
-    /*  if (!interrupted) {
-      shooter.setHasNoteState(true);
-    } */
+    /*
+     * if (!interrupted) {
+     * shooter.setHasNoteState(true);
+     * }
+     */
   }
 }
 

@@ -6,6 +6,7 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.maxCommandWaitTime;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
@@ -18,7 +19,7 @@ public class shootCommand extends Command {
   private boolean hasNotBeenDetected = false;
   LightSubsystem lights = LightSubsystem.getInstance();
   Clock currentTime = Clock.systemDefaultZone();
-  long startedMillis = currentTime.millis();
+  long startedMillis;
   long currentMillis;
   long sinceNoteLeft;
   long sinceIntakeMotor;
@@ -43,6 +44,7 @@ public class shootCommand extends Command {
   public void initialize() {
     sinceIntakeMotor = currentTime.millis();
     sinceNoteLeft = currentTime.millis();
+    startedMillis = currentTime.millis();
     hasSeenNote = false;
     hasNote = shooter.getHasNoteState();
     shooter.stopIntakeMotor();
@@ -50,7 +52,6 @@ public class shootCommand extends Command {
 
   @Override
   public void execute() {
-
     currentMillis = currentTime.millis(); // records current time
     shooter.spinShootToRPM(rpm.getAsInt()); // spins the shooters
     if ((currentMillis - sinceIntakeMotor)
@@ -72,11 +73,13 @@ public class shootCommand extends Command {
   }
 
   public boolean isFinished() {
-    return (currentMillis - sinceNoteLeft) > 1000 && hasSeenNote == true;
+    return ((currentMillis - sinceNoteLeft) > 1000 && hasSeenNote == true)
+        || (currentMillis - startedMillis > maxCommandWaitTime.shootCommandWaitTime);
   }
 
   @Override
   public void end(boolean interrupted) {
+
     shooter.stopShootMotor();
     shooter.stopIntakeMotor();
     System.out.println("Shooting Done");

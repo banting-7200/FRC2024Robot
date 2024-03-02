@@ -2,6 +2,7 @@ package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Arm;
+import frc.robot.Constants.maxCommandWaitTime;
 import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
 import java.time.Clock;
 
@@ -43,7 +44,7 @@ public class UntuckArm extends Command {
 
   @Override
   public boolean isFinished() {
-    return !arm.isTucked();
+    return !arm.isTucked() || (timer.millis() - startTime) > maxCommandWaitTime.unTuckWaitTime;
   }
 
   @Override

@@ -4,8 +4,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.maxCommandWaitTime;
 import frc.robot.subsystems.Vision.LimelightDevice;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import java.time.Clock;
 import java.util.function.IntSupplier;
 
 public class AprilTagAlign extends Command {
@@ -20,6 +22,10 @@ public class AprilTagAlign extends Command {
   private double targetArea;
 
   private IntSupplier tagToAlign;
+
+  private Clock currentTime = Clock.systemDefaultZone();
+  private long startedMillis;
+  private long currentMillis;
 
   public AprilTagAlign(
       SwerveSubsystem swerveSubsystem,
@@ -50,10 +56,15 @@ public class AprilTagAlign extends Command {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    startedMillis = currentTime.millis();
+  }
 
   @Override
   public void execute() {
+
+    currentMillis = currentTime.millis(); // records current time
+
     double fowardAdjust = 0;
     double rotationAdjust = 0;
 
@@ -74,7 +85,8 @@ public class AprilTagAlign extends Command {
 
   @Override
   public boolean isFinished() {
-    return positionController.atSetpoint() && rotationController.atSetpoint();
+    return (positionController.atSetpoint() && rotationController.atSetpoint())
+        || currentMillis - startedMillis > maxCommandWaitTime.aprilTagAlignWaitTime;
   }
 
   @Override

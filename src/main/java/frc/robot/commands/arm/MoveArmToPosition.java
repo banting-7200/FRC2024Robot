@@ -1,6 +1,7 @@
 package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.maxCommandWaitTime;
 import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
@@ -60,7 +61,8 @@ public class MoveArmToPosition extends Command {
 
   @Override
   public boolean isFinished() {
-    return reachedSetpoint;
+    return reachedSetpoint
+        || (timer.millis() - startTime) > maxCommandWaitTime.moveArmToPositionWaitTime;
   }
 
   @Override

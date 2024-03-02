@@ -7,7 +7,6 @@
 
 package frc.robot.subsystems.Feedback;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -161,8 +160,9 @@ public class ShuffleboardSubsystem {
       double direction) { // create a named list layout of swerve motor and
     // direction values.
     setLayout(name, 2, 2);
-    setNumber(name + " Speed", speed, BuiltInWidgets.kDial); //todo:see if max and mins needs to be set.
-    setNumber(name + " Direction", direction, BuiltInWidgets.kGyro); //same here
+    setNumber(
+        name + " Speed", speed, BuiltInWidgets.kDial); // todo:see if max and mins needs to be set.
+    setNumber(name + " Direction", direction, BuiltInWidgets.kGyro); // same here
   }
 
   public void setPID(

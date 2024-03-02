@@ -61,7 +61,7 @@ public class ArmSubsystem extends SubsystemBase {
     leftArmMotor = new CANSparkMax(Arm.leftArmMotorID, MotorType.kBrushless);
     rightArmMotor = new CANSparkMax(Arm.rightArmMotorID, MotorType.kBrushless);
 
-    //Assign the limit switches to the ones connected to the right spark
+    // Assign the limit switches to the ones connected to the right spark
     forwardLimitSwitch = rightArmMotor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
     reverseLimitSwitch = rightArmMotor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
 

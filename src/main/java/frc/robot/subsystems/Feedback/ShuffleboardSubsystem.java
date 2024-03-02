@@ -26,7 +26,7 @@ public class ShuffleboardSubsystem {
   ShuffleboardTab tab;
   List<String> entryNames = new ArrayList<String>();
   List<GenericEntry> entries = new ArrayList<GenericEntry>();
-  SendableChooser<PathPlannerAuto> autos;
+  SendableChooser<String> autos;
 
   private ShuffleboardSubsystem() {}
 
@@ -200,7 +200,7 @@ public class ShuffleboardSubsystem {
   }
 
   public void newAutoChooser(
-      SendableChooser<PathPlannerAuto>
+      SendableChooser<String>
           inAutos) { // creates drop down containing autos, doesn't add any functionality to the
     // basic function, just contains everything in the subsystem
     setTab("Pre-Match");
@@ -209,7 +209,7 @@ public class ShuffleboardSubsystem {
     autos.setDefaultOption("No Auto Selected", null);
   }
 
-  public PathPlannerAuto getAuto() { // returns auto from drop down;
+  public String getAuto() { // returns auto from drop down;
     return (autos.getSelected());
   }
 

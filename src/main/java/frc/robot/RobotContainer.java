@@ -147,39 +147,11 @@ public class RobotContainer {
     shuffle.setLayout("Debugging Tools", 1, 4);
     shuffle.setNumber("Arm Goal Position", Arm.ampArmAngle);
     shuffle.newCommandButton("Move Arm To Position", new MoveArmToPosition(arm, shuffle.getNumber("Arm Goal Position"))); 
-    // Applies deadbands and inverts controls because joysticks
-    // are back-right positive while robot
-    // controls are front-left positive
-    // left stick controls translation
-    // right stick controls the desired angle NOT angular rotation
-    Command driveFieldOrientedDirectAngle =
-        drivebase.driveCommand(
-            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-            () -> driverXbox.getRightX(),
-            () -> driverXbox.getRightY());
 
-    // Applies deadbands and inverts controls because joysticks
-    // are back-right positive while robot
-    // controls are front-left positive
-    // left stick controls translation
-    // right stick controls the angular velocity of the robot
-    Command driveFieldOrientedAnglularVelocity =
-        drivebase.driveCommand(
-            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-            () -> driverXbox.getRawAxis(2));
-
-    Command driveFieldOrientedDirectAngleSim =
-        drivebase.simDriveCommand(
-            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-            () -> driverXbox.getRawAxis(2));
-
-    drivebase.setDefaultCommand(
-        !RobotBase.isSimulation()
-            ? driveFieldOrientedDirectAngle
-            : driveFieldOrientedDirectAngleSim);
+    shuffle.newCommandButton("Move To Amp", new MoveArmToPosition(arm, Arm.ampArmAngle));
+    shuffle.newCommandButton("Move To Speaker", new MoveArmToPosition(arm, Arm.speakerArmAngle));
+    shuffle.newCommandButton("Move To Intake", new MoveArmToPosition(arm, Arm.intakeArmAngle));
+    shuffle.newCommandButton("Move To Carry", new MoveArmToPosition(arm, Arm.tuckArmAngle));
 
     // Register Auto Commands
     NamedCommands.registerCommand(
@@ -414,7 +386,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return shuffle.getAuto();
+    return drivebase.getAutonomousCommand(shuffle.getAuto());
   }
 
   public void setDriveMode() {

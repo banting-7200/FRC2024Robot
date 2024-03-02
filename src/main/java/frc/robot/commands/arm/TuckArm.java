@@ -33,7 +33,6 @@ public class TuckArm extends Command {
   @Override
   public void execute() {
     // System.out.println(ranTuckCommand);
-    // System.out.println(ranTuckCommand);
     if (arm.getEncoderPosition() >= Arm.tuckSafeMin) {
       if (!ranTuckCommand) {
         arm.tuckShooter();
@@ -43,8 +42,6 @@ public class TuckArm extends Command {
       // move to safe tuck pos
       arm.moveToAngle(Arm.tuckSafeMin + 2);
     }
-    // System.out.println("is it safe to tuck: " + (arm.getEncoderPosition() >=
-    // Arm.tuckSafeMin));
     // System.out.println("is it safe to tuck: " + (arm.getEncoderPosition() >= Arm.tuckSafeMin));
   }
 

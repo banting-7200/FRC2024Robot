@@ -4,14 +4,22 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Arm;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.Shooter;
 import frc.robot.Constants.copilotController;
 import frc.robot.commands.arm.MoveArm;
@@ -53,6 +61,10 @@ public class RobotContainer {
   static XboxController driverXbox = new XboxController(0);
   static Joystick CoPilotController = new Joystick(1);
 
+  private SendableChooser<String> autos = new SendableChooser<>();
+  int speakerTag;
+  int ampTag;
+
   // Subsystem Declaration
     private final SwerveSubsystem drivebase =
     new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve/neo"));
@@ -81,7 +93,6 @@ public class RobotContainer {
     shooter = new ShooterSubsystem(arm); // Creating a new instance of Shooter Subsytem
 
     configureBindings();
-
     
       AbsoluteDriveAdv closedAbsoluteDriveAdv = new AbsoluteDriveAdv(drivebase,
       () -> MathUtil.applyDeadband(driverXbox.getLeftY(),
@@ -136,6 +147,67 @@ public class RobotContainer {
     shuffle.setLayout("Debugging Tools", 1, 4);
     shuffle.setNumber("Arm Goal Position", Arm.ampArmAngle);
     shuffle.newCommandButton("Move Arm To Position", new MoveArmToPosition(arm, shuffle.getNumber("Arm Goal Position"))); 
+    // Applies deadbands and inverts controls because joysticks
+    // are back-right positive while robot
+    // controls are front-left positive
+    // left stick controls translation
+    // right stick controls the desired angle NOT angular rotation
+    Command driveFieldOrientedDirectAngle =
+        drivebase.driveCommand(
+            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> driverXbox.getRightX(),
+            () -> driverXbox.getRightY());
+
+    // Applies deadbands and inverts controls because joysticks
+    // are back-right positive while robot
+    // controls are front-left positive
+    // left stick controls translation
+    // right stick controls the angular velocity of the robot
+    Command driveFieldOrientedAnglularVelocity =
+        drivebase.driveCommand(
+            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> driverXbox.getRawAxis(2));
+
+    Command driveFieldOrientedDirectAngleSim =
+        drivebase.simDriveCommand(
+            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> driverXbox.getRawAxis(2));
+
+    drivebase.setDefaultCommand(
+        !RobotBase.isSimulation()
+            ? driveFieldOrientedDirectAngle
+            : driveFieldOrientedDirectAngleSim);
+
+    // Register Auto Commands
+    NamedCommands.registerCommand(
+        "Print", Commands.runOnce(() -> System.out.println("Events work!!!")));
+
+    NamedCommands.registerCommand(
+        "Intake",
+        new intakeCommand(
+            Shooter.intakeRPM, Shooter.pullBackRPM, Shooter.correctPositioningRPM, shooter));
+    NamedCommands.registerCommand(
+        "Shoot", new shootCommand(Shooter.speakerShootRPM, shooter, Shooter.speakerWaitTime));
+    NamedCommands.registerCommand("Prep Intake", new MoveArmToPosition(arm, Arm.intakeArmAngle));
+    NamedCommands.registerCommand("Prep Shoot", new MoveArmToPosition(arm, Arm.armToShooterAngle));
+    NamedCommands.registerCommand(
+        "Note Align", Commands.runOnce(() -> System.out.println("Note align")));
+    NamedCommands.registerCommand(
+        "Shoot Align", new AprilTagAlign(drivebase, limelight, 2, 12)); // fill in area and
+    // tag id
+    NamedCommands.registerCommand("Amp Align", new AprilTagAlign(drivebase, limelight, 2, 12));
+    NamedCommands.registerCommand("Prep Amp", new MoveArmToPosition(arm, Arm.ampArmAngle));
+    
+    // Initialize sendable chooser for autos
+    autos = new SendableChooser();
+    autos.addOption("Left Start", "Left Start Auto");
+    autos.addOption("Mid Start", "Mid Start Auto");
+    autos.addOption("Right Start", "(R) 4 in Speaker");
+
+    shuffle.newAutoChooser(autos);
   }
 
   /**
@@ -340,11 +412,10 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand()
-  // {
-  // An example command will be run in autonomous
-  // return drivebase.getAutonomousCommand("New Path", true);
-  // }
+  public Command getAutonomousCommand() {
+    // An example command will be run in autonomous
+    return shuffle.getAuto();
+  }
 
   public void setDriveMode() {
     //drivebase.setDefaultCommand();
@@ -376,11 +447,6 @@ public class RobotContainer {
     return drivebase.getPose();
     }
 
-    /*
-        * public Pose2d getRobotPose() {
-        * return drivebase.getPose();
-        * }
-        */
 
     public void setShuffleboard(){
         arm.setShuffleboard();

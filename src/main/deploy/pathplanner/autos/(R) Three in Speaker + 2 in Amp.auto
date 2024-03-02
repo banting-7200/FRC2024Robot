@@ -1,0 +1,133 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.25,
+      "y": 4.1
+    },
+    "rotation": 135.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(R) Right Close Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(R) Middle Close Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(M) Leftmost Close Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "To Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Amp Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "To Far Left"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(L) Left Far Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "To Amp"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems.Feedback;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -25,7 +26,7 @@ public class ShuffleboardSubsystem {
   ShuffleboardTab tab;
   List<String> entryNames = new ArrayList<String>();
   List<GenericEntry> entries = new ArrayList<GenericEntry>();
-  SendableChooser<String> autos;
+  SendableChooser<PathPlannerAuto> autos;
 
   private ShuffleboardSubsystem() {}
 
@@ -199,16 +200,16 @@ public class ShuffleboardSubsystem {
   }
 
   public void newAutoChooser(
-      SendableChooser<String>
+      SendableChooser<PathPlannerAuto>
           inAutos) { // creates drop down containing autos, doesn't add any functionality to the
     // basic function, just contains everything in the subsystem
     setTab("Pre-Match");
     autos = inAutos;
     tab.add("Autos", autos).withSize(2, 1);
-    autos.setDefaultOption("No Auto Selected", "None");
+    autos.setDefaultOption("No Auto Selected", null);
   }
 
-  public String getAuto() { // returns auto from drop down;
+  public PathPlannerAuto getAuto() { // returns auto from drop down;
     return (autos.getSelected());
   }
 

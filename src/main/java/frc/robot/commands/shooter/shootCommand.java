@@ -25,9 +25,10 @@ public class shootCommand extends Command {
   IntSupplier rpm; // Int supplier for different shoot rpm's(speaker/amp)
   Boolean hasSeenNote = false; // if note has been detected yet
   IntSupplier waitTime; // Int supplier for different wait times(speaker/amp)
-  boolean hasNote; // This variables is used for telling whether the note is already in the shooter
+  boolean
+      hasNote; // This variables is used for telling whether the note is already in the shooter or
 
-  // or not
+  // not
 
   public shootCommand(IntSupplier rpm, ShooterSubsystem shooter, IntSupplier waitTime) {
     this.rpm = rpm;
@@ -43,13 +44,12 @@ public class shootCommand extends Command {
 
   @Override
   public void initialize() {
-    // Initialize values
     sinceIntakeMotor = currentTime.millis();
     sinceNoteLeft = currentTime.millis();
     startedMillis = currentTime.millis();
     hasSeenNote = false;
     hasNote = shooter.getHasNoteState();
-    shooter.stopIntakeMotor(); // Stop the intake motor(failsafe)
+    shooter.stopIntakeMotor(); // Stop the intake motor
   }
 
   @Override
@@ -71,8 +71,8 @@ public class shootCommand extends Command {
         hasSeenNote = true;
         System.out.println("SAW THE NOTE");
       }
-      System.out.println(hasSeenNote);
     }
+    System.out.println(hasSeenNote);
   }
 
   public boolean isFinished() {
@@ -82,13 +82,14 @@ public class shootCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
+
     shooter.stopShootMotor();
     shooter.stopIntakeMotor();
     System.out.println("Shooting Done");
+    lights.SetLightState(LightStates.ReadyForPickup);
+    System.out.println("Has Note state is currently: " + shooter.getHasNoteState());
     if (!interrupted) {
-      lights.SetLightState(LightStates.ReadyForPickup);
       shooter.setHasNoteState(false);
     }
-    System.out.println("Has Note state is currently: " + shooter.getHasNoteState());
   }
 }

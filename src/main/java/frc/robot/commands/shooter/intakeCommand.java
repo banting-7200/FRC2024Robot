@@ -47,6 +47,7 @@ public class intakeCommand extends Command {
 
   @Override
   public void initialize() {
+    System.out.println("Has Note state is currently@IntakeStart: " + shooter.getHasNoteState());
     System.out.println("I GOT TO INIT");
     startedMillis = 0;
     override = false;
@@ -80,17 +81,6 @@ public class intakeCommand extends Command {
           shooter.spinIntakeToPositiveRPM(pullBackRPM); // Pull back the note
           override = true;
         }
-      } else {
-        if (notelock2 == false) { // If we have not started correcting
-          shooter.spinIntakeToNegativeRPM(correctPositioningRPM); // Start Correcting
-          if (shooter.shooterHasNote() == false
-              && shooterHasNotePrev == true) { // If we no longer have a note, but a
-            // note was detected last robot loop
-            notelock2 = true;
-          }
-        } else { // Stop correcting
-          shooter.spinIntakeToNegativeRPM(0);
-        }
       }
       shooterHasNotePrev =
           shooter
@@ -100,7 +90,7 @@ public class intakeCommand extends Command {
   }
 
   public boolean isFinished() {
-    return (shooter.shooterHasNote() == false && openOrClosedCounter == 1)
+    return (notelock == true)
         || (currentTime.millis() - commandInitMillis > maxCommandWaitTime.intakeCommandWaitTime);
   }
 
@@ -109,7 +99,7 @@ public class intakeCommand extends Command {
     shooter.stopIntakeMotor();
     lights.SetLightState(LightStates.NotePickedUp);
     System.out.println("Intake Command ShutDown");
-    System.out.println("Has Note state is currently: " + shooter.getHasNoteState());
+    System.out.println("Has Note state is currently@IntakeEnd: " + shooter.getHasNoteState());
     if (!interrupted) {
       shooter.setHasNoteState(true);
     }

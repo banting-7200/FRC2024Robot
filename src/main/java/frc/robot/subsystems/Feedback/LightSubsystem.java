@@ -2,9 +2,9 @@ package frc.robot.subsystems.Feedback;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Constants.Lights;
 import frc.robot.subsystems.Vision.LimelightDevice;
-import java.awt.Color;
 
 public class LightSubsystem {
 
@@ -27,7 +27,7 @@ public class LightSubsystem {
 
   // Initializes shuffleboard
   public void shuffleSetup() {
-    shuffle.setTab("Lights");
+    shuffle.setTab("Lights Tab");
     shuffle.setText("Mode", "No Mode Selected");
   }
 
@@ -53,13 +53,13 @@ public class LightSubsystem {
     int id = -1;
     switch (stateToSet) {
       case ReadyForPickup:
-        setSolid(Color.RED);
+        setSolid(Color.kRed);
         break;
       case NotePickedUp:
-        setSolid(Color.GREEN);
+        setSolid(Color.kGreen);
         break;
       case CarryingNote:
-        setSolid(Color.ORANGE);
+        setSolid(Color.kOrange);
         break;
       case ReadyToAMP:
         id =
@@ -68,21 +68,21 @@ public class LightSubsystem {
         // for limelight subsystem
         if (id == 3 || id == 4 || id == 7
             || id == 8) { // todo: set speaker id in constants on startup based on aliance colour
-          setSolid(Color.BLUE);
+          setSolid(Color.kBlue);
         } else {
-          setDashed(Color.BLUE, Color.BLACK);
+          setDashed(Color.kBlue, Color.kBlack);
         }
         break;
       case ReadyToSPEAKER:
         id = limelight.getTagID();
         if (id == 5 || id == 6) { // todo: same here with amp id
-          setSolid(Color.PINK);
+          setSolid(Color.kPink);
         } else {
-          setDashed(Color.PINK, Color.BLACK);
+          setDashed(Color.kPink, Color.kBlack);
         }
         break;
       default:
-        setSolid(Color.GRAY);
+        setSolid(Color.kGray);
         break;
     }
     shuffle.setText("Mode", stateToSet.toString());
@@ -90,7 +90,7 @@ public class LightSubsystem {
 
   public void setSolid(Color colour) { // set to specific colour
     for (int i = 0; i < statusBuffer.getLength(); i++) {
-      statusBuffer.setRGB(i, colour.getGreen(), colour.getRed(), colour.getBlue());
+      statusBuffer.setRGB(i, (int) colour.green, (int) colour.red, (int) colour.blue);
     }
     statusLights.setData(statusBuffer);
     shuffle.setTab("Data");
@@ -100,12 +100,12 @@ public class LightSubsystem {
   public void setDashed(Color colour1, Color colour2) {
     for (int i = 0; i < statusBuffer.getLength(); i++) {
       if (Math.floor(i / 4) % 2 == 0) {
-        statusBuffer.setRGB(i, colour1.getGreen(), colour1.getRed(), colour1.getBlue());
+        statusBuffer.setRGB(i, (int) colour1.green, (int) colour1.red, (int) colour1.blue);
       } else {
-        statusBuffer.setRGB(i, colour2.getGreen(), colour2.getRed(), colour2.getBlue());
+        statusBuffer.setRGB(i, (int) colour2.green, (int) colour2.red, (int) colour2.blue);
       }
       shuffle.setTab("Data");
-      shuffle.setColour("Light Colour", colour1.darker());
+      shuffle.setColour("Light Colour", Color.kGray);
     }
     statusLights.setData(statusBuffer);
   }

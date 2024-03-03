@@ -91,6 +91,7 @@ public class LimelightDevice extends SubsystemBase {
       tid = (int) mainTable.getEntry("tid").getDouble(-1);
     } catch (NullPointerException e) {
       System.out.println("tid ERROR, EXCEPTION: " + e);
+      tid = -1;
     }
     shuffle.setNumber("Tag ID", tid);
     return tid;

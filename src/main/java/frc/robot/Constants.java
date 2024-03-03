@@ -178,10 +178,10 @@ public final class Constants {
     public static final double TURN_CONSTANT = 6;
   }
 
-public static final class Limelight{
-public static final double speakerTargetArea = 2;
-public static final double ampTargetArea = 2;
-}
+  public static final class Limelight {
+    public static final double speakerTargetArea = 1.15;
+    public static final double ampTargetArea = 2;
+  }
 
   public static final class AprilTagID {
     public static final int blueSourceInner = 1;

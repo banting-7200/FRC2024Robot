@@ -78,10 +78,11 @@ public class RobotContainer {
       ShuffleboardSubsystem.getInstance(); // Getting instance of Shooter
   // Subsystem
 
-  private static boolean isRedAliance =
-      DriverStation.getAlliance().isPresent()
-          ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red
-          : false; // This is a local reference to the DriverStation alliance
+  private BooleanSupplier isRedAliance =
+      () ->
+          DriverStation.getAlliance().isPresent()
+              ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red
+              : false; // This is a local reference to the DriverStation alliance
 
   static boolean speakerShot =
       true; // Whether the robot is ready for a Speaker Shot or not. Initialized to true
@@ -90,9 +91,8 @@ public class RobotContainer {
 
   // first shot is a speaker shot.
 
-public final IntSupplier shootTagToAlign = () -> limelight.getSpeakerMiddleTag();
-public final IntSupplier ampTagToAlign = () -> limelight.getAmpTag();
-
+  public final IntSupplier shootTagToAlign = () -> limelight.getSpeakerMiddleTag();
+  public final IntSupplier ampTagToAlign = () -> limelight.getAmpTag();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -175,9 +175,16 @@ public final IntSupplier ampTagToAlign = () -> limelight.getAmpTag();
     NamedCommands.registerCommand(
         "Note Align", Commands.runOnce(() -> System.out.println("Note align")));
     NamedCommands.registerCommand(
-        "Shoot Align", new AprilTagAlign(drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign)); // fill in area and
+        "Shoot Align",
+        new AprilTagAlign(
+            drivebase,
+            limelight,
+            Limelight.speakerTargetArea,
+            shootTagToAlign)); // fill in area and
     // tag id
-    NamedCommands.registerCommand("Amp Align", new AprilTagAlign(drivebase, limelight, Limelight.ampTargetArea, ampTagToAlign));
+    NamedCommands.registerCommand(
+        "Amp Align",
+        new AprilTagAlign(drivebase, limelight, Limelight.ampTargetArea, ampTagToAlign));
     NamedCommands.registerCommand("Prep Amp", new MoveArmToPosition(arm, Arm.ampArmAngle));
 
     // Initialize sendable chooser for autos
@@ -204,12 +211,13 @@ public final IntSupplier ampTagToAlign = () -> limelight.getAmpTag();
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-
   public static final IntSupplier shooterRPM =
       () -> speakerShot ? Shooter.speakerShootRPM : Shooter.ampShootRPM;
 
   public static final IntSupplier shooterWaitTime =
       () -> speakerShot ? Shooter.speakerWaitTime : Shooter.ampWaitTime;
+
+    public static BooleanSupplier isSpeakerShot = () -> speakerShot;
 
   static JoystickButton upButton =
       new JoystickButton(CoPilotController, copilotController.upButton);
@@ -336,7 +344,8 @@ public final IntSupplier ampTagToAlign = () -> limelight.getAmpTag();
      * tag
      */
     new JoystickButton(CoPilotController, copilotController.limelightButton)
-        .onTrue(new AprilTagAlign(drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign));
+        .onTrue(
+            new AprilTagAlign(drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign));
 
     /*
      * On button press command the arm to move to the angle supplied by the
@@ -411,7 +420,7 @@ public final IntSupplier ampTagToAlign = () -> limelight.getAmpTag();
   }
 
   public void refreshTagIDs() {
-    limelight.refreshRelevantTags(isRedAliance);
+    limelight.refreshRelevantTags(isRedAliance.getAsBoolean());
   }
 
   /*

@@ -5,7 +5,7 @@
       "x": 1.25,
       "y": 4.1
     },
-    "rotation": 135.0
+    "rotation": -45.0
   },
   "command": {
     "type": "sequential",
@@ -24,6 +24,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Prep Intake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "(R) Right Close Note"
@@ -38,7 +44,19 @@
         {
           "type": "named",
           "data": {
+            "name": "Shoot Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Intake"
           }
         },
         {
@@ -56,7 +74,19 @@
         {
           "type": "named",
           "data": {
+            "name": "Shoot Align"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Intake"
           }
         },
         {
@@ -69,6 +99,12 @@
           "type": "named",
           "data": {
             "name": "Prep Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Align"
           }
         },
         {

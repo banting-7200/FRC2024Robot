@@ -170,8 +170,10 @@ public class RobotContainer {
             Shooter.intakeRPM, Shooter.pullBackRPM, Shooter.correctPositioningRPM, shooter));
     NamedCommands.registerCommand(
         "Shoot", new shootCommand(Shooter.speakerShootRPM, shooter, Shooter.speakerWaitTime));
-    NamedCommands.registerCommand("Prep Intake", new MoveArmToPosition(arm, Arm.intakeArmAngle));
-    NamedCommands.registerCommand("Prep Shoot", new MoveArmToPosition(arm, Arm.armToShooterAngle));
+    NamedCommands.registerCommand(
+        "Prep Intake", new UntuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle)));
+    NamedCommands.registerCommand(
+        "Prep Shoot", new TuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.speakerArmAngle)));
     NamedCommands.registerCommand(
         "Note Align", Commands.runOnce(() -> System.out.println("Note align")));
     NamedCommands.registerCommand(
@@ -185,7 +187,8 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "Amp Align",
         new AprilTagAlign(drivebase, limelight, Limelight.ampTargetArea, ampTagToAlign));
-    NamedCommands.registerCommand("Prep Amp", new MoveArmToPosition(arm, Arm.ampArmAngle));
+    NamedCommands.registerCommand(
+        "Prep Amp", new UntuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.ampArmAngle)));
 
     // Initialize sendable chooser for autos
     autos = new SendableChooser();
@@ -217,7 +220,7 @@ public class RobotContainer {
   public static final IntSupplier shooterWaitTime =
       () -> speakerShot ? Shooter.speakerWaitTime : Shooter.ampWaitTime;
 
-    public static BooleanSupplier isSpeakerShot = () -> speakerShot;
+  public static BooleanSupplier isSpeakerShot = () -> speakerShot;
 
   static JoystickButton upButton =
       new JoystickButton(CoPilotController, copilotController.upButton);

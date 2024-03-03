@@ -15,7 +15,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private TalonFX m_intake; // Creating new Intake motor
 
   // Creates a boolean that determines if the note is inside the shooter
-  public boolean hasNote = false;
+  public boolean hasNote = true;
 
   // PID Velocity control for both motors
   VelocityVoltage m_velocity = new VelocityVoltage(0);

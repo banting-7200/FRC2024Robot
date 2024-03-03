@@ -94,7 +94,7 @@ public class shootCommand extends Command {
       hasSeenNote = true;
       System.out.println("SAW THE NOTE");
     }
-    System.out.println(hasSeenNote);
+    System.out.println("Current  HAS NOTE STATE: " + shooter.getHasNoteState());
   }
 
   public boolean isFinished() {

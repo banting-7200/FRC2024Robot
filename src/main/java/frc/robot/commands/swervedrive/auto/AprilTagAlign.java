@@ -77,7 +77,7 @@ public class AprilTagAlign extends Command {
       tagArea = limelightSubsystem.getTagArea();
       fowardAdjust = positionController.calculate(tagArea, targetArea);
       rotationAdjust = rotationController.calculate(limelightSubsystem.getTagX(), 0);
-      swerveSubsystem.drive(new Translation2d(-fowardAdjust, 0), rotationAdjust, false);
+      swerveSubsystem.drive(new Translation2d(fowardAdjust, 0), rotationAdjust, false);
     } else {
       swerveSubsystem.drive(new Translation2d(0, 0), 0, false);
     }

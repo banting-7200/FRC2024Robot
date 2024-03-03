@@ -25,8 +25,9 @@ public class shootCommand extends Command {
   IntSupplier rpm; // Int supplier for different shoot rpm's(speaker/amp)
   Boolean hasSeenNote = false; // if note has been detected yet
   IntSupplier waitTime; // Int supplier for different wait times(speaker/amp)
-  boolean
-      hasNote; // This variables is used for telling whether the note is already in the shooter or
+  boolean hasNote; // This variables is used for telling whether the note is already in the shooter
+
+  // or
 
   // not
 
@@ -44,7 +45,6 @@ public class shootCommand extends Command {
 
   @Override
   public void initialize() {
-    sinceIntakeMotor = currentTime.millis();
     sinceNoteLeft = currentTime.millis();
     startedMillis = currentTime.millis();
     hasSeenNote = false;
@@ -56,12 +56,16 @@ public class shootCommand extends Command {
   public void execute() {
     if (hasNote == true) {
       currentMillis = currentTime.millis(); // records current time
-      shooter.spinShootToRPM(rpm.getAsInt()); // spins the shooters
-      if ((currentMillis - sinceIntakeMotor)
-          > waitTime.getAsInt()) { // waits for 250 ms for it to turn on the shoot
+      if (currentMillis - startedMillis
+          < 100) { // runs until current millis minus started millis until bigger than 100
+        shooter.spinIntakeToPositiveRPM(3000);
+      } else if ((currentMillis - startedMillis) > waitTime.getAsInt()) {
+        // waits for 250 ms for it to turn on the shoot
         // motor
         shooter.spinIntakeToNegativeRPM(rpm.getAsInt()); // runs the shoot motor
         System.out.println("Run Shooter motor");
+      } else {
+        shooter.stopIntakeMotor();
       }
       if (shooter.shooterHasNote() == true) {
         sinceNoteLeft =
@@ -71,6 +75,24 @@ public class shootCommand extends Command {
         hasSeenNote = true;
         System.out.println("SAW THE NOTE");
       }
+      if (currentMillis - startedMillis > 250) {
+        shooter.spinShootToRPM(rpm.getAsInt());
+      }
+    }
+
+    if ((currentMillis - startedMillis)
+        > waitTime.getAsInt()) { // waits for 250 ms for it to turn on the shoot
+      // motor
+      shooter.spinIntakeToNegativeRPM(rpm.getAsInt()); // runs the shoot motor
+      System.out.println("Run Shooter motor");
+    }
+    if (shooter.shooterHasNote() == true) {
+      sinceNoteLeft =
+          currentTime
+              .millis(); // if it see's the note it will set the since note left time for current
+      // time
+      hasSeenNote = true;
+      System.out.println("SAW THE NOTE");
     }
     System.out.println(hasSeenNote);
   }

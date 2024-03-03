@@ -60,10 +60,13 @@ public class AprilTagAlign extends Command {
   public void initialize() {
     shuffle = ShuffleboardSubsystem.getInstance();
     startedMillis = currentTime.millis();
+    System.out.println("Started INTI for April Tag Align");
+    System.out.println("Current tag target ID: " + limelightSubsystem.getTagID());
   }
 
   @Override
   public void execute() {
+    System.out.println("Currently Executing Tag Align command");
 
     currentMillis = currentTime.millis(); // records current time
 
@@ -74,9 +77,9 @@ public class AprilTagAlign extends Command {
       tagArea = limelightSubsystem.getTagArea();
       fowardAdjust = positionController.calculate(tagArea, targetArea);
       rotationAdjust = rotationController.calculate(limelightSubsystem.getTagX(), 0);
-      swerveSubsystem.drive(new Translation2d(fowardAdjust, 0), rotationAdjust, false);
+      swerveSubsystem.drive(new Translation2d(-fowardAdjust, 0), rotationAdjust, false);
     }
-    shuffle.setTab("Debug");
+    shuffle.setTab("Debugging");
     shuffle.setNumber("Tag Area", tagArea);
     shuffle.setNumber("Target Area", targetArea);
     shuffle.setBoolean("At Position?", positionController.atSetpoint());
@@ -94,5 +97,10 @@ public class AprilTagAlign extends Command {
   @Override
   public void end(boolean interrupted) {
     swerveSubsystem.lock();
+    if (!interrupted) {
+      System.out.println("Ended Tag Align successfully");
+    } else {
+      System.out.println("Interrupted Tag Align Commmand");
+    }
   }
 }

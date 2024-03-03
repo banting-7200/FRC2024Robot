@@ -58,7 +58,7 @@ public final class Constants {
 
   public static final class maxCommandWaitTime {
     // todo: Tune All of these later
-    public static final int moveArmToPositionWaitTime = 3000;
+    public static final int moveArmToPositionWaitTime = 3300;
     public static final int tuckArmWaitTime = 2000;
     public static final int unTuckWaitTime = 2000;
     public static final int intakeCommandWaitTime = 3000;
@@ -84,18 +84,20 @@ public final class Constants {
 
     // default arm pids
     // Todo: calibrate these
-    public static final double p = 0.15;
-    public static final double i = 0.000009;
-    public static final double d = 0.01;
-    public static final double f = 0;
-    public static final double iz = 1.9;
+    public static /* final */ double p = 0.15;
+    public static /* final */ double i = 0.000009;
+    public static /* final */ double d = 0.01;
+    public static /* final */ double f = 0;
+    public static /* final */ double iz = 1.9;
 
-    public static final double pidOutputMin = -1;
-    public static final double pidOutputMax = 1;
+    public static /* final */ double pidOutputMin = -1;
+    public static /* final */ double pidOutputMax = 1;
 
-    public static final double motorSpeed = 0.2; // 0 - 1 range
+    public static final double motorSpeed = 0.5; // 0 - 1 range
 
-    public static final double motorRampRate = 0.6;
+    public static final double motorRampRate = 0.7;
+    public static final double motorPIDRampRate = 0.6;
+
     public static final int currentLimit = 40;
     public static final double speakerAlignTagArea = 2;
 
@@ -111,7 +113,7 @@ public final class Constants {
     public static final double armGearRatio = 400;
 
     public static final double tuckArmAngle = 24;
-    public static final double intakeArmAngle = 21.0;
+    public static final double intakeArmAngle = 20.8;
     public static final double ampArmAngle = 31.3;
     public static final double liftArmAngle = 21;
     public static final double speakerArmAngle = 29; // Todo: find a real value for this

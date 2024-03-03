@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
+import frc.robot.subsystems.Vision.LimelightDevice;
 import java.io.File;
 import java.io.IOException;
 import swervelib.parser.SwerveParser;
@@ -26,6 +27,7 @@ public class Robot extends TimedRobot {
   private static Robot instance; // Creates tehe Robotn.java instance
   private RobotContainer m_robotContainer; // Creates the Robotcontainer instance
   private Command m_autonomousCommand; // The command that stores our auto
+  private LimelightDevice limelight = LimelightDevice.getInstance();
 
   private Timer disabledTimer; // Normal Robot container instance
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
@@ -85,6 +87,7 @@ public class Robot extends TimedRobot {
     disabledTimer.reset();
     disabledTimer.start();
     m_robotContainer.stopArm();
+    limelight.setLight(false);
   }
 
   @Override
@@ -105,6 +108,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
+    limelight.setLight(true);
   }
 
   /** This function is called periodically during autonomous. */
@@ -122,6 +126,7 @@ public class Robot extends TimedRobot {
     }
     m_robotContainer.setDriveMode();
     m_robotContainer.setMotorBrake(true);
+    limelight.setLight(true);
   }
 
   /** This function is called periodically during operator control. */

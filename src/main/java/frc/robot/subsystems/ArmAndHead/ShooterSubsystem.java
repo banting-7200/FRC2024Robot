@@ -121,6 +121,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void setShooterShuffleBoard() {
-    shuffle.setBoolean("IR Sensor", !shootIR.get());
+    shuffle.setTab("Debugging");
+    shuffle.setBoolean("IR Sensor", shootIR.get());
   }
 }

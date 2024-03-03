@@ -3,6 +3,7 @@ package frc.robot.subsystems.Vision;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AprilTagID;
 import frc.robot.Constants.Arm;
@@ -16,6 +17,13 @@ public class LimelightDevice extends SubsystemBase {
   public int speakerMiddleTag;
   public int speakerSideTag;
   public int ampTag;
+
+  public LimelightDevice() {
+    mainTable =
+        NetworkTableInstance.getDefault().getTable("limelight"); // gets the network table with key
+
+    mode = 0;
+  }
 
   public static synchronized LimelightDevice getInstance() {
     if (instance == null) {
@@ -79,6 +87,7 @@ public class LimelightDevice extends SubsystemBase {
       ttarget = mainTable.getEntry("tv").getDouble(0);
     } catch (NullPointerException e) {
       System.out.println("ttarget ERROR, EXCEPTION: " + e);
+      ttarget = 0;
     }
     boolean tdetected = ttarget == 0 ? false : true;
     shuffle.setBoolean("Tag Detected", tdetected);
@@ -104,6 +113,7 @@ public class LimelightDevice extends SubsystemBase {
 
     } catch (NullPointerException e) {
       System.out.println("Tag Area ERROR, EXCEPTION: " + e);
+      ta = 0;
     }
     shuffle.setNumber("Tag Area", ta);
     return ta;
@@ -115,6 +125,7 @@ public class LimelightDevice extends SubsystemBase {
       tx = mainTable.getEntry("tx").getDouble(0);
     } catch (NullPointerException e) {
       System.out.println("tx ERROR, EXCEPTION: " + e);
+      tx = 0;
     }
     shuffle.setNumber("Tag X", tx);
     return tx;
@@ -126,6 +137,7 @@ public class LimelightDevice extends SubsystemBase {
       ty = mainTable.getEntry("ty").getDouble(0);
     } catch (NullPointerException e) {
       System.out.println("ty ERROR, EXCEPTION: " + e);
+      ty = 0;
     }
 
     shuffle.setNumber("Tag Y", ty);

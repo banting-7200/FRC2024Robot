@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,8 +29,12 @@ public class ShuffleboardSubsystem {
   List<String> entryNames = new ArrayList<String>();
   List<GenericEntry> entries = new ArrayList<GenericEntry>();
   SendableChooser<String> autos;
+  SimpleWidget lights;
 
-  private ShuffleboardSubsystem() {}
+  private ShuffleboardSubsystem() {
+    setTab("Default");
+    lights = tab.add("Lights", true).withWidget(BuiltInWidgets.kBooleanBox);
+  }
 
   // Singleton instance of the shuffleboard class
   public static synchronized ShuffleboardSubsystem getInstance() {
@@ -247,22 +252,23 @@ public class ShuffleboardSubsystem {
 
   public void setColour(String name, Color colour) { // custom colour widget
     try {
+      /*       setTab("Light Tab");
       GenericEntry entry;
       int index = entryNames.indexOf(name);
       Map<String, Object> map = Map.of("colorWhenTrue", colour.toString());
       if (layout != null) {
-        entry = layout.add(name, true).withProperties(map).getEntry();
+        layout.add(name, true).withProperties(map).withWidget(BuiltInWidgets.kBooleanBox);
+        entry = layout.add(name, true).getEntry();
       } else {
-        entry =
-            tab.add(name, true)
-                .withWidget(BuiltInWidgets.kBooleanBox)
-                .withProperties(map)
-                .getEntry();
+        tab.add(name, true).withProperties(map).withWidget(BuiltInWidgets.kBooleanBox);
+        entry = tab.add(name, true).getEntry();
       }
       if (index == -1) {
         entryNames.add(name);
         entries.add(entry);
       }
+      */
+      lights.withProperties(Map.of("colorWhenTrue", colour.toString()));
     } catch (IllegalArgumentException e) {
       System.out.println("Set Color Error, EXEPTION: " + e);
     }

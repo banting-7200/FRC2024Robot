@@ -10,6 +10,7 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.Arm;
@@ -87,7 +88,7 @@ public class ArmSubsystem extends SubsystemBase {
     rightArmMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
     // Sets the ramp rate when moving the motor through PID to a predefine
-    rightArmMotor.setClosedLoopRampRate(Arm.motorRampRate);
+    rightArmMotor.setClosedLoopRampRate(Arm.motorPIDRampRate);
     // Sets the current limit in Amperes which is defined in constants.java
     rightArmMotor.setSmartCurrentLimit(Arm.currentLimit);
 
@@ -109,7 +110,12 @@ public class ArmSubsystem extends SubsystemBase {
     lastShooterState = solenoidSwitch.get();
 
     // Sets the PID configs.
+    shuffleboard.setTab("Debugging");
+    shuffleboard.setPID("arm PID", Arm.p, Arm.i, Arm.d, Arm.f, Arm.iz);
+    shuffleboard.setNumber("arm min output", Arm.pidOutputMin);
+    shuffleboard.setNumber("arm max output", Arm.pidOutputMax);
     setPID();
+    shuffleboard.newCommandButton("apply PID changes", new InstantCommand(() -> setPID()));
 
     // Enables better motor simulation in sim.
     if (RobotBase.isSimulation()) {
@@ -131,42 +137,34 @@ public class ArmSubsystem extends SubsystemBase {
     int smartMotionSlot = Arm.smartMotionSlot;
 
     // Shuffle PID config. Todo: move to debug
-    /*
-     * /* double[] PIDvalues = shuffleboard.getPID("arm");
-     * Arm.p = PIDvalues[0];
-     * Arm.i = PIDvalues[1];
-     * Arm.d = PIDvalues[2];
-     * Arm.f = PIDvalues[3];
-     * Arm.iz = PIDvalues[4];
-     */
 
-    /*
-     * if (Arm.p != PIDvalues[0]) {
-     * Arm.p = PIDvalues[0];
-     * }
-     * if (Arm.i != PIDvalues[1]) {
-     * Arm.i = PIDvalues[1];
-     * }
-     * if (Arm.d != PIDvalues[2]) {
-     * Arm.d = PIDvalues[2];
-     * }
-     * if (Arm.f != PIDvalues[3]) {
-     * Arm.f = PIDvalues[3];
-     * }
-     * if (Arm.iz != PIDvalues[4]) {
-     * Arm.iz = PIDvalues[4];
-     * }
-     * if (Arm.pidOutputMin != shuffleboard.getNumber("arm min output")) {
-     * Arm.pidOutputMin = shuffleboard.getNumber("arm min output");
-     * }
-     * if (Arm.pidOutputMax != shuffleboard.getNumber("arm max output")) {
-     * Arm.pidOutputMax = shuffleboard.getNumber("arm max output");
-     * }
-     *
-     * // Re-updating ramp rate and current limit for motor ramp rate
-     * rightArmMotor.setClosedLoopRampRate(Arm.motorRampRate);
-     * rightArmMotor.setSmartCurrentLimit(Arm.currentLimit);
-     */
+    double[] PIDvalues = shuffleboard.getPID("arm PID");
+
+    if (Arm.p != PIDvalues[0]) {
+      Arm.p = PIDvalues[0];
+    }
+    if (Arm.i != PIDvalues[1]) {
+      Arm.i = PIDvalues[1];
+    }
+    if (Arm.d != PIDvalues[2]) {
+      Arm.d = PIDvalues[2];
+    }
+    if (Arm.f != PIDvalues[3]) {
+      Arm.f = PIDvalues[3];
+    }
+    if (Arm.iz != PIDvalues[4]) {
+      Arm.iz = PIDvalues[4];
+    }
+    if (Arm.pidOutputMin != shuffleboard.getNumber("arm min output")) {
+      Arm.pidOutputMin = shuffleboard.getNumber("arm min output");
+    }
+    if (Arm.pidOutputMax != shuffleboard.getNumber("arm max output")) {
+      Arm.pidOutputMax = shuffleboard.getNumber("arm max output");
+    }
+
+    // Re-updating ramp rate and current limit for motor ramp rate
+    // rightArmMotor.setClosedLoopRampRate(Arm.motorPIDRampRate);
+    // rightArmMotor.setSmartCurrentLimit(Arm.currentLimit);
 
     // Sets the PID values defined in constants to the smart motion slot on the
     // spark max

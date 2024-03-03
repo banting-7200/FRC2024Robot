@@ -116,10 +116,10 @@ public class RobotContainer {
     // right stick controls the desired angle NOT angular rotation
     Command driveFieldOrientedDirectAngle =
         drivebase.driveCommand(
-            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-            () -> driverXbox.getRightX(),
-            () -> driverXbox.getRightY());
+            () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> -driverXbox.getRightX(),
+            () -> -driverXbox.getRightY());
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -308,7 +308,14 @@ public class RobotContainer {
     // This binding allows for direct control over the shooter solenoid to toggle
     // its state at will.
     new JoystickButton(CoPilotController, copilotController.extendButton)
-        .onTrue(Commands.runOnce(() -> arm.toggleShooterState()));
+        .onTrue(
+            new UntuckArm(arm)
+                .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
+                .finallyDo(
+                    (boolean interrupted) -> {
+                      if (!interrupted && !shooter.hasNote)
+                        lights.SetLightState(LightStates.ReadyForPickup);
+                    }));
 
     /*
      * Essentially this command runs the shoot command when the shoot button
@@ -415,10 +422,10 @@ public class RobotContainer {
     return drivebase.getPose();
   }
 
-  public void setShuffleboard() {
+  public void setShuffleboard() { //
     arm.setShuffleboard();
     shooter.setShooterShuffleBoard();
-    swerveNetworkTables.setSwerveShuffleboard();
+    // swerveNetworkTables.setSwerveShuffleboard();
     /* limelight.shuffleUpdate(); */
   }
 }

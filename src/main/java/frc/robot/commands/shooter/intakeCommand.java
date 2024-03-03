@@ -63,34 +63,35 @@ public class intakeCommand extends Command {
   @Override
   public void execute() {
     if (hasNote == false) {
-      /* Get note into position */
-      if (notelock == false) { // if note is not in position
-        shooter.spinIntakeToNegativeRPM(intakeRPM); // intake
-        if (shooter.shooterHasNote() == true && override == false) {
-          startedMillis =
-              currentTime.millis() + 100; // run for an extra 100ms after note has been detected
-          stopDryRun = true; // 100ms is finished
-        }
-        if (shooter.shooterHasNote() == true
-            && override == true) { // If we have the note and can override
-          notelock = true; // enable the first lock
-        }
-        if (currentTime.millis() > startedMillis
-            && stopDryRun == true) { // If the timer has elapsed and we have entered
-          // the dry run
-          shooter.spinIntakeToPositiveRPM(pullBackRPM); // Pull back the note
-          override = true;
-        }
+
+      shooter.spinIntakeToNegativeRPM(intakeRPM); // intake
+      if (shooter.shooterHasNote() == true && stopDryRun == false) {
+        startedMillis =
+            currentTime.millis() + 100; // run for an extra 100ms after note has been detected
+        stopDryRun = true; // 100ms is finished
+        System.out.println("Stage 1@intakeExecute");
       }
-      shooterHasNotePrev =
-          shooter
-              .shooterHasNote(); // Store the status of the note this loop to check against the next
-      // loop.
+      if (currentTime.millis() > startedMillis
+          && stopDryRun == true) { // If the timer has elapsed and we have entered
+        // the dry run
+        shooter.spinIntakeToPositiveRPM(0); // Pull back the note
+        notelock = true;
+        System.out.println("Stage 2@intakeExecute");
+      }
+      System.out.println("Current timer: " + (currentTime.millis() - startedMillis));
     }
+    /*
+     * shooterHasNotePrev =
+     * shooter
+     * .shooterHasNote(); // Store the status of the note this loop to check against
+     * the next
+     * // loop.
+     */
+
   }
 
   public boolean isFinished() {
-    return (notelock == true)
+    return notelock
         || (currentTime.millis() - commandInitMillis > maxCommandWaitTime.intakeCommandWaitTime);
   }
 
@@ -105,5 +106,4 @@ public class intakeCommand extends Command {
     }
   }
 }
-
 // Jas sux

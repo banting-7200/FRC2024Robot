@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Arm;
+import frc.robot.Constants.Limelight;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.Shooter;
 import frc.robot.Constants.copilotController;
@@ -88,6 +89,10 @@ public class RobotContainer {
   // because our
 
   // first shot is a speaker shot.
+
+public final IntSupplier shootTagToAlign = () -> limelight.getSpeakerMiddleTag();
+public final IntSupplier ampTagToAlign = () -> limelight.getAmpTag();
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -170,9 +175,9 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "Note Align", Commands.runOnce(() -> System.out.println("Note align")));
     NamedCommands.registerCommand(
-        "Shoot Align", new AprilTagAlign(drivebase, limelight, 2, 12)); // fill in area and
+        "Shoot Align", new AprilTagAlign(drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign)); // fill in area and
     // tag id
-    NamedCommands.registerCommand("Amp Align", new AprilTagAlign(drivebase, limelight, 2, 12));
+    NamedCommands.registerCommand("Amp Align", new AprilTagAlign(drivebase, limelight, Limelight.ampTargetArea, ampTagToAlign));
     NamedCommands.registerCommand("Prep Amp", new MoveArmToPosition(arm, Arm.ampArmAngle));
 
     // Initialize sendable chooser for autos
@@ -199,7 +204,6 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  public final IntSupplier tagToAlign = () -> limelight.getSpeakerMiddleTag();
 
   public static final IntSupplier shooterRPM =
       () -> speakerShot ? Shooter.speakerShootRPM : Shooter.ampShootRPM;
@@ -332,7 +336,7 @@ public class RobotContainer {
      * tag
      */
     new JoystickButton(CoPilotController, copilotController.limelightButton)
-        .onTrue(new AprilTagAlign(drivebase, limelight, Arm.speakerAlignTagArea, tagToAlign));
+        .onTrue(new AprilTagAlign(drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign));
 
     /*
      * On button press command the arm to move to the angle supplied by the

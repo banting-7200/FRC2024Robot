@@ -99,7 +99,6 @@ public final class Constants {
     public static final double motorPIDRampRate = 0.6;
 
     public static final int currentLimit = 40;
-    public static final double speakerAlignTagArea = 2;
 
     public static final double stopRange = 0.3;
     public static final double encoderHardMax = 34;
@@ -178,6 +177,11 @@ public final class Constants {
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT = 6;
   }
+
+public static final class Limelight{
+public static final double speakerTargetArea = 2;
+public static final double ampTargetArea = 2;
+}
 
   public static final class AprilTagID {
     public static final int blueSourceInner = 1;

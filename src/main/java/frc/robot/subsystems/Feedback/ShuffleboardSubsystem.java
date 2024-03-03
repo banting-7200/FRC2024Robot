@@ -13,11 +13,13 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+// import java.awt.Color;
 
 public class ShuffleboardSubsystem {
   private static ShuffleboardSubsystem instance = null;
@@ -244,20 +246,25 @@ public class ShuffleboardSubsystem {
   }
 
   public void setColour(String name, Color colour) { // custom colour widget
-    GenericEntry entry;
-    int index = entryNames.indexOf(name);
-    if (layout != null) {
-      entry = layout.add(name, true).withProperties(Map.of("colorWhenTrue", colour)).getEntry();
-    } else {
-      entry =
-          tab.add(name, true)
-              .withWidget(BuiltInWidgets.kBooleanBox)
-              .withProperties(Map.of("colorWhenTrue", colour))
-              .getEntry();
-    }
-    if (index == -1) {
-      entryNames.add(name);
-      entries.add(entry);
+    try {
+      GenericEntry entry;
+      int index = entryNames.indexOf(name);
+      Map<String, Object> map = Map.of("colorWhenTrue", colour.toString());
+      if (layout != null) {
+        entry = layout.add(name, true).withProperties(map).getEntry();
+      } else {
+        entry =
+            tab.add(name, true)
+                .withWidget(BuiltInWidgets.kBooleanBox)
+                .withProperties(map)
+                .getEntry();
+      }
+      if (index == -1) {
+        entryNames.add(name);
+        entries.add(entry);
+      }
+    } catch (IllegalArgumentException e) {
+      System.out.println("Set Color Error, EXEPTION: " + e);
     }
   }
 }

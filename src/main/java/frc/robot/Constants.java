@@ -96,7 +96,7 @@ public final class Constants {
     public static final double motorSpeed = 0.2; // 0 - 1 range
 
     public static final double motorRampRate = 0.6;
-    public static final int currentLimit = 20;
+    public static final int currentLimit = 40;
     public static final double speakerAlignTagArea = 2;
 
     public static final double stopRange = 0.3;

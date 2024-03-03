@@ -27,6 +27,7 @@ import frc.robot.Constants.copilotController;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.arm.MoveArmToPosition;
 import frc.robot.commands.arm.TuckArm;
+import frc.robot.commands.arm.UntuckArm;
 import frc.robot.commands.shooter.intakeCommand;
 import frc.robot.commands.shooter.shootCommand;
 import frc.robot.commands.swervedrive.auto.AprilTagAlign;
@@ -82,7 +83,9 @@ public class RobotContainer {
           : false; // This is a local reference to the DriverStation alliance
 
   static boolean speakerShot =
-      true; // Whether the robot is ready for a Speaker Shot or not. Initialized to true because our
+      true; // Whether the robot is ready for a Speaker Shot or not. Initialized to true
+
+  // because our
 
   // first shot is a speaker shot.
 
@@ -243,9 +246,11 @@ public class RobotContainer {
     new JoystickButton(CoPilotController, copilotController.downButton)
         .onTrue(new MoveArm(arm, axis));
 
-    /* Brakes the swerve modules. Constantly resets odometry while active to
-    trick the swerve into thinking its not moving and stop trying to correct
-    itself.*/
+    /*
+     * Brakes the swerve modules. Constantly resets odometry while active to
+     * trick the swerve into thinking its not moving and stop trying to correct
+     * itself.
+     */
     new JoystickButton(CoPilotController, copilotController.brakeButton)
         .toggleOnTrue(new RepeatCommand(new InstantCommand(drivebase::resetOdometry, drivebase)));
 
@@ -333,7 +338,8 @@ public class RobotContainer {
      */
     new JoystickButton(CoPilotController, copilotController.speakerButton)
         .onTrue(
-            new MoveArmToPosition(arm, speakerAngle)
+            new TuckArm(arm)
+                .andThen(new MoveArmToPosition(arm, speakerAngle))
                 .finallyDo(
                     (boolean interrupted) -> {
                       if (!interrupted) speakerShot = true;
@@ -350,7 +356,8 @@ public class RobotContainer {
      */
     new JoystickButton(CoPilotController, copilotController.ampButton)
         .onTrue(
-            new MoveArmToPosition(arm, Arm.ampArmAngle)
+            new UntuckArm(arm)
+                .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))
                 .finallyDo(
                     (boolean interrupted) -> {
                       if (!interrupted) speakerShot = false;
@@ -412,5 +419,6 @@ public class RobotContainer {
     arm.setShuffleboard();
     shooter.setShooterShuffleBoard();
     swerveNetworkTables.setSwerveShuffleboard();
+    /* limelight.shuffleUpdate(); */
   }
 }

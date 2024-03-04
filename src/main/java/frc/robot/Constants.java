@@ -61,7 +61,7 @@ public final class Constants {
     public static final int moveArmToPositionWaitTime = 3300;
     public static final int tuckArmWaitTime = 2000;
     public static final int unTuckWaitTime = 2000;
-    public static final int intakeCommandWaitTime = 3000;
+    public static final int intakeCommandWaitTime = 7000;
     public static final int shootCommandWaitTime = 3000;
     public static final int aprilTagAlignWaitTime = 7000;
     public static final int noteObjectAlignWaitTime = 7000;
@@ -114,8 +114,8 @@ public final class Constants {
     public static final double tuckArmAngle = 24;
     public static final double intakeArmAngle = 20.8;
     public static final double ampArmAngle = 31.3;
-    public static final double liftArmAngle = 21;
-    public static final double speakerArmAngle = 29; // Todo: find a real value for this
+    public static final double liftArmAngle = 30.3;
+    public static final double speakerArmAngle = 28; // Todo: find a real value for this
 
     public static final int kMeasuredPosHorizontal =
         21; // Default position measured when arm is horizontal from

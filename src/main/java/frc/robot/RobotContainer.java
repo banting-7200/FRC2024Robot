@@ -281,8 +281,14 @@ public class RobotContainer {
      */
     new JoystickButton(CoPilotController, copilotController.pickupButton)
         .onTrue(
-            new intakeCommand(
-                    Shooter.intakeRPM, Shooter.pullBackRPM, Shooter.correctPositioningRPM, shooter)
+            new UntuckArm(arm)
+                .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
+                .andThen(
+                    new intakeCommand(
+                        Shooter.intakeRPM,
+                        Shooter.pullBackRPM,
+                        Shooter.correctPositioningRPM,
+                        shooter))
                 .andThen(
                     new TuckArm(arm)
                         .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
@@ -293,11 +299,15 @@ public class RobotContainer {
                             }))); // From what positions will we intake?
 
     /*
-     * Simply toggles the hook solenoid on a button press.
-     * This effectivly toggles the hook up or down on button press.
+     * On press deploys the hook
      */
     new JoystickButton(CoPilotController, copilotController.hookButton)
-        .onTrue(Commands.runOnce(() -> arm.toggleHook()));
+        .onTrue(
+            new MoveArmToPosition(arm, Arm.liftArmAngle)
+                .andThen(new InstantCommand(() -> arm.deployHook())))
+        .onFalse(new InstantCommand(() -> arm.retractHook()));
+    /*.toggleOnTrue(new StartEndCommand(() -> {new UntuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.liftArmAngle))
+    .andThen(new InstantCommand(() -> arm.deployHook()));}, () -> arm.retractHook()));*/
 
     /*
      * This is a failsafe if the intake command fails.
@@ -323,14 +333,7 @@ public class RobotContainer {
     // This binding allows for direct control over the shooter solenoid to toggle
     // its state at will.
     new JoystickButton(CoPilotController, copilotController.extendButton)
-        .onTrue(
-            new UntuckArm(arm)
-                .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
-                .finallyDo(
-                    (boolean interrupted) -> {
-                      if (!interrupted && !shooter.hasNote)
-                        lights.SetLightState(LightStates.ReadyForPickup);
-                    }));
+        .onTrue(new InstantCommand(() -> arm.toggleShooterState()));
 
     /*
      * Essentially this command runs the shoot command when the shoot button

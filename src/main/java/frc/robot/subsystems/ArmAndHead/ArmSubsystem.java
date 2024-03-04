@@ -315,14 +315,14 @@ public class ArmSubsystem extends SubsystemBase {
 
   // HookDeploys the hook
   public void deployHook() {
-    hookSolenoidActions.setForward();
+    hookSolenoidActions.setReverse();
     System.out.println("Hook Deployed");
   }
 
   // Stows the hook
-  public void stowHook() {
-    hookSolenoidActions.setReverse();
-    System.out.println("Hook Stowed");
+  public void retractHook() {
+    hookSolenoidActions.setForward();
+    System.out.println("Hook Retracted");
   }
 
   // A toggle function for the hook

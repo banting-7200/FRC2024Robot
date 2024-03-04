@@ -153,7 +153,7 @@ public class LimelightDevice extends SubsystemBase {
     double distanceFromArmToGoal = distanceFromLimelightToGoal + Arm.armToLimelightDistance;
 
     return (Math.atan2(Arm.armToSpeakerHeight, distanceFromArmToGoal) + Arm.armToShooterAngle)
-        * (180.0 / 3.14159);
+        * (180.0 / 3.14159) *  (42 / 360) + 21;
   }
 
   public Pose2d getFakeTagPose() { // input fake tag values for simulation

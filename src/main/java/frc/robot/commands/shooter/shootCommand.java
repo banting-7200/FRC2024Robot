@@ -48,7 +48,7 @@ public class shootCommand extends Command {
     sinceNoteLeft = currentTime.millis();
     startedMillis = currentTime.millis();
     hasSeenNote = false;
-    hasNote = shooter.getHasNoteState();
+    hasNote = shooter.shooterHasNote();
     shooter.stopIntakeMotor(); // Stop the intake motor
   }
 
@@ -109,9 +109,9 @@ public class shootCommand extends Command {
     shooter.stopIntakeMotor();
     System.out.println("Shooting Done");
     lights.SetLightState(LightStates.ReadyForPickup);
-    System.out.println("Has Note state is currently: " + shooter.getHasNoteState());
+   /*  System.out.println("Has Note state is currently: " + shooter.getHasNoteState());
     if (!interrupted) {
       shooter.setHasNoteState(false);
-    }
+    } */
   }
 }

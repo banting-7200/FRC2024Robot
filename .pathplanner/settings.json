@@ -3,19 +3,18 @@
   "robotLength": 0.7747,
   "holonomicMode": true,
   "pathFolders": [
-    "Left Start Paths",
-    "Mid Start Paths",
-    "Middle Start Paths",
-    "Middle Note Paths",
+    "(Old) Mid Start Paths",
+    "(Old) Test Paths",
+    "Left Paths",
+    "Middle Paths",
     "Positions",
-    "Right Start Paths",
-    "Test Paths"
+    "Right Paths"
   ],
   "autoFolders": [
     "Test Autos"
   ],
-  "defaultMaxVel": 1.0,
-  "defaultMaxAccel": 2.0,
+  "defaultMaxVel": 4.4,
+  "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 4.5

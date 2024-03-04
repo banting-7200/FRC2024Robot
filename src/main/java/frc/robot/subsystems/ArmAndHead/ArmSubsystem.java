@@ -320,9 +320,9 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   // Stows the hook
-  public void stowHook() {
+  public void retractHook() {
     hookSolenoidActions.setForward();
-    System.out.println("Hook Stowed");
+    System.out.println("Hook Retracted");
   }
 
   // A toggle function for the hook

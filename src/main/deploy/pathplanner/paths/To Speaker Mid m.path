@@ -3,36 +3,42 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.9978270455827631,
-        "y": 4.368142031576503
+        "x": 7.51,
+        "y": 7.42
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3842846515935527,
-        "y": 4.368142031576503
+        "x": 5.073198163514728,
+        "y": 6.558068465637644
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.426549104168107,
-        "y": 4.11050362756931
+        "x": 2.719320017812645,
+        "y": 5.5040931765173085
       },
       "prevControl": {
-        "x": 2.1337781905235693,
-        "y": 4.157346973752435
+        "x": 4.393969643859401,
+        "y": 6.358984244359359
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Move To Intake Position",
+      "name": "New Event Marker",
       "waypointRelativePos": 0,
       "command": {
         "type": "sequential",
@@ -41,24 +47,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Prep Intake"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.7,
-      "command": {
-        "type": "sequential",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
+                "name": "Prep Shoot"
               }
             }
           ]
@@ -74,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Left Start Paths",
+  "folder": "Mid Start Paths",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

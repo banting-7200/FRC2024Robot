@@ -1,6 +1,12 @@
 {
   "version": 1.0,
-  "startingPose": null,
+  "startingPose": {
+    "position": {
+      "x": 0.9978270455827631,
+      "y": 4.368142031576503
+    },
+    "rotation": -45.0
+  },
   "command": {
     "type": "sequential",
     "data": {
@@ -12,13 +18,13 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot Align"
+                  "name": "Shoot"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot"
+                  "name": "Prep Intake"
                 }
               }
             ]
@@ -31,38 +37,19 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "To Speaker Left"
+          }
+        },
+        {
           "type": "sequential",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "Note Align"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "parallel",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Prep Shoot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Shoot Align"
-                      }
-                    }
-                  ]
+                  "name": "Prep Shoot"
                 }
               },
               {
@@ -81,21 +68,15 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "To Speaker Mid"
+          }
+        },
+        {
           "type": "sequential",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Note Align"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
               {
                 "type": "parallel",
                 "data": {
@@ -104,12 +85,6 @@
                       "type": "named",
                       "data": {
                         "name": "Prep Shoot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Shoot Align"
                       }
                     }
                   ]
@@ -131,15 +106,15 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "To Speaker Right"
+          }
+        },
+        {
           "type": "sequential",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Note Align"
-                }
-              },
               {
                 "type": "named",
                 "data": {
@@ -147,22 +122,9 @@
                 }
               },
               {
-                "type": "parallel",
+                "type": "named",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Prep Shoot"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Shoot Align"
-                      }
-                    }
-                  ]
+                  "name": "Prep Shoot"
                 }
               },
               {

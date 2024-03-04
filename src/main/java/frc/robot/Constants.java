@@ -52,8 +52,12 @@ public final class Constants {
   }
 
   public static final class Lights {
-    public static final int lightID = 1;
-    public static final int lightStringLength = 50;
+    public static final int lightIDLeft = 2;
+    public static final int lightStringLengthLeft = 50;
+    public static final int lightIDRight = 3;
+    public static final int lightStringLengthRight = 50;
+    public static final int lightIDTanks = 4;
+    public static final int lightStringLengthTanks = 50;
   }
 
   public static final class maxCommandWaitTime {

@@ -12,6 +12,7 @@ public class LightSubsystem {
   private final AddressableLEDBuffer statusBuffer;
 
   private static LightSubsystem instance = null; // creates Singleton instance
+
   private ShuffleboardSubsystem shuffle =
       ShuffleboardSubsystem.getInstance(); // Gets shuffleboard instance
 
@@ -36,7 +37,7 @@ public class LightSubsystem {
   // Ensures only one instance can be made.
   public static synchronized LightSubsystem getInstance() {
     if (instance == null) {
-      instance = new LightSubsystem(Lights.lightID, Lights.lightStringLength);
+      instance = new LightSubsystem(Lights.lightIDLeft, Lights.lightStringLengthLeft);
     }
     return instance;
   }

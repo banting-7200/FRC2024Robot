@@ -57,7 +57,7 @@ public class intakeCommand extends Command {
     notelock2 = false;
     shooterHasNotePrev = false;
     commandInitMillis = currentTime.millis();
-    hasNote = shooter.getHasNoteState();
+    hasNote = shooter.shooterHasNote();
   }
 
   @Override
@@ -100,10 +100,10 @@ public class intakeCommand extends Command {
     shooter.stopIntakeMotor();
     lights.SetLightState(LightStates.NotePickedUp);
     System.out.println("Intake Command ShutDown");
-    System.out.println("Has Note state is currently@IntakeEnd: " + shooter.getHasNoteState());
+   /*  System.out.println("Has Note state is currently@IntakeEnd: " + shooter.getHasNoteState());
     if (!interrupted) {
       shooter.setHasNoteState(true);
-    }
+    } */
   }
 }
 // Jas sux

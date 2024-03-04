@@ -33,13 +33,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Left Start"
+            "pathName": "(L) RC"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "To Speaker Left"
+            "pathName": "(R) Speaker"
           }
         },
         {
@@ -57,43 +57,11 @@
                 "data": {
                   "name": "Shoot"
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Note 1 to 2 Left"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "To Speaker Mid"
-          }
-        },
-        {
-          "type": "sequential",
-          "data": {
-            "commands": [
-              {
-                "type": "parallel",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Prep Shoot"
-                      }
-                    }
-                  ]
-                }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot"
+                  "name": "Prep Intake"
                 }
               }
             ]
@@ -102,25 +70,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note 2 to 3 Left"
+            "pathName": "(L) MC"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "To Speaker Right"
+            "pathName": "(M) Speaker"
           }
         },
         {
           "type": "sequential",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
               {
                 "type": "named",
                 "data": {
@@ -131,6 +93,49 @@
                 "type": "named",
                 "data": {
                   "name": "Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(L) LC"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(L) Speaker"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Intake"
                 }
               }
             ]

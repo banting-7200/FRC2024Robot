@@ -166,12 +166,12 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param pose Target {@link Pose2d} to go to.
    * @return PathFinding command
    */
-  public Command driveToPose(Pose2d pose) {
+  public Command driveToPose(Pose2d pose) { // todo: Do we need this?
     // Create the constraints to use while pathfinding
     PathConstraints constraints =
         new PathConstraints(
             swerveDrive.getMaximumVelocity(),
-            4.0, // todo: Do we need this?
+            4.0, 
             swerveDrive.getMaximumAngularVelocity(),
             Units.degreesToRadians(720));
 
@@ -184,6 +184,10 @@ public class SwerveSubsystem extends SubsystemBase {
         // before
         // attempting to rotate.
         );
+  }
+
+  public void printVelAndAngVel(){
+    System.out.println("max velocity is: " + swerveDrive.getMaximumVelocity() + " max angular velocity is: " + swerveDrive.getMaximumAngularVelocity());
   }
 
   /**

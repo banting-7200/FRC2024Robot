@@ -297,7 +297,10 @@ public class RobotContainer {
      * This effectivly toggles the hook up or down on button press.
      */
     new JoystickButton(CoPilotController, copilotController.hookButton)
-        .onTrue(Commands.runOnce(() -> arm.toggleHook()));
+        .onTrue(
+            new MoveArmToPosition(arm, Arm.liftArmAngle)
+                .andThen(new InstantCommand(() -> arm.deployHook())))
+        .onFalse(new InstantCommand(() -> arm.stowHook()));
 
     /*
      * This is a failsafe if the intake command fails.

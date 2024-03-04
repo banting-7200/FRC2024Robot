@@ -114,7 +114,7 @@ public final class Constants {
     public static final double tuckArmAngle = 24;
     public static final double intakeArmAngle = 20.8;
     public static final double ampArmAngle = 31.3;
-    public static final double liftArmAngle = 21;
+    public static final double liftArmAngle = 30.3;
     public static final double speakerArmAngle = 29; // Todo: find a real value for this
 
     public static final int kMeasuredPosHorizontal =

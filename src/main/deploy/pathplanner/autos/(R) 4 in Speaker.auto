@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(R) Right Close Note"
+            "pathName": "(R) RC"
           }
         },
         {
@@ -42,15 +42,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shoot Align"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
+            "pathName": "(R) Speaker"
           }
         },
         {
@@ -62,7 +56,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(R) Middle Close Note"
+            "pathName": "(R) MC"
           }
         },
         {
@@ -72,15 +66,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shoot Align"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
+            "pathName": "(M) Speaker"
           }
         },
         {
@@ -92,7 +80,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(M) Leftmost Close Note"
+            "pathName": "(M) LC"
           }
         },
         {
@@ -102,15 +90,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shoot Align"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
+            "pathName": "(L) Speaker"
           }
         }
       ]

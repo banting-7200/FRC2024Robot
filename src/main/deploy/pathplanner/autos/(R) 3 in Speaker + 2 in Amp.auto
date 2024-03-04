@@ -5,7 +5,7 @@
       "x": 1.25,
       "y": 4.1
     },
-    "rotation": 135.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -20,19 +20,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Align"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "(R) Right Close Note"
+            "pathName": "(R) RC"
           }
         },
         {
@@ -42,21 +36,15 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shoot Align"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
+            "pathName": "(R) Speaker"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "(R) Middle Close Note"
+            "pathName": "(R) MC"
           }
         },
         {
@@ -66,9 +54,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shoot Align"
+            "pathName": "(M) Speaker"
           }
         },
         {
@@ -80,13 +68,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(M) Leftmost Close Note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "To Amp"
+            "pathName": "(M) LC"
           }
         },
         {
@@ -96,9 +78,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Amp Align"
+            "pathName": "To Amp"
           }
         },
         {
@@ -110,19 +92,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "To Far Left"
+            "pathName": "(L) 1F"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "(L) Left Far Note"
+            "pathName": null
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "To Amp"
+            "pathName": null
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
           }
         }
       ]

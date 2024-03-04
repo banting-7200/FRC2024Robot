@@ -20,19 +20,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot Align"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "(R) Right Close Note"
+            "pathName": "(R) RC"
           }
         },
         {
@@ -42,21 +36,21 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Shoot Align"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
+            "pathName": "(R) Speaker"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "(R) Middle Close Note"
+            "pathName": "(R) MC"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Amp"
           }
         },
         {
@@ -68,31 +62,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Amp"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Amp Align"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Shoot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "(M) Leftmost Close Note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "To Amp"
+            "pathName": "(L) LC"
           }
         },
         {
@@ -102,9 +78,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Amp Align"
+            "pathName": "To Amp"
           }
         },
         {

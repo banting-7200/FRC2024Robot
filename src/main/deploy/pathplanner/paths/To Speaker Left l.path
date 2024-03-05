@@ -50,7 +50,7 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
+    "maxVelocity": 4.4,
     "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
@@ -61,7 +61,11 @@
     "rotateFast": false
   },
   "reversed": false,
+<<<<<<< HEAD
   "folder": "(Old) Test Paths",
+=======
+  "folder": null,
+>>>>>>> dbba0b4b515dc3ead12d3bbcdd335658a523a30f
   "previewStartingState": {
     "rotation": 0.0,
     "velocity": 0

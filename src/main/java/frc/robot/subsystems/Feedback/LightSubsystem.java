@@ -37,7 +37,7 @@ public class LightSubsystem {
   // Ensures only one instance can be made.
   public static synchronized LightSubsystem getInstance() {
     if (instance == null) {
-      instance = new LightSubsystem(Lights.lightIDLeft, Lights.lightStringLengthLeft);
+      instance = new LightSubsystem(Lights.lightID, Lights.lightStringLength);
     }
     return instance;
   }

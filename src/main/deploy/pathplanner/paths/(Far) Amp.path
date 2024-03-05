@@ -39,7 +39,11 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.4,
+<<<<<<< HEAD:src/main/deploy/pathplanner/paths/(Far) Amp.path
     "maxAcceleration": 4.0,
+=======
+    "maxAcceleration": 2.0,
+>>>>>>> dbba0b4b515dc3ead12d3bbcdd335658a523a30f:src/main/deploy/pathplanner/paths/To Speaker Right.path
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },

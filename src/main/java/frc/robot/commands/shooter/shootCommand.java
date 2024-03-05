@@ -85,32 +85,21 @@ public class shootCommand extends Command {
       shooter.spinIntakeToNegativeRPM(rpm.getAsInt()); // runs the shoot motor
       System.out.println("Run Shooter motor");
     }
-    if (shooter.shooterHasNote() == true) {
-      sinceNoteLeft =
-          currentTime
-              .millis(); // if it see's the note it will set the since note left time for current
-      // time
-      hasSeenNote = true;
-      System.out.println("SAW THE NOTE");
-    }
+
     System.out.println("Current  HAS NOTE STATE: " + shooter.getHasNoteState());
   }
 
   public boolean isFinished() {
-    return ((currentMillis - sinceNoteLeft) > 1000 && hasSeenNote == true)
+    return ((currentMillis - sinceNoteLeft) > 4500 && hasSeenNote == true)
         || (currentMillis - startedMillis > maxCommandWaitTime.shootCommandWaitTime);
   }
 
   @Override
   public void end(boolean interrupted) {
-
     shooter.stopShootMotor();
     shooter.stopIntakeMotor();
     System.out.println("Shooting Done");
     lights.SetLightState(LightStates.ReadyForPickup);
-   /*  System.out.println("Has Note state is currently: " + shooter.getHasNoteState());
-    if (!interrupted) {
-      shooter.setHasNoteState(false);
-    } */
+    System.out.println("Has Note state is currently: " + shooter.shooterHasNote());
   }
 }

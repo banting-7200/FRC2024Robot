@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 1.25,
-      "y": 4.1
+      "y": 7.0
     },
-    "rotation": -45.0
+    "rotation": 45.0
   },
   "command": {
     "type": "sequential",
@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(R) Right Close"
+            "pathName": "(L) Left Close"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(R) Speaker"
+            "pathName": "(L) Speaker"
           }
         },
         {
@@ -56,7 +56,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(R) Middle Close"
+            "pathName": "(L) Middle Close"
           }
         },
         {
@@ -80,7 +80,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(M) Left Close"
+            "pathName": "(M) Right Close"
           }
         },
         {
@@ -92,12 +92,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(L) Speaker"
+            "pathName": "(R) Speaker"
           }
         }
       ]
     }
   },
-  "folder": "Right Autos",
+  "folder": "Left Autos",
   "choreoAuto": false
 }

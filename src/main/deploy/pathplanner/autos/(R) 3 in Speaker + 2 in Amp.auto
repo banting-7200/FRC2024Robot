@@ -26,7 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(R) RC"
+            "pathName": "(R) Right Close"
           }
         },
         {
@@ -44,7 +44,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(R) MC"
+            "pathName": "(R) Middle Close"
           }
         },
         {
@@ -62,7 +62,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(M) LC"
+            "pathName": "(M) Left Close"
           }
         },
         {
@@ -80,7 +80,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "To Amp"
+            "pathName": "(Close) To Amp"
           }
         },
         {
@@ -98,12 +98,30 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(L) 1F"
+            "pathName": "(L) 1st Far"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Amp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(Close) To Amp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Right Autos",
   "choreoAuto": false
 }

@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7,
-        "y": 5.55
+        "x": 1.25,
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7000000000000002,
-        "y": 5.55
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.8,
+        "x": 2.2500000000000004,
         "y": 7.0
       },
-      "prevControl": {
-        "x": 1.8,
-        "y": 6.5
-      },
-      "nextControl": {
-        "x": 1.8,
-        "y": 7.999999999999995
-      },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.8,
-        "y": 7.799417139490484
+        "x": 2.7,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 1.8,
-        "y": 7.299417139490484
+        "x": 1.7000000000000002,
+        "y": 4.099999999999979
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,13 +30,31 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": -90.0,
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -45.0,
       "rotateFast": false
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.4,
     "maxAcceleration": 4.0,
@@ -61,11 +63,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Positions",
+  "folder": "(L) Paths",
   "previewStartingState": {
     "rotation": 0.0,
     "velocity": 0

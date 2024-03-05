@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 1.25,
-      "y": 4.1
+      "y": 7.0
     },
-    "rotation": -45.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -32,55 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(R) Right Close"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(R) Speaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(R) Middle Close"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(M) Speaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(M) Left Close"
+            "pathName": "(L) Left Close"
           }
         },
         {
@@ -94,10 +46,70 @@
           "data": {
             "pathName": "(L) Speaker"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(L) 1st Far"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(L) Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(L) 2nd Far"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Amp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(L) Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
         }
       ]
     }
   },
-  "folder": "Right Autos",
+  "folder": "Left Autos",
   "choreoAuto": false
 }

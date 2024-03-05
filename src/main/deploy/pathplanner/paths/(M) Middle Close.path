@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 2.7,
-        "y": 7.0
+        "y": 5.55
       },
       "prevControl": {
         "x": 1.7000000000000002,
-        "y": 7.0
+        "y": 5.55
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 45.0,
+      "rotationDegrees": 0.0,
       "rotateFast": false
     }
   ],
@@ -41,7 +41,7 @@
       "name": "New Event Marker",
       "waypointRelativePos": 0,
       "command": {
-        "type": "parallel",
+        "type": "race",
         "data": {
           "commands": [
             {
@@ -67,7 +67,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Middle Paths",
+  "folder": "(M) Paths",
   "previewStartingState": {
     "rotation": 0.0,
     "velocity": 0

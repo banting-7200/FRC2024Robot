@@ -5,12 +5,14 @@
   "pathFolders": [
     "(Old) Mid Start Paths",
     "(Old) Test Paths",
-    "Left Paths",
-    "Middle Paths",
+    "(L) Paths",
+    "(M) Paths",
     "Positions",
-    "Right Paths"
+    "(R) Paths"
   ],
   "autoFolders": [
+    "Left Autos",
+    "Right Autos",
     "Test Autos"
   ],
   "defaultMaxVel": 4.4,

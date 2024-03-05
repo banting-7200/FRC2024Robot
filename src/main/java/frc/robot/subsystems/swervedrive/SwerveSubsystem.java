@@ -171,7 +171,7 @@ public class SwerveSubsystem extends SubsystemBase {
     PathConstraints constraints =
         new PathConstraints(
             swerveDrive.getMaximumVelocity(),
-            4.0, 
+            4.0,
             swerveDrive.getMaximumAngularVelocity(),
             Units.degreesToRadians(720));
 
@@ -186,8 +186,12 @@ public class SwerveSubsystem extends SubsystemBase {
         );
   }
 
-  public void printVelAndAngVel(){
-    System.out.println("max velocity is: " + swerveDrive.getMaximumVelocity() + " max angular velocity is: " + swerveDrive.getMaximumAngularVelocity());
+  public void printVelAndAngVel() {
+    System.out.println(
+        "max velocity is: "
+            + swerveDrive.getMaximumVelocity()
+            + " max angular velocity is: "
+            + swerveDrive.getMaximumAngularVelocity());
   }
 
   /**

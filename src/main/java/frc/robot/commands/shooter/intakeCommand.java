@@ -28,6 +28,7 @@ public class intakeCommand extends Command {
   boolean notelock2 = false;
   boolean shooterHasNotePrev = false;
   boolean hasNote;
+  boolean readyNote = false;
   long commandInitMillis;
 
   private LightSubsystem lights = LightSubsystem.getInstance();
@@ -57,12 +58,13 @@ public class intakeCommand extends Command {
     notelock2 = false;
     shooterHasNotePrev = false;
     commandInitMillis = currentTime.millis();
-    hasNote = shooter.shooterHasNote();
+    hasNote = shooter.getHasNoteState();
+    readyNote = shooter.shooterHasNote();
   }
 
   @Override
   public void execute() {
-    if (hasNote == false) {
+    if (readyNote == false) {
 
       shooter.spinIntakeToNegativeRPM(intakeRPM); // intake
       if (shooter.shooterHasNote() == true && stopDryRun == false) {
@@ -75,19 +77,13 @@ public class intakeCommand extends Command {
           && stopDryRun == true) { // If the timer has elapsed and we have entered
         // the dry run
         shooter.spinIntakeToPositiveRPM(0); // Pull back the note
+        shooter.setHasNoteState(true);
         notelock = true;
+        readyNote = shooter.shooterHasNote();
         System.out.println("Stage 2@intakeExecute");
       }
       System.out.println("Current timer: " + (currentTime.millis() - startedMillis));
     }
-    /*
-     * shooterHasNotePrev =
-     * shooter
-     * .shooterHasNote(); // Store the status of the note this loop to check against
-     * the next
-     * // loop.
-     */
-
   }
 
   public boolean isFinished() {
@@ -100,10 +96,12 @@ public class intakeCommand extends Command {
     shooter.stopIntakeMotor();
     lights.SetLightState(LightStates.NotePickedUp);
     System.out.println("Intake Command ShutDown");
-   /*  System.out.println("Has Note state is currently@IntakeEnd: " + shooter.getHasNoteState());
-    if (!interrupted) {
-      shooter.setHasNoteState(true);
-    } */
+    System.out.println("Has Note state is currently@IntakeEnd: " + shooter.getHasNoteState());
+    /*
+     * if (!interrupted) {
+     * shooter.setHasNoteState(true);
+     * }
+     */
   }
 }
 // Jas sux

@@ -281,33 +281,48 @@ public class RobotContainer {
      */
     new JoystickButton(CoPilotController, copilotController.pickupButton)
         .onTrue(
-            new UntuckArm(arm)
-                .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
-                .andThen(
-                    new intakeCommand(
-                        Shooter.intakeRPM,
-                        Shooter.pullBackRPM,
-                        Shooter.correctPositioningRPM,
-                        shooter))
-                .andThen(
-                    new TuckArm(arm)
-                        .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
-                        .finallyDo(
-                            (boolean interrupted) -> {
-                              if (!interrupted && shooter.hasNote)
-                                lights.SetLightState(LightStates.CarryingNote);
-                            }))); // From what positions will we intake?
+            (new UntuckArm(arm)
+                    .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
+                    .andThen(
+                        new intakeCommand(
+                            Shooter.intakeRPM,
+                            Shooter.pullBackRPM,
+                            Shooter.correctPositioningRPM,
+                            shooter))
+                    .andThen(
+                        new TuckArm(arm)
+                            .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
+                            .finallyDo(
+                                (boolean interrupted) -> {
+                                  if (!interrupted && shooter.hasNote)
+                                    lights.SetLightState(LightStates.CarryingNote);
+                                })))
+                .onlyIf(() -> shooter.shooterHasNote())); // From what positions will we intake?
 
     /*
-     * On press deploys the hook
+     * On first press schedules a command to set the arm speed to climb speed,
+     * untcuk and move the arm to lift position, and deploys the hook.
+     * On second press the hook is retracted.
      */
     new JoystickButton(CoPilotController, copilotController.hookButton)
         .onTrue(
-            new MoveArmToPosition(arm, Arm.liftArmAngle)
+            new UntuckArm(arm)
+                .andThen(new MoveArmToPosition(arm, Arm.liftArmAngle))
                 .andThen(new InstantCommand(() -> arm.deployHook())))
         .onFalse(new InstantCommand(() -> arm.retractHook()));
-    /*.toggleOnTrue(new StartEndCommand(() -> {new UntuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.liftArmAngle))
-    .andThen(new InstantCommand(() -> arm.deployHook()));}, () -> arm.retractHook()));*/
+
+    /*  .toggleOnTrue(
+    new StartEndCommand(
+        () -> {
+          arm.motorManualSpeed = Arm.motorManualSpeedClimb;
+          CommandScheduler.getInstance()
+              .schedule(
+                  new UntuckArm(arm)
+                      .andThen(new MoveArmToPosition(arm, Arm.liftArmAngle))
+                      .andThen(new InstantCommand(() -> arm.deployHook())));
+        },
+        () -> arm.retractHook(),
+        arm)); */
 
     /*
      * This is a failsafe if the intake command fails.
@@ -350,7 +365,7 @@ public class RobotContainer {
      * tag
      */
     new JoystickButton(CoPilotController, copilotController.limelightButton)
-        .onTrue(
+        .toggleOnTrue(
             new AprilTagAlign(drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign));
 
     /*
@@ -423,6 +438,13 @@ public class RobotContainer {
    */
   public void stopArm() {
     arm.stopArm();
+  }
+
+  // This function can be called to reset the speed of the arm motors when in
+  // manual control to restore them from the speed set when switching to climb
+  // state.
+  public void resetArmManualSpeed() {
+    arm.motorManualSpeed = Arm.motorManualSpeed;
   }
 
   public void refreshTagIDs() {

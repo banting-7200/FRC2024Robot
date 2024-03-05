@@ -26,7 +26,7 @@ public class MoveArm extends Command {
   @Override
   public void execute() {
 
-    double motorTargetSpeed = axis.getAsDouble() * Arm.motorSpeed;
+    double motorTargetSpeed = axis.getAsDouble() * arm.motorManualSpeed;
     double motorSpeed = arm.getMotorSpeed();
     if ((motorTargetSpeed - motorSpeed) > rampRate) {
       arm.setMotorSpeed(motorSpeed += rampRate);

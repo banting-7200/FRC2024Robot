@@ -87,11 +87,14 @@ public class Robot extends TimedRobot {
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    m_robotContainer.setMotorBrake(true);
+    m_robotContainer.setMotorBrake(true); // Brake the swerve modules
     disabledTimer.reset();
     disabledTimer.start();
-    m_robotContainer.stopArm();
-    limelight.setLight(false);
+    m_robotContainer.stopArm(); // ensure the arm is stopped
+    m_robotContainer.resetArmManualSpeed(); // reset the arm speed to it's regular state
+    limelight.setLight(
+        false); // Turn off the limelight lights so the robot can be more easily approached on
+    // disable.
   }
 
   @Override

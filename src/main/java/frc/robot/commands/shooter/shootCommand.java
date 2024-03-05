@@ -80,13 +80,6 @@ public class shootCommand extends Command {
       }
     }
 
-    if ((currentMillis - startedMillis)
-        > waitTime.getAsInt()) { // waits for 250 ms for it to turn on the shoot
-      // motor
-      shooter.spinIntakeToNegativeRPM(rpm.getAsInt()); // runs the shoot motor
-      System.out.println("Run Shooter motor");
-    }
-
     System.out.println("Current  HAS NOTE STATE: " + shooter.getHasNoteState());
   }
 

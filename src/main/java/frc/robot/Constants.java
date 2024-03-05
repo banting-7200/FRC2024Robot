@@ -93,7 +93,8 @@ public final class Constants {
     public static /* final */ double pidOutputMin = -1;
     public static /* final */ double pidOutputMax = 1;
 
-    public static final double motorSpeed = 0.5; // 0 - 1 range
+    public static final double motorManualSpeed = 0.5; // 0 - 1 range
+    public static final double motorManualSpeedClimb = 0.3; // 0 - 1 range
 
     public static final double motorRampRate = 0.7;
     public static final double motorPIDRampRate = 0.6;

@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.25,
-      "y": 7.0
+      "x": 1.0,
+      "y": 4.1
     },
-    "rotation": 45.0
+    "rotation": -45.0
   },
   "command": {
     "type": "sequential",
@@ -32,43 +32,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(L) Left Close"
+            "pathName": "Under Stage Right"
           }
         },
         {
-          "type": "named",
+          "type": "race",
           "data": {
-            "name": "Prep Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(L) Speaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(L) Middle Close"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(M) Speaker"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(Stage) 3rd Far"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -80,7 +63,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(M) Right Close"
+            "pathName": "Back Under Stage Right"
           }
         },
         {
@@ -92,12 +75,49 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(R) Speaker"
+            "pathName": "(R Stage) Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Intake"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(R) 4th Far"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(R Stage) Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]
     }
   },
-  "folder": "Left Autos",
+  "folder": "Other Autos",
   "choreoAuto": false
 }

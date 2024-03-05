@@ -198,6 +198,8 @@ public class RobotContainer {
     autos.addOption("(L) Left Side 4 in Speaker", " (L) Left Side 4 in Speaker");   
     autos.addOption("(L) Left Side 2 in Speaker + 2 in Amp", "(L) Left Side 2 in Speaker + 2 in Amp");
     autos.addOption("(L) 3 Close in Speaker", "(L) 3 Close in Speaker");
+    autos.addOption("Far Notes", "Far Notes");
+
 
     shuffle.newAutoChooser(autos);
   }

@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.25,
+      "x": 1.0,
       "y": 7.0
     },
     "rotation": 0.0
@@ -30,9 +30,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "(L) Left Close"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(L) Left Close"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -54,9 +67,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "(L) 1st Far"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(L) 1st Far"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -84,9 +110,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "(L) 2nd Far"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(L) 2nd Far"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {

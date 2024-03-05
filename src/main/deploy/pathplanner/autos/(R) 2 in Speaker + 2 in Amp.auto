@@ -30,9 +30,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "(R) Right Close"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(R) Right Close"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -54,9 +67,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "(R) Middle Close"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(R) Middle Close"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -84,9 +110,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "(Amp) Left Close"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(Amp) Left Close"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {

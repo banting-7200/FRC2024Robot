@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.25,
+      "x": 1.0,
       "y": 4.1
     },
     "rotation": -45.0
@@ -30,9 +30,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "(R) RC"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(R) Right Close"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -56,7 +69,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(R) MC"
+            "pathName": "(R) Middle Close"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(R) Middle Close"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -80,7 +112,26 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(M) LC"
+            "pathName": "(M) Left Close"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(M) Left Close"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         },
         {
@@ -98,6 +149,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Right Autos",
   "choreoAuto": false
 }

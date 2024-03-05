@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7,
+        "x": 1.4,
         "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6,
+        "x": 2.4,
         "y": 5.55
       },
       "isLocked": false,
@@ -16,24 +16,48 @@
     },
     {
       "anchor": {
-        "x": 1.45,
-        "y": 5.55
+        "x": 2.7,
+        "y": 7.0
       },
       "prevControl": {
-        "x": 1.55,
-        "y": 5.55
+        "x": 1.7000000000000002,
+        "y": 7.0
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 45.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 4.4,
-    "maxAcceleration": 2.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -43,7 +67,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Positions",
+  "folder": "(M) Paths",
   "previewStartingState": {
     "rotation": 0.0,
     "velocity": 0

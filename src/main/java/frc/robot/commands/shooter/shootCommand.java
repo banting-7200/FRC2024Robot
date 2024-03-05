@@ -54,11 +54,10 @@ public class shootCommand extends Command {
 
   @Override
   public void execute() {
-    if (hasNote == true) {
-      currentMillis = currentTime.millis(); // records current time
-      if (currentMillis - startedMillis
-          < 100) { // runs until current millis minus started millis until bigger than 100
-        shooter.spinIntakeToPositiveRPM(3000);
+    if (hasNote == true) { //if shooter has note in it
+      currentMillis = currentTime.millis(); // record current time
+      if (currentMillis - startedMillis < 100) { // until 100 millis pass
+        shooter.spinIntakeToPositiveRPM(3000); //reverse intake
       } else if ((currentMillis - startedMillis) > waitTime.getAsInt()) {
         // waits for 250 ms for it to turn on the shoot
         // motor

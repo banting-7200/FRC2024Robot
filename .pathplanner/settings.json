@@ -5,16 +5,19 @@
   "pathFolders": [
     "(Old) Mid Start Paths",
     "(Old) Test Paths",
-    "Left Paths",
-    "Middle Paths",
+    "(L) Paths",
+    "(M) Paths",
     "Positions",
-    "Right Paths"
+    "(R) Paths"
   ],
   "autoFolders": [
+    "Left Autos",
+    "Other Autos",
+    "Right Autos",
     "Test Autos"
   ],
   "defaultMaxVel": 4.4,
-  "defaultMaxAccel": 2.0,
+  "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 4.5

@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.0,
-      "y": 4.1
+      "x": 1.25,
+      "y": 7.0
     },
     "rotation": 0.0
   },
@@ -24,13 +24,19 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Prep Intake"
+          }
+        },
+        {
           "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(R) Right Close"
+                  "pathName": "(L) Left Close"
                 }
               },
               {
@@ -51,75 +57,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(R) Speaker"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "(R) Middle Close"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(M) Speaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "(M) Left Close"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Amp"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(Close) To Amp"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
+            "pathName": "(L) Speaker"
           }
         },
         {
@@ -156,7 +94,50 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(Close) To Amp"
+            "pathName": "(Far) Left Close"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Intake"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(L) 2nd Far"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Amp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(Far) Left Close"
           }
         },
         {
@@ -168,6 +149,6 @@
       ]
     }
   },
-  "folder": "Right Autos",
+  "folder": "Left Autos",
   "choreoAuto": false
 }

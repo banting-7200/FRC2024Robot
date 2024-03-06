@@ -33,6 +33,11 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 2;
   }
 
+  public static final class xboxController {
+    public static final double rumbleStrength = 0.7; // 0 - 1 range
+    public static final double rumbleTime = 1000; // rumble time in milliseconds
+  }
+
   public static final class copilotController {
     public static final int upButton = 2;
     public static final int downButton = 3;
@@ -93,7 +98,8 @@ public final class Constants {
     public static /* final */ double pidOutputMin = -1;
     public static /* final */ double pidOutputMax = 1;
 
-    public static final double motorSpeed = 0.5; // 0 - 1 range
+    public static final double motorManualSpeed = 0.5; // 0 - 1 range
+    public static final double motorManualSpeedClimb = 0.3; // 0 - 1 range
 
     public static final double motorRampRate = 0.7;
     public static final double motorPIDRampRate = 0.6;
@@ -148,6 +154,7 @@ public final class Constants {
     public static final int speakerShootRPM = 7200;
     public static final int ampWaitTime = 0;
     public static final int speakerWaitTime = 1000;
+    public static final int shootRampDown = 500;
 
     // Default PID values to be tuned later
     public static final double shooterF = 0.13;

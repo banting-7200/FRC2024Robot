@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.7,
-        "y": 4.1
+        "x": 3.0,
+        "y": 2.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7000000000000002,
-        "y": 4.1
+        "x": 2.9292893218813454,
+        "y": 2.0707106781186546
       },
       "isLocked": false,
       "linkedName": null
@@ -20,26 +20,20 @@
         "y": 4.1
       },
       "prevControl": {
-        "x": 2.0,
-        "y": 4.1
+        "x": 1.0707106781186548,
+        "y": 4.029289321881345
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": -45.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.5,
       "command": {
         "type": "parallel",
         "data": {
@@ -67,9 +61,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "(R) Paths",
+  "folder": "Positions",
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 0,
     "velocity": 0
   },
   "useDefaultConstraints": true

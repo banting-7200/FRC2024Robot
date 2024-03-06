@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 1.25,
-        "y": 4.1
+        "y": 7.0
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.25,
-        "y": 4.1
+        "y": 7.0
       },
       "isLocked": false,
       "linkedName": null
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 2.7,
-        "y": 4.1
+        "y": 7.0
       },
       "prevControl": {
         "x": 1.7000000000000002,
-        "y": 4.099999999999979
+        "y": 7.0
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,30 +31,12 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
+      "rotationDegrees": 0.0,
       "rotateFast": false
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.4,
     "maxAcceleration": 2.0,
@@ -67,10 +49,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Right Paths",
-  "previewStartingState": {
-    "rotation": 0.0,
-    "velocity": 0
-  },
+  "folder": "(L) Paths",
+  "previewStartingState": null,
   "useDefaultConstraints": true
 }

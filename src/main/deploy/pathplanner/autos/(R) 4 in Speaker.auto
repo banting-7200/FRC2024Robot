@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.25,
+      "x": 1.0,
       "y": 4.1
     },
     "rotation": -45.0
@@ -30,9 +30,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "(R) RC"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(R) Right Close"
+                }
+              }
+            ]
           }
         },
         {
@@ -54,9 +67,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "(R) MC"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(R) Middle Close"
+                }
+              }
+            ]
           }
         },
         {
@@ -78,9 +104,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "(M) LC"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(M) Left Close"
+                }
+              }
+            ]
           }
         },
         {
@@ -98,6 +137,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Right Autos",
   "choreoAuto": false
 }

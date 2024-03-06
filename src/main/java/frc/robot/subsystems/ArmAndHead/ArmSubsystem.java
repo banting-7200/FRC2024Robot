@@ -31,6 +31,8 @@ public class ArmSubsystem extends SubsystemBase {
   private DigitalInput
       solenoidSwitch; // switch attached to the shooter solenoid to query the tuck/untucked state.
 
+  public double motorManualSpeed = Arm.motorManualSpeed;
+
   DoubleSolenoidActions shooterSolenoidActions =
       new DoubleSolenoidActions(
           Constants.m_pH.makeDoubleSolenoid(

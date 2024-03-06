@@ -201,11 +201,13 @@ public class RobotContainer {
     autos.addOption("(R) 4 in Speaker", "(R) 4 in Speaker");
     autos.addOption("(R) 2 in Speaker + 2 in Amp", "(R) 2 in Speaker + 2 in Amp");
     autos.addOption("(R) 3 in Speaker + 2 in Amp", "(R) 3 in Speaker + 2 in Amp");
+    autos.addOption("(R) Far Notes 1", "(R) Far Notes 1");
+    autos.addOption("(R) Far Notes 2", "(R) Far Notes 2");
     autos.addOption("(L) Left Side 4 in Speaker", " (L) Left Side 4 in Speaker");
     autos.addOption(
         "(L) Left Side 2 in Speaker + 2 in Amp", "(L) Left Side 2 in Speaker + 2 in Amp");
     autos.addOption("(L) 3 Close in Speaker", "(L) 3 Close in Speaker");
-    autos.addOption("Far Notes", "Far Notes");
+    autos.addOption("(M) Far Notes", "(M) Far Notes");
 
     shuffle.newAutoChooser(autos);
   }

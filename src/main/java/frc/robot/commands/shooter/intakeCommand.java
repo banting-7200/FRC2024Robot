@@ -7,6 +7,7 @@
 
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.maxCommandWaitTime;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
@@ -17,30 +18,19 @@ import java.time.Clock;
 public class intakeCommand extends Command {
   public ShooterSubsystem shooter;
   double intakeRPM;
-  double pullBackRPM;
-  double correctPositioningRPM;
+
   Clock currentTime = Clock.systemDefaultZone();
   long startedMillis = 0;
-  boolean override = false;
-  int openOrClosedCounter = 0;
   boolean stopDryRun = false;
-  boolean notelock = false;
-  boolean notelock2 = false;
-  boolean shooterHasNotePrev = false;
-  boolean hasNote;
   boolean readyNote = false;
   long commandInitMillis;
 
+  XboxController driveController;
+
   private LightSubsystem lights = LightSubsystem.getInstance();
 
-  public intakeCommand(
-      double intakeRPM,
-      double pullBackRPM,
-      double correctPositioningRPM,
-      ShooterSubsystem shooter) {
+  public intakeCommand(double intakeRPM, ShooterSubsystem shooter) {
     this.intakeRPM = intakeRPM;
-    this.pullBackRPM = pullBackRPM;
-    this.correctPositioningRPM = correctPositioningRPM;
     this.shooter = shooter;
 
     addRequirements(shooter);
@@ -51,43 +41,36 @@ public class intakeCommand extends Command {
     System.out.println("Has Note state is currently@IntakeStart: " + shooter.getHasNoteState());
     System.out.println("I GOT TO INIT");
     startedMillis = 0;
-    override = false;
-    openOrClosedCounter = 0;
     stopDryRun = false;
-    notelock = false;
-    notelock2 = false;
-    shooterHasNotePrev = false;
     commandInitMillis = currentTime.millis();
-    hasNote = shooter.getHasNoteState();
     readyNote = shooter.shooterHasNote();
   }
 
   @Override
   public void execute() {
-    if (readyNote == false) {
+    /* if (readyNote == false) { */
 
-      shooter.spinIntakeToNegativeRPM(intakeRPM); // intake
-      if (shooter.shooterHasNote() == true && stopDryRun == false) {
-        startedMillis =
-            currentTime.millis() + 100; // run for an extra 100ms after note has been detected
-        stopDryRun = true; // 100ms is finished
-        System.out.println("Stage 1@intakeExecute");
-      }
-      if (currentTime.millis() > startedMillis
-          && stopDryRun == true) { // If the timer has elapsed and we have entered
-        // the dry run
-        shooter.spinIntakeToPositiveRPM(0); // Pull back the note
-        shooter.setHasNoteState(true);
-        notelock = true;
-        readyNote = shooter.shooterHasNote();
-        System.out.println("Stage 2@intakeExecute");
-      }
-      System.out.println("Current timer: " + (currentTime.millis() - startedMillis));
+    shooter.spinIntakeToNegativeRPM(intakeRPM); // intake
+    /*     if (shooter.shooterHasNote() && stopDryRun == false) {
+      startedMillis =
+          currentTime.millis() + 100; // run for an extra 100ms after note has been detected
+      stopDryRun = true; // 100ms is finished
+      System.out.println("Stage 1@intakeExecute");
     }
+    if (currentTime.millis() > startedMillis
+        && stopDryRun == true) { // If the timer has elapsed and we have entered
+      // the dry run
+      shooter.spinIntakeToPositiveRPM(0); // Pull back the note
+      shooter.setHasNoteState(true);
+      System.out.println("Stage 2@intakeExecute");
+    } */
+    System.out.println("Current timer: " + (currentTime.millis() - startedMillis));
   }
 
+  /* } */
+
   public boolean isFinished() {
-    return notelock
+    return shooter.shooterHasNote()
         || (currentTime.millis() - commandInitMillis > maxCommandWaitTime.intakeCommandWaitTime);
   }
 

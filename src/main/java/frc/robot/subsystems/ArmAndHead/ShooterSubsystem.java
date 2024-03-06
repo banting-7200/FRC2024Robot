@@ -55,6 +55,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
     m_shoot.getConfigurator().apply(slot0Configs); // pass shoot motor PID configs to the motor
     m_intake.getConfigurator().apply(slot1Configs); // pass intake motor PID configs to the motor
+
+    shuffle.setTab("Debugging");
+    shuffle.setNumber("shoot Ramp Down", Shooter.shootRampDown);
   }
 
   /* Spins the intake to a positive passed in RPM */
@@ -73,6 +76,11 @@ public class ShooterSubsystem extends SubsystemBase {
   public void spinShootToRPM(double targetRPM) {
     m_velocity.Slot = 0;
     m_shoot.setControl(m_velocity.withVelocity(targetRPM / 60)); // convert rpm to rps then apply
+  }
+
+  public void spinShootNegativeToRPM(double targetRPM) {
+    m_velocity.Slot = 0;
+    m_shoot.setControl(m_velocity.withVelocity(-targetRPM / 60)); // convert rpm to rps then apply
   }
 
   /* Querys the state of the IR sensor */
@@ -117,12 +125,12 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public boolean getHasNoteState() {
-    
+
     return hasNote;
   }
 
   public void setShooterShuffleBoard() {
     shuffle.setTab("Debugging");
-    shuffle.setBoolean("IR Sensor", shootIR.get());
+    shuffle.setBoolean("IR Sensor", shooterHasNote());
   }
 }

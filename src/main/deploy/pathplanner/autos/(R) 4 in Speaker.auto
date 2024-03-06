@@ -61,12 +61,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
-          }
-        },
-        {
           "type": "race",
           "data": {
             "commands": [
@@ -95,12 +89,6 @@
           "type": "named",
           "data": {
             "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
           }
         },
         {

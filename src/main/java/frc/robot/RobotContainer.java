@@ -14,9 +14,11 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -25,6 +27,8 @@ import frc.robot.Constants.Limelight;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.Shooter;
 import frc.robot.Constants.copilotController;
+import frc.robot.Constants.xboxController;
+import frc.robot.commands.RumbleCommand;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.arm.MoveArmToPosition;
 import frc.robot.commands.arm.TuckArm;
@@ -86,9 +90,7 @@ public class RobotContainer {
 
   static boolean speakerShot =
       true; // Whether the robot is ready for a Speaker Shot or not. Initialized to true
-
   // because our
-
   // first shot is a speaker shot.
 
   public final IntSupplier shootTagToAlign = () -> limelight.getSpeakerMiddleTag();
@@ -164,16 +166,17 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "Print", Commands.runOnce(() -> System.out.println("Events work!!!")));
 
+    NamedCommands.registerCommand("Intake", new intakeCommand(Shooter.intakeRPM, shooter));
     NamedCommands.registerCommand(
-        "Intake",
-        new intakeCommand(
-            Shooter.intakeRPM, Shooter.pullBackRPM, Shooter.correctPositioningRPM, shooter));
-    NamedCommands.registerCommand(
-        "Shoot", new shootCommand(Shooter.speakerShootRPM, shooter, Shooter.speakerWaitTime));
+        "Shoot",
+        new shootCommand(Shooter.speakerShootRPM, shooter, Shooter.speakerWaitTime, isSpeakerShot));
     NamedCommands.registerCommand(
         "Prep Intake", new UntuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle)));
     NamedCommands.registerCommand(
-        "Prep Shoot", new TuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.speakerArmAngle)));
+        "Prep Shoot",
+        new TuckArm(arm)
+            .andThen(new MoveArmToPosition(arm, Arm.speakerArmAngle))
+            .andThen(new InstantCommand(() -> speakerShot = true)));
     NamedCommands.registerCommand(
         "Note Align", Commands.runOnce(() -> System.out.println("Note align")));
     NamedCommands.registerCommand(
@@ -188,18 +191,21 @@ public class RobotContainer {
         "Amp Align",
         new AprilTagAlign(drivebase, limelight, Limelight.ampTargetArea, ampTagToAlign));
     NamedCommands.registerCommand(
-        "Prep Amp", new UntuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.ampArmAngle)));
+        "Prep Amp",
+        new UntuckArm(arm)
+            .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))
+            .andThen(new InstantCommand(() -> speakerShot = false)));
 
     // Initialize sendable chooser for autos
     autos = new SendableChooser();
     autos.addOption("(R) 4 in Speaker", "(R) 4 in Speaker");
     autos.addOption("(R) 2 in Speaker + 2 in Amp", "(R) 2 in Speaker + 2 in Amp");
     autos.addOption("(R) 3 in Speaker + 2 in Amp", "(R) 3 in Speaker + 2 in Amp");
-    autos.addOption("(L) Left Side 4 in Speaker", " (L) Left Side 4 in Speaker");   
-    autos.addOption("(L) Left Side 2 in Speaker + 2 in Amp", "(L) Left Side 2 in Speaker + 2 in Amp");
+    autos.addOption("(L) Left Side 4 in Speaker", " (L) Left Side 4 in Speaker");
+    autos.addOption(
+        "(L) Left Side 2 in Speaker + 2 in Amp", "(L) Left Side 2 in Speaker + 2 in Amp");
     autos.addOption("(L) 3 Close in Speaker", "(L) 3 Close in Speaker");
     autos.addOption("Far Notes", "Far Notes");
-
 
     shuffle.newAutoChooser(autos);
   }
@@ -247,6 +253,9 @@ public class RobotContainer {
               ? limelight.calculateArmShootAngle()
               : Arm.speakerArmAngle;
 
+  public BooleanSupplier hasNote = () -> shooter.shooterHasNote();
+  public BooleanSupplier isTeleop = () -> DriverStation.isTeleop();
+
   private void configureBindings() {
 
     // SWERVE STUFF
@@ -258,6 +267,11 @@ public class RobotContainer {
     Trigger t = new Trigger(creepBoolean);
     t.onTrue(new InstantCommand(() -> drivebase.setCreep(true))) // Set creep on
         .onFalse(new InstantCommand(() -> drivebase.setCreep(false))); // Set creep off
+
+    Trigger rumbleTrigger = new Trigger(hasNote);
+    rumbleTrigger.onTrue(
+        new RumbleCommand(xboxController.rumbleStrength, xboxController.rumbleTime, driverXbox)
+            .onlyIf(isTeleop));
 
     // Manual arm movement up based on the axis double supplier
     new JoystickButton(CoPilotController, copilotController.upButton)
@@ -286,33 +300,42 @@ public class RobotContainer {
      */
     new JoystickButton(CoPilotController, copilotController.pickupButton)
         .onTrue(
-            new UntuckArm(arm)
-                .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
-                .andThen(
-                    new intakeCommand(
-                        Shooter.intakeRPM,
-                        Shooter.pullBackRPM,
-                        Shooter.correctPositioningRPM,
-                        shooter))
-                .andThen(
-                    new TuckArm(arm)
-                        .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
-                        .finallyDo(
-                            (boolean interrupted) -> {
-                              if (!interrupted && shooter.hasNote)
-                                lights.SetLightState(LightStates.CarryingNote);
-                            }))); // From what positions will we intake?
+            (new UntuckArm(arm)
+                    .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
+                    .andThen(new intakeCommand(Shooter.intakeRPM, shooter))
+                    .andThen(
+                        new TuckArm(arm)
+                            .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
+                            .finallyDo(
+                                (boolean interrupted) -> {
+                                  if (!interrupted && shooter.hasNote)
+                                    lights.SetLightState(LightStates.CarryingNote);
+                                })))
+                .onlyIf(() -> !shooter.shooterHasNote())); // From what positions will we intake?
 
     /*
-     * On press deploys the hook
+     * On first press schedules a command to set the arm speed to climb speed,
+     * untcuk and move the arm to lift position, and deploys the hook.
+     * On second press the hook is retracted.
      */
     new JoystickButton(CoPilotController, copilotController.hookButton)
-        .onTrue(
-            new MoveArmToPosition(arm, Arm.liftArmAngle)
-                .andThen(new InstantCommand(() -> arm.deployHook())))
-        .onFalse(new InstantCommand(() -> arm.retractHook()));
-    /*.toggleOnTrue(new StartEndCommand(() -> {new UntuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.liftArmAngle))
-    .andThen(new InstantCommand(() -> arm.deployHook()));}, () -> arm.retractHook()));*/
+        /*  .onTrue(
+                new UntuckArm(arm)
+                        .andThen(new MoveArmToPosition(arm, Arm.liftArmAngle))
+                        .andThen(new InstantCommand(() -> arm.deployHook())))
+        .onFalse(new InstantCommand(() -> arm.retractHook())); */
+
+        .toggleOnTrue(
+            new StartEndCommand(
+                () -> {
+                  arm.motorManualSpeed = Arm.motorManualSpeedClimb;
+                  CommandScheduler.getInstance()
+                      .schedule(
+                          new UntuckArm(arm)
+                              .andThen(new MoveArmToPosition(arm, Arm.liftArmAngle))
+                              .andThen(new InstantCommand(() -> arm.deployHook())));
+                },
+                () -> arm.retractHook()));
 
     /*
      * This is a failsafe if the intake command fails.
@@ -348,14 +371,14 @@ public class RobotContainer {
      * position of the arm, which can be found if you scroll up.
      */
     new JoystickButton(CoPilotController, copilotController.shootButton)
-        .onTrue(new shootCommand(shooterRPM, shooter, shooterWaitTime));
+        .onTrue(new shootCommand(shooterRPM, shooter, shooterWaitTime, isSpeakerShot));
 
     /*
      * Simply schedules a command to align the robot to the commands supplied april
      * tag
      */
     new JoystickButton(CoPilotController, copilotController.limelightButton)
-        .onTrue(
+        .toggleOnTrue(
             new AprilTagAlign(drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign));
 
     /*
@@ -373,8 +396,8 @@ public class RobotContainer {
                 .andThen(new MoveArmToPosition(arm, speakerAngle))
                 .finallyDo(
                     (boolean interrupted) -> {
-                      if (!interrupted) speakerShot = true;
-                      lights.SetLightState(LightStates.ReadyToSPEAKER);
+                      speakerShot = true;
+                      if (!interrupted) lights.SetLightState(LightStates.ReadyToSPEAKER);
                     }));
 
     /*
@@ -391,8 +414,8 @@ public class RobotContainer {
                 .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))
                 .finallyDo(
                     (boolean interrupted) -> {
-                      if (!interrupted) speakerShot = false;
-                      lights.SetLightState(LightStates.ReadyToAMP);
+                      speakerShot = false;
+                      if (!interrupted) lights.SetLightState(LightStates.ReadyToAMP);
                     }));
   }
 
@@ -428,6 +451,13 @@ public class RobotContainer {
    */
   public void stopArm() {
     arm.stopArm();
+  }
+
+  // This function can be called to reset the speed of the arm motors when in
+  // manual control to restore them from the speed set when switching to climb
+  // state.
+  public void resetArmManualSpeed() {
+    arm.motorManualSpeed = Arm.motorManualSpeed;
   }
 
   public void refreshTagIDs() {

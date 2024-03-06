@@ -4,14 +4,12 @@
 
 package frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.Feedback.LightSubsystem;
-import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Vision.LimelightDevice;
 import java.io.File;
@@ -33,7 +31,6 @@ public class Robot extends TimedRobot {
 
   private Timer disabledTimer; // Normal Robot container instance
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
-  LightSubsystem lights = LightSubsystem.getInstance();
 
   public Robot() {
     instance = this;
@@ -59,7 +56,13 @@ public class Robot extends TimedRobot {
 
     // start capture of connect camera to rio for the live stream camera
     // displays output of stream to shuffle board
-    CameraServer.startAutomaticCapture("Front Camera", 0);
+    // Must be a PWM header, not MXP or DIO
+
+    // Reuse buffer
+
+    // Default to a length of 60, start empty output
+
+    // Length is expensive to set, so only set it once, then just update data
   }
 
   /**
@@ -81,17 +84,20 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
 
     m_robotContainer.setShuffleboard();
-    lights.SetLightState(LightStates.CarryingNote);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    m_robotContainer.setMotorBrake(true);
+    m_robotContainer.setMotorBrake(true); // Brake the swerve modules
     disabledTimer.reset();
     disabledTimer.start();
-    m_robotContainer.stopArm();
-    limelight.setLight(false);
+    m_robotContainer.stopArm(); // ensure the arm is stopped
+    m_robotContainer.resetArmManualSpeed(); // reset the arm speed to it's regular state
+    limelight.setLight(
+        false); // Turn off the limelight lights so the robot can be more easily approached on
+    // disable.
+    m_robotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0);
   }
 
   @Override

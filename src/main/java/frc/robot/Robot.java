@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -95,6 +96,7 @@ public class Robot extends TimedRobot {
     limelight.setLight(
         false); // Turn off the limelight lights so the robot can be more easily approached on
     // disable.
+    m_robotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0);
   }
 
   @Override

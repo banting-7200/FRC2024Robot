@@ -34,15 +34,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "(R) Right Close"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(R) Right Close"
                 }
               }
             ]
@@ -67,25 +67,19 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "(R) Middle Close"
-          }
-        },
-        {
           "type": "race",
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "(R) Middle Close"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(R) Middle Close"
                 }
               }
             ]
@@ -110,25 +104,19 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "(M) Left Close"
-          }
-        },
-        {
           "type": "race",
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "(M) Left Close"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(M) Left Close"
                 }
               }
             ]

@@ -10,7 +10,9 @@ import frc.robot.Constants.maxCommandWaitTime;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
+import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import java.time.Clock;
+import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
 
 public class shootCommand extends Command {
@@ -21,26 +23,33 @@ public class shootCommand extends Command {
   long startedMillis; // time when started
   long currentMillis; // current time
   long sinceNoteLeft; // time since note left shooter
-  long sinceIntakeMotor; // time since intake motor turned on
   IntSupplier rpm; // Int supplier for different shoot rpm's(speaker/amp)
   Boolean hasSeenNote = false; // if note has been detected yet
   IntSupplier waitTime; // Int supplier for different wait times(speaker/amp)
   boolean hasNote; // This variables is used for telling whether the note is already in the shooter
+  BooleanSupplier isSpeakerShot;
 
   // or
+  ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
 
   // not
 
-  public shootCommand(IntSupplier rpm, ShooterSubsystem shooter, IntSupplier waitTime) {
+  public shootCommand(
+      IntSupplier rpm,
+      ShooterSubsystem shooter,
+      IntSupplier waitTime,
+      BooleanSupplier isSpeakerShot) {
     this.rpm = rpm;
     this.shooter = shooter;
     this.waitTime = waitTime;
+    this.isSpeakerShot = isSpeakerShot;
 
     addRequirements(shooter);
   }
 
-  public shootCommand(int rpm, ShooterSubsystem shooter, int waitTime) {
-    this(() -> rpm, shooter, () -> waitTime);
+  public shootCommand(
+      int rpm, ShooterSubsystem shooter, int waitTime, BooleanSupplier isSpeakerShot) {
+    this(() -> rpm, shooter, () -> waitTime, isSpeakerShot);
   }
 
   @Override
@@ -54,10 +63,11 @@ public class shootCommand extends Command {
 
   @Override
   public void execute() {
-    if (hasNote == true) { //if shooter has note in it
+    if (hasNote == true) { // if shooter has note in it
       currentMillis = currentTime.millis(); // record current time
-      if (currentMillis - startedMillis < 100) { // until 100 millis pass
-        shooter.spinIntakeToPositiveRPM(3000); //reverse intake
+      if (currentMillis - startedMillis < 100
+          && isSpeakerShot.getAsBoolean()) { // until 100 millis pass
+        shooter.spinIntakeToPositiveRPM(3000); // reverse intake
       } else if ((currentMillis - startedMillis) > waitTime.getAsInt()) {
         // waits for 250 ms for it to turn on the shoot
         // motor
@@ -79,11 +89,12 @@ public class shootCommand extends Command {
       }
     }
 
-    System.out.println("Current  HAS NOTE STATE: " + shooter.getHasNoteState());
+    System.out.println("Current  HAS NOTE STATE: " + shooter.shooterHasNote());
   }
 
   public boolean isFinished() {
-    return ((currentMillis - sinceNoteLeft) > 4500 && hasSeenNote == true)
+    return ((currentMillis - sinceNoteLeft) > shuffle.getNumber("shoot Ramp Down")
+            && hasSeenNote == true)
         || (currentMillis - startedMillis > maxCommandWaitTime.shootCommandWaitTime);
   }
 

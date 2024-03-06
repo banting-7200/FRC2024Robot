@@ -14,73 +14,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Under Stage Right"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "(Stage) 3rd Far"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Back Under Stage Right"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(R Stage) Speaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Prep Intake"
           }
         },
@@ -114,10 +47,47 @@
           "data": {
             "name": "Shoot"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Intake"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(R) 5th Far"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(R Stage) Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
         }
       ]
     }
   },
-  "folder": "Other Autos",
+  "folder": "Right Autos",
   "choreoAuto": false
 }

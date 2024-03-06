@@ -170,6 +170,7 @@ public class ShuffleboardSubsystem {
     setNumber(
         name + " Speed", speed, BuiltInWidgets.kDial); // todo:see if max and mins needs to be set.
     setNumber(name + " Direction", direction, BuiltInWidgets.kGyro); // same here
+    setLayout(null);
   }
 
   public void setPID(
@@ -187,6 +188,7 @@ public class ShuffleboardSubsystem {
     setNumber(name + " D", d, 0, 2);
     setNumber(name + " F", f, 0, 3);
     setNumber(name + " IZ", iz, 0, 4);
+    setLayout(null);
   }
 
   public double[] getPID(
@@ -252,23 +254,20 @@ public class ShuffleboardSubsystem {
 
   public void setColour(String name, Color colour) { // custom colour widget
     try {
-      /*       setTab("Light Tab");
       GenericEntry entry;
       int index = entryNames.indexOf(name);
-      Map<String, Object> map = Map.of("colorWhenTrue", colour.toString());
+      Map<String, Object> map = Map.of("colorWhenTrue", colour.toHexString());
       if (layout != null) {
-        layout.add(name, true).withProperties(map).withWidget(BuiltInWidgets.kBooleanBox);
-        entry = layout.add(name, true).getEntry();
+        entry = layout.add(name, true).withProperties(map).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
       } else {
-        tab.add(name, true).withProperties(map).withWidget(BuiltInWidgets.kBooleanBox);
-        entry = tab.add(name, true).getEntry();
+        entry = tab.add(name, true).withProperties(map).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
       }
       if (index == -1) {
         entryNames.add(name);
         entries.add(entry);
       }
-      */
-      lights.withProperties(Map.of("colorWhenTrue", colour.toHexString()));
+      
+      // lights.withProperties(Map.of("colorWhenTrue", colour.toHexString()));
     } catch (IllegalArgumentException e) {
       System.out.println("Set Color Error, EXEPTION: " + e);
     }

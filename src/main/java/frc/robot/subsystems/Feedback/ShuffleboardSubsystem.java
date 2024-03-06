@@ -268,7 +268,7 @@ public class ShuffleboardSubsystem {
         entries.add(entry);
       }
       */
-      lights.withProperties(Map.of("colorWhenTrue", colour.toString()));
+      lights.withProperties(Map.of("colorWhenTrue", colour.toHexString()));
     } catch (IllegalArgumentException e) {
       System.out.println("Set Color Error, EXEPTION: " + e);
     }

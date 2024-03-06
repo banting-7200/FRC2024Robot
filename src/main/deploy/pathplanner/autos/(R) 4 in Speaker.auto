@@ -34,24 +34,18 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "(R) Right Close"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake"
                 }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(R) Right Close"
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Shoot"
           }
         },
         {
@@ -63,13 +57,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Intake"
+            "name": "Shoot"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "(R) Middle Close"
+            "name": "Prep Intake"
           }
         },
         {
@@ -77,24 +71,18 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "(R) Middle Close"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake"
                 }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(R) Middle Close"
+                }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Shoot"
           }
         },
         {
@@ -106,13 +94,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Intake"
+            "name": "Shoot"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "(M) Left Close"
+            "name": "Prep Intake"
           }
         },
         {
@@ -120,30 +108,30 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "(M) Left Close"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(M) Left Close"
                 }
               }
             ]
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Prep Shoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "(L) Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]

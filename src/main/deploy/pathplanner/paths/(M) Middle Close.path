@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 2.7,
+        "x": 2.9,
         "y": 5.55
       },
       "prevControl": {
-        "x": 1.7000000000000002,
+        "x": 1.9,
         "y": 5.55
       },
       "nextControl": null,
@@ -36,25 +36,7 @@
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0,
-      "command": {
-        "type": "race",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.4,
     "maxAcceleration": 4.0,

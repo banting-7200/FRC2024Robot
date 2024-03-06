@@ -67,15 +67,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Prep Shoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "(R Stage) Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {

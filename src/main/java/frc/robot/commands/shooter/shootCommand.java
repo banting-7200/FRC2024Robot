@@ -59,6 +59,7 @@ public class shootCommand extends Command {
       if (currentMillis - startedMillis
           < 100) { // runs until current millis minus started millis until bigger than 100
         shooter.spinIntakeToPositiveRPM(3000);
+        shooter.spinShootNegativeToRPM(3000);
       } else if ((currentMillis - startedMillis) > waitTime.getAsInt()) {
         // waits for 250 ms for it to turn on the shoot
         // motor
@@ -66,6 +67,7 @@ public class shootCommand extends Command {
         System.out.println("Run Shooter motor");
       } else {
         shooter.stopIntakeMotor();
+        shooter.stopShootMotor();
       }
       if (shooter.shooterHasNote() == true) {
         sinceNoteLeft =

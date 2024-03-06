@@ -75,6 +75,11 @@ public class ShooterSubsystem extends SubsystemBase {
     m_shoot.setControl(m_velocity.withVelocity(targetRPM / 60)); // convert rpm to rps then apply
   }
 
+  public void spinShootNegativeToRPM(double targetRPM) {
+    m_velocity.Slot = 0;
+    m_shoot.setControl(m_velocity.withVelocity(-targetRPM / 60)); // convert rpm to rps then apply
+  }
+
   /* Querys the state of the IR sensor */
   public boolean shooterHasNote() {
     return !shootIR.get(); // Inverted because the IR sensor returns true when there is no note.

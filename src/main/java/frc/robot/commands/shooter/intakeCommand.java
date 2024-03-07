@@ -77,7 +77,7 @@ public class intakeCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.stopIntakeMotor();
-    lights.SetLightState(LightStates.NotePickedUp);
+    if (shooter.shooterHasNote()) lights.SetLightState(LightStates.NotePickedUp);
     System.out.println("Intake Command ShutDown");
     System.out.println("Has Note state is currently@IntakeEnd: " + shooter.getHasNoteState());
     /*

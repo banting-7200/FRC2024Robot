@@ -214,6 +214,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // swerveDrive.setHeadingCorrection(true); // Normally you would want heading
     // correction for
     // this kind of control.
+
     return run(
         () -> {
           double xInput =
@@ -460,7 +461,8 @@ public class SwerveSubsystem extends SubsystemBase {
         xInput, yInput, angle.getRadians(), getHeading().getRadians(), maximumSpeed);
   }
 
-  //Convert circular joystick input into a square shape. Todo: Further comment and update this after com to be more efficent.
+  // Convert circular joystick input into a square shape. Todo: Further comment and update this
+  // after com to be more efficent.
   public double[] squareifyInput(double x, double y, double innerRoundness) {
     double PiOverFour = Math.PI / 4;
 

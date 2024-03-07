@@ -97,16 +97,17 @@ public class RobotContainer {
   public final IntSupplier shootTagToAlign = () -> limelight.getSpeakerMiddleTag();
   public final IntSupplier ampTagToAlign = () -> limelight.getAmpTag();
 
-  //Supply square joystick input. Todo: Further comment and update this after com to be more efficent.
+  // Supply square joystick input. Todo: Further comment and update this after com to be more
+  // efficent.
   public final Supplier<Double> joystickSquaredX =
       () -> {
         double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY(), 2);
-        return d[0];
+        return isRedAliance.getAsBoolean() ? d[0] * -1 : d[0];
       };
   public final Supplier<Double> joystickSquaredY =
       () -> {
         double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY(), 2);
-        return d[1];
+        return isRedAliance.getAsBoolean() ? d[1] * -1 : d[1];
       };
   ;
 
@@ -141,8 +142,14 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
             () ->
                 MathUtil.applyDeadband(-joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
-            () -> -driverXbox.getRightX(),
-            () -> -driverXbox.getRightY());
+            () -> {
+              if (isRedAliance.getAsBoolean()) return -driverXbox.getRightX();//This code bad! Make gooder soon!
+              else return driverXbox.getRightX();
+            },
+            () -> {
+              if (isRedAliance.getAsBoolean()) return -driverXbox.getRightY();
+              else return driverXbox.getRightY();
+            });
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -217,13 +224,11 @@ public class RobotContainer {
     autos.addOption("(R) 4 in Speaker", "(R) 4 in Speaker");
     autos.addOption("(R) 2 in Speaker + 2 in Amp", "(R) 2 in Speaker + 2 in Amp");
     autos.addOption("(R) 3 in Speaker + 2 in Amp", "(R) 3 in Speaker + 2 in Amp");
-    autos.addOption("(R) Far Notes 1", "(R) Far Notes 1");
-    autos.addOption("(R) Far Notes 2", "(R) Far Notes 2");
     autos.addOption("(L) Left Side 4 in Speaker", " (L) Left Side 4 in Speaker");
     autos.addOption(
         "(L) Left Side 2 in Speaker + 2 in Amp", "(L) Left Side 2 in Speaker + 2 in Amp");
     autos.addOption("(L) 3 Close in Speaker", "(L) 3 Close in Speaker");
-    autos.addOption("(M) Far Notes", "(M) Far Notes");
+    autos.addOption("Far Notes", "Far Notes");
 
     shuffle.newAutoChooser(autos);
   }
@@ -277,7 +282,6 @@ public class RobotContainer {
   private void configureBindings() {
 
     // SWERVE STUFF
-
     new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 

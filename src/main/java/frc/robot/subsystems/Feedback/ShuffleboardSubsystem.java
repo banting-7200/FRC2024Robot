@@ -258,15 +258,24 @@ public class ShuffleboardSubsystem {
       int index = entryNames.indexOf(name);
       Map<String, Object> map = Map.of("colorWhenTrue", colour.toHexString());
       if (layout != null) {
-        entry = layout.add(name, true).withProperties(map).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        entry =
+            layout
+                .add(name, true)
+                .withProperties(map)
+                .withWidget(BuiltInWidgets.kBooleanBox)
+                .getEntry();
       } else {
-        entry = tab.add(name, true).withProperties(map).withWidget(BuiltInWidgets.kBooleanBox).getEntry();
+        entry =
+            tab.add(name, true)
+                .withProperties(map)
+                .withWidget(BuiltInWidgets.kBooleanBox)
+                .getEntry();
       }
       if (index == -1) {
         entryNames.add(name);
         entries.add(entry);
       }
-      
+
       // lights.withProperties(Map.of("colorWhenTrue", colour.toHexString()));
     } catch (IllegalArgumentException e) {
       System.out.println("Set Color Error, EXEPTION: " + e);

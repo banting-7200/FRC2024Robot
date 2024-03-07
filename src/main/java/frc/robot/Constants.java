@@ -154,7 +154,7 @@ public final class Constants {
     public static final int speakerShootRPM = 7200;
     public static final int ampWaitTime = 0;
     public static final int speakerWaitTime = 1000;
-    public static final int shootRampDown = 500;
+    public static final int shootRampDown = 1000;
 
     // Default PID values to be tuned later
     public static final double shooterF = 0.13;

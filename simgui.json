@@ -66,6 +66,12 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Debugging/Move Arm To Position": "Command",
+      "/Shuffleboard/Debugging/Move To Amp": "Command",
+      "/Shuffleboard/Debugging/Move To Carry": "Command",
+      "/Shuffleboard/Debugging/Move To Intake": "Command",
+      "/Shuffleboard/Debugging/Move To Speaker": "Command",
+      "/Shuffleboard/PID/apply PID changes": "Command",
       "/Shuffleboard/Pre-Match/Autos": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Pigeon 2 (v6) [2]": "Gyro"

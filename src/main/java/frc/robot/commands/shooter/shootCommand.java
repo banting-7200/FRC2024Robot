@@ -104,7 +104,7 @@ public class shootCommand extends Command {
     shooter.stopShootMotor();
     shooter.stopIntakeMotor();
     System.out.println("Shooting Done");
-    lights.SetLightState(LightStates.ReadyForPickup);
+    if (!shooter.shooterHasNote()) lights.SetLightState(LightStates.ReadyForPickup);
     System.out.println("Has Note state is currently: " + shooter.shooterHasNote());
   }
 }

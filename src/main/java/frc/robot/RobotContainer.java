@@ -46,9 +46,11 @@ import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Vision.LimelightDevice;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
+import java.sql.Driver;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -82,7 +84,7 @@ public class RobotContainer {
       ShuffleboardSubsystem.getInstance(); // Getting instance of Shooter
   // Subsystem
 
-  private BooleanSupplier isRedAliance =
+  public BooleanSupplier isRedAliance =
       () ->
           DriverStation.getAlliance().isPresent()
               ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red
@@ -96,6 +98,20 @@ public class RobotContainer {
   public final IntSupplier shootTagToAlign = () -> limelight.getSpeakerMiddleTag();
   public final IntSupplier ampTagToAlign = () -> limelight.getAmpTag();
 
+  // Supply square joystick input. Todo: Further comment and update this after com to be more
+  // efficent.
+  public final Supplier<Double> joystickSquaredX =
+      () -> {
+        double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY(), 2);
+        return isRedAliance.getAsBoolean() ? d[0] * -1 : d[0];
+      };
+  public final Supplier<Double> joystickSquaredY =
+      () -> {
+        double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY(), 2);
+        return isRedAliance.getAsBoolean() ? d[1] * -1 : d[1];
+      };
+  ;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -107,8 +123,8 @@ public class RobotContainer {
     AbsoluteDriveAdv closedAbsoluteDriveAdv =
         new AbsoluteDriveAdv(
             drivebase,
-            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
             () ->
                 MathUtil.applyDeadband(driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
             driverXbox::getYButtonPressed,
@@ -123,10 +139,18 @@ public class RobotContainer {
     // right stick controls the desired angle NOT angular rotation
     Command driveFieldOrientedDirectAngle =
         drivebase.driveCommand(
-            () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-            () -> -driverXbox.getRightX(),
-            () -> -driverXbox.getRightY());
+            () ->
+                MathUtil.applyDeadband(-joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
+            () ->
+                MathUtil.applyDeadband(-joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> {
+              if (isRedAliance.getAsBoolean()) return -driverXbox.getRightX();//This code bad! Make gooder soon!
+              else return driverXbox.getRightX();
+            },
+            () -> {
+              if (isRedAliance.getAsBoolean()) return -driverXbox.getRightY();
+              else return driverXbox.getRightY();
+            });
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -135,14 +159,14 @@ public class RobotContainer {
     // right stick controls the angular velocity of the robot
     Command driveFieldOrientedAnglularVelocity =
         drivebase.driveCommand(
-            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
             () -> driverXbox.getRawAxis(2));
 
     Command driveFieldOrientedDirectAngleSim =
         drivebase.simDriveCommand(
-            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
             () -> driverXbox.getRawAxis(2));
 
     drivebase.setDefaultCommand(
@@ -201,13 +225,13 @@ public class RobotContainer {
     autos.addOption("(R) 4 in Speaker", "(R) 4 in Speaker");
     autos.addOption("(R) 2 in Speaker + 2 in Amp", "(R) 2 in Speaker + 2 in Amp");
     autos.addOption("(R) 3 in Speaker + 2 in Amp", "(R) 3 in Speaker + 2 in Amp");
-    autos.addOption("(R) Far Notes 1", "(R) Far Notes 1");
-    autos.addOption("(R) Far Notes 2", "(R) Far Notes 2");
     autos.addOption("(L) Left Side 4 in Speaker", " (L) Left Side 4 in Speaker");
     autos.addOption(
         "(L) Left Side 2 in Speaker + 2 in Amp", "(L) Left Side 2 in Speaker + 2 in Amp");
-    autos.addOption("(L) 3 Close in Speaker", "(L) 3 Close in Speaker");
+    autos.addOption("(L) 4 Close in Speaker", "(L) 4 Close in Speaker");
     autos.addOption("(M) Far Notes", "(M) Far Notes");
+    autos.addOption("(L) Basic Auto", "(L) Basic Auto");
+    autos.addOption("(M) Basic Auto", "(M) Basic Auto");
 
     shuffle.newAutoChooser(autos);
   }
@@ -261,7 +285,6 @@ public class RobotContainer {
   private void configureBindings() {
 
     // SWERVE STUFF
-
     new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 
@@ -310,7 +333,7 @@ public class RobotContainer {
                             .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
                             .finallyDo(
                                 (boolean interrupted) -> {
-                                  if (!interrupted && shooter.hasNote)
+                                  if (!interrupted && shooter.shooterHasNote())
                                     lights.SetLightState(LightStates.CarryingNote);
                                 })))
                 .onlyIf(() -> !shooter.shooterHasNote())); // From what positions will we intake?
@@ -356,7 +379,7 @@ public class RobotContainer {
                         .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
                         .finallyDo(
                             (boolean interrupted) -> {
-                              if (!interrupted && shooter.hasNote)
+                              if (!interrupted && shooter.shooterHasNote())
                                 lights.SetLightState(LightStates.CarryingNote);
                             })));
 
@@ -438,6 +461,11 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    // if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+    //   drivebase.zeroGyro();
+    //   drivebase.resetOdometry(
+    //       new Pose2d(drivebase.getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+    // }
     // An example command will be run in autonomous
     return drivebase.getAutonomousCommand(shuffle.getAuto());
   }
@@ -483,5 +511,13 @@ public class RobotContainer {
     shooter.setShooterShuffleBoard();
     // swerveNetworkTables.setSwerveShuffleboard();
     /* limelight.shuffleUpdate(); */
+  }
+
+  public void printSquareify() {
+    double[] squareifedInputs =
+        drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY(), 2);
+    shuffle.setTab("Debugging");
+    shuffle.setNumber("X", squareifedInputs[0]);
+    shuffle.setNumber("Y", squareifedInputs[1]);
   }
 }

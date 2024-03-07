@@ -113,9 +113,12 @@ public class SwerveSubsystem extends SubsystemBase {
         // ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in
             // your Constants class
-            new PIDConstants(
-                5.0, 0.0,
-                0.0), /*swerveDrive.swerveController.config.TranslationPID.p, swerveDrive.swerveController.config.TranslationPID.i, swerveDrive.swerveController.config.TranslationPID.d)*/ // todo: check to see if this is necessary (removed in example code)
+            new PIDConstants(5.0, 0.0, 0.0), /*
+                                              * swerveDrive.swerveController.config.TranslationPID.p,
+                                              * swerveDrive.swerveController.config.TranslationPID.i,
+                                              * swerveDrive.swerveController.config.TranslationPID.d)
+                                              */
+            // todo: check to see if this is necessary (removed in example code)
             // Translation PID constants
             new PIDConstants(
                 swerveDrive.swerveController.config.headingPIDF.p,
@@ -455,6 +458,61 @@ public class SwerveSubsystem extends SubsystemBase {
     yInput = Math.pow(yInput, 3);
     return swerveDrive.swerveController.getTargetSpeeds(
         xInput, yInput, angle.getRadians(), getHeading().getRadians(), maximumSpeed);
+  }
+
+  //Convert circular joystick input into a square shape. Todo: Further comment and update this after com to be more efficent.
+  public double[] squareifyInput(double x, double y, double innerRoundness) {
+    double PiOverFour = Math.PI / 4;
+
+    // Determine the theta angle
+    double angle = Math.atan2(y, x) + Math.PI;
+    double[] squared = {0, 0};
+
+    // Scale according to which wall we're clamping to
+    // X+ wall
+    if (angle <= PiOverFour || angle > 7 * PiOverFour) {
+      squared[0] = x * (1 / Math.cos(angle));
+      squared[1] = y * (1 / Math.cos(angle));
+    }
+    // Y+ wall
+    else if (angle > PiOverFour && angle <= 3 * PiOverFour) {
+
+      squared[0] = x * (1 / Math.sin(angle));
+      squared[1] = y * (1 / Math.sin(angle));
+    }
+    // X- wall
+    else if (angle > 3 * PiOverFour && angle <= 5 * PiOverFour) {
+      squared[0] = x * (-1 / Math.cos(angle));
+      squared[1] = y * (-1 / Math.cos(angle));
+    }
+    // Y- wall
+    else if (angle > 5 * PiOverFour && angle <= 7 * PiOverFour) {
+      squared[0] = x * (-1 / Math.sin(angle));
+      squared[1] = y * (-1 / Math.sin(angle));
+    }
+    // Early-out for a perfect square output
+    /* if (innerRoundness == 0) */
+
+    if (squared[0] > 1) {
+      squared[0] = 1;
+    }
+    if (squared[0] < -1) {
+      squared[0] = -1;
+    }
+    if (squared[1] > 1) {
+      squared[1] = 1;
+    }
+    if (squared[1] < -1) {
+      squared[1] = -1;
+    }
+    return squared;
+    /*
+     * // Find the inner-roundness scaling factor and LERP
+     * var length = point.Length();
+     * var factor = (float) Math.Pow(length, innerRoundness);
+     * return Vector2.Lerp(point, squared, factor);
+     */
+
   }
 
   /**

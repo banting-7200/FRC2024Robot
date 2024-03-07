@@ -49,6 +49,7 @@ import java.io.File;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
+import java.util.function.Supplier;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -96,6 +97,19 @@ public class RobotContainer {
   public final IntSupplier shootTagToAlign = () -> limelight.getSpeakerMiddleTag();
   public final IntSupplier ampTagToAlign = () -> limelight.getAmpTag();
 
+  //Supply square joystick input. Todo: Further comment and update this after com to be more efficent.
+  public final Supplier<Double> joystickSquaredX =
+      () -> {
+        double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY(), 2);
+        return d[0];
+      };
+  public final Supplier<Double> joystickSquaredY =
+      () -> {
+        double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY(), 2);
+        return d[1];
+      };
+  ;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -107,8 +121,8 @@ public class RobotContainer {
     AbsoluteDriveAdv closedAbsoluteDriveAdv =
         new AbsoluteDriveAdv(
             drivebase,
-            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
             () ->
                 MathUtil.applyDeadband(driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
             driverXbox::getYButtonPressed,
@@ -123,8 +137,10 @@ public class RobotContainer {
     // right stick controls the desired angle NOT angular rotation
     Command driveFieldOrientedDirectAngle =
         drivebase.driveCommand(
-            () -> MathUtil.applyDeadband(-driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(-driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+            () ->
+                MathUtil.applyDeadband(-joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
+            () ->
+                MathUtil.applyDeadband(-joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
             () -> -driverXbox.getRightX(),
             () -> -driverXbox.getRightY());
 
@@ -135,14 +151,14 @@ public class RobotContainer {
     // right stick controls the angular velocity of the robot
     Command driveFieldOrientedAnglularVelocity =
         drivebase.driveCommand(
-            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
             () -> driverXbox.getRawAxis(2));
 
     Command driveFieldOrientedDirectAngleSim =
         drivebase.simDriveCommand(
-            () -> MathUtil.applyDeadband(driverXbox.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(driverXbox.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
+            () -> MathUtil.applyDeadband(joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
             () -> driverXbox.getRawAxis(2));
 
     drivebase.setDefaultCommand(
@@ -308,7 +324,7 @@ public class RobotContainer {
                             .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
                             .finallyDo(
                                 (boolean interrupted) -> {
-                                  if (!interrupted && shooter.hasNote)
+                                  if (!interrupted && shooter.shooterHasNote())
                                     lights.SetLightState(LightStates.CarryingNote);
                                 })))
                 .onlyIf(() -> !shooter.shooterHasNote())); // From what positions will we intake?
@@ -354,7 +370,7 @@ public class RobotContainer {
                         .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
                         .finallyDo(
                             (boolean interrupted) -> {
-                              if (!interrupted && shooter.hasNote)
+                              if (!interrupted && shooter.shooterHasNote())
                                 lights.SetLightState(LightStates.CarryingNote);
                             })));
 
@@ -481,5 +497,13 @@ public class RobotContainer {
     shooter.setShooterShuffleBoard();
     // swerveNetworkTables.setSwerveShuffleboard();
     /* limelight.shuffleUpdate(); */
+  }
+
+  public void printSquareify() {
+    double[] squareifedInputs =
+        drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY(), 2);
+    shuffle.setTab("Debugging");
+    shuffle.setNumber("X", squareifedInputs[0]);
+    shuffle.setNumber("Y", squareifedInputs[1]);
   }
 }

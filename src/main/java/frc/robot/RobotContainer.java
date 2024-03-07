@@ -46,7 +46,6 @@ import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Vision.LimelightDevice;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
-import java.sql.Driver;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
@@ -98,7 +97,8 @@ public class RobotContainer {
   public final IntSupplier shootTagToAlign = () -> limelight.getSpeakerMiddleTag();
   public final IntSupplier ampTagToAlign = () -> limelight.getAmpTag();
 
-  //Supply square joystick input. Todo: Further comment and update this after com to be more efficent.
+  // Supply square joystick input. Todo: Further comment and update this after com to be more
+  // efficent.
   public final Supplier<Double> joystickSquaredX =
       () -> {
         double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY(), 2);

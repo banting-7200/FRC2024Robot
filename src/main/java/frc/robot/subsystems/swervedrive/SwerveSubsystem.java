@@ -224,7 +224,7 @@ public class SwerveSubsystem extends SubsystemBase {
           double yInput =
               Math.pow(
                   translationY.getAsDouble() * speedMultiplier,
-                  3); // Smooth controll out (Speed multiplier for Creep Drive)        
+                  3); // Smooth controll out (Speed multiplier for Creep Drive)
           // Make the robot move
           driveFieldOriented(
               swerveDrive.swerveController.getTargetSpeeds(
@@ -461,7 +461,8 @@ public class SwerveSubsystem extends SubsystemBase {
         xInput, yInput, angle.getRadians(), getHeading().getRadians(), maximumSpeed);
   }
 
-  //Convert circular joystick input into a square shape. Todo: Further comment and update this after com to be more efficent.
+  // Convert circular joystick input into a square shape. Todo: Further comment and update this
+  // after com to be more efficent.
   public double[] squareifyInput(double x, double y, double innerRoundness) {
     double PiOverFour = Math.PI / 4;
 

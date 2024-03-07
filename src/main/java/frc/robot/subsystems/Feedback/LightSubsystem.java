@@ -63,30 +63,30 @@ public class LightSubsystem {
         setSolid(Color.kOrange);
         break;
       case ReadyToAMP:
-       /* //Removed until limelight is back
-       id = limelight
-                .getTagID(); // todo: remove limelight subsystem from here and replace with function
-        // for limelight subsystem
-         if (id == 3 || id == 4 || id == 7
-            || id == 8) { // todo: set speaker id in constants on startup based on aliance colour
-          setSolid(Color.kBlue);
-        } else {
-          setDashed(Color.kBlue, Color.kBlack);
-        } */
+        /* //Removed until limelight is back
+        id = limelight
+                 .getTagID(); // todo: remove limelight subsystem from here and replace with function
+         // for limelight subsystem
+          if (id == 3 || id == 4 || id == 7
+             || id == 8) { // todo: set speaker id in constants on startup based on aliance colour
+           setSolid(Color.kBlue);
+         } else {
+           setDashed(Color.kBlue, Color.kBlack);
+         } */
         setSolid(Color.kBlue);
         break;
       case ReadyToSPEAKER:
-      //removed until limelight is back
-/*         id = limelight.getTagID();
-        if (id == 5 || id == 6) { // todo: same here with amp id
-          setSolid(Color.kPink);
-        } else {
-          setDashed(Color.kPink, Color.kBlack);
-        }
-        break;
-      default:
-        setSolid(Color.kGray); */
-      setSolid(Color.kPink);
+        // removed until limelight is back
+        /*         id = limelight.getTagID();
+          if (id == 5 || id == 6) { // todo: same here with amp id
+            setSolid(Color.kPink);
+          } else {
+            setDashed(Color.kPink, Color.kBlack);
+          }
+          break;
+        default:
+          setSolid(Color.kGray); */
+        setSolid(Color.kPink);
         break;
     }
     shuffle.setText("Mode", stateToSet.toString());

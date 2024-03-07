@@ -46,6 +46,7 @@ import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Vision.LimelightDevice;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
+import java.sql.Driver;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
@@ -82,7 +83,7 @@ public class RobotContainer {
       ShuffleboardSubsystem.getInstance(); // Getting instance of Shooter
   // Subsystem
 
-  private BooleanSupplier isRedAliance =
+  public BooleanSupplier isRedAliance =
       () ->
           DriverStation.getAlliance().isPresent()
               ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red
@@ -206,8 +207,10 @@ public class RobotContainer {
     autos.addOption("(L) Left Side 4 in Speaker", " (L) Left Side 4 in Speaker");
     autos.addOption(
         "(L) Left Side 2 in Speaker + 2 in Amp", "(L) Left Side 2 in Speaker + 2 in Amp");
-    autos.addOption("(L) 3 Close in Speaker", "(L) 3 Close in Speaker");
+    autos.addOption("(L) 4 Close in Speaker", "(L) 4 Close in Speaker");
     autos.addOption("(M) Far Notes", "(M) Far Notes");
+    autos.addOption("(L) Basic Auto", "(L) Basic Auto");
+    autos.addOption("(M) Basic Auto", "(M) Basic Auto");
 
     shuffle.newAutoChooser(autos);
   }
@@ -438,6 +441,11 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    // if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
+    //   drivebase.zeroGyro();
+    //   drivebase.resetOdometry(
+    //       new Pose2d(drivebase.getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+    // }
     // An example command will be run in autonomous
     return drivebase.getAutonomousCommand(shuffle.getAuto());
   }

@@ -5,7 +5,7 @@
       "x": 1.0,
       "y": 4.1
     },
-    "rotation": 0.0
+    "rotation": -45.0
   },
   "command": {
     "type": "sequential",
@@ -24,34 +24,15 @@
           }
         },
         {
-          "type": "race",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "(R) Right Close"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
+            "name": "Prep Intake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "(R) Speaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
+            "pathName": "Under Stage Right"
           }
         },
         {
@@ -61,38 +42,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(R) Middle Close"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(M) Speaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "(M) Left Close"
+                  "pathName": "(Stage) 3rd Far"
                 }
               },
               {
@@ -107,13 +57,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Amp"
+            "name": "Prep Intake"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "(Close) To Amp"
+            "pathName": "Back Under Stage Right"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(R Stage) Speaker"
           }
         },
         {
@@ -135,7 +91,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(L) 1st Far"
+                  "pathName": "(R) 4th Far"
                 }
               },
               {
@@ -148,15 +104,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Prep Amp"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "(Close) To Amp"
+            "pathName": "(R Stage) Speaker"
           }
         },
         {

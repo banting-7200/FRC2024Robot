@@ -49,15 +49,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Prep Shoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "(L) Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
@@ -86,15 +86,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Prep Shoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "(M) Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
@@ -123,15 +123,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Prep Shoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "(R) Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]

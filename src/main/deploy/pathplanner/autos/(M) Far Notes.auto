@@ -69,7 +69,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Under Stage Left"
+            "pathName": "REVERT (Speed) Under Stage Left"
           }
         },
         {
@@ -79,7 +79,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(Stage) 3rd Far"
+                  "pathName": "REVERT (Stage) 3rd Far"
                 }
               },
               {
@@ -118,7 +118,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Under Stage Left"
+            "pathName": "REVERT (Speed) Under Stage Left"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "REVERT (Stage) 4th Far"
           }
         }
       ]

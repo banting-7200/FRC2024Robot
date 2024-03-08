@@ -235,6 +235,10 @@ public class RobotContainer {
     autos.addOption("(L) Basic Auto", "(L) Basic Auto");
     autos.addOption("(M) Basic Auto", "(M) Basic Auto");
 
+    autos.addOption("(M) Basic Shoot Auto", "(M) Basic Shoot Auto");
+    autos.addOption("(R) Basic Shoot Auto", "(R) Basic Shoot Auto");
+    autos.addOption("(L) Basic Shoot Auto", "(L) Basic Shoot Auto");
+
     shuffle.newAutoChooser(autos);
   }
 
@@ -279,7 +283,10 @@ public class RobotContainer {
               ? limelight.calculateArmShootAngle()
               : Arm.speakerArmAngle;
 
-  public BooleanSupplier hasNote = () -> shooter.shooterHasNote();
+  public BooleanSupplier hasNote =
+      () ->
+          shooter.shooterHasNote()
+              && Math.abs(arm.getEncoderPosition() - Arm.intakeArmAngle) < Arm.stopRange;
   public BooleanSupplier isTeleop = () -> DriverStation.isTeleop();
 
   void setAmpShot() {
@@ -406,7 +413,9 @@ public class RobotContainer {
      * position of the arm, which can be found if you scroll up.
      */
     new JoystickButton(CoPilotController, copilotController.shootButton)
-        .onTrue(new shootCommand(shooterRPM, shooter, shooterWaitTime, isSpeakerShot));
+        .onTrue(
+            new shootCommand(
+                shooterRPM, shooter, shooterWaitTime, isSpeakerShot, CoPilotController));
 
     /*
      * Simply schedules a command to align the robot to the commands supplied april

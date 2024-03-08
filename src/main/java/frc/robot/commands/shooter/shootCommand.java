@@ -36,6 +36,8 @@ public class shootCommand extends Command {
   // or
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
 
+  boolean override;
+
   // not
 
   public shootCommand(
@@ -47,6 +49,7 @@ public class shootCommand extends Command {
     this.shooter = shooter;
     this.waitTime = waitTime;
     this.isSpeakerShot = isSpeakerShot;
+    this.controller = null;
 
     addRequirements(shooter);
   }
@@ -75,13 +78,12 @@ public class shootCommand extends Command {
     hasNote = shooter.shooterHasNote();
     shooter.stopIntakeMotor(); // Stop the intake motor
     System.out.println("is Shoot state: " + isSpeakerShot.getAsBoolean());
+    override = controller != null ? controller.getRawButton(copilotController.brakeButton) : false;
   }
 
   @Override
   public void execute() {
-    if (hasNote == true || controller != null
-        ? controller.getRawButton(copilotController.brakeButton)
-        : false) { // if shooter has note in it
+    if (hasNote == true || override) { // if shooter has note in it
       currentMillis = currentTime.millis(); // record current time
       if (currentMillis - startedMillis < 100
           && isSpeakerShot.getAsBoolean()) { // until 100 millis pass

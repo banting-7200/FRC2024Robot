@@ -96,7 +96,14 @@ public class LightSubsystem {
 
   public void setSolid(Color colour) { // set to specific colour
     for (int i = 0; i < statusBuffer.getLength(); i++) {
-      statusBuffer.setRGB(i, (int) colour.green, (int) colour.red, (int) colour.blue);
+      statusBuffer.setLED(i, colour);
+      /* System.out.println(
+      "Led color: R "
+          + statusBuffer.getRed(i)
+          + " B "
+          + statusBuffer.getBlue(i)
+          + " G "
+          + statusBuffer.getGreen(i)); */
     }
     statusLights.setData(statusBuffer);
     shuffle.setTab("Driver");

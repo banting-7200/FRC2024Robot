@@ -55,12 +55,14 @@ public class LightSubsystem {
     switch (stateToSet) {
       case ReadyForPickup:
         setSolid(Color.kRed);
+        System.out.println("Lights Ready for Pickup");
         break;
       case NotePickedUp:
         setSolid(Color.kGreen);
         break;
       case CarryingNote:
         setSolid(Color.kOrange);
+        System.out.println("Lights Carry position");
         break;
       case ReadyToAMP:
         /* //Removed until limelight is back
@@ -97,7 +99,7 @@ public class LightSubsystem {
       statusBuffer.setRGB(i, (int) colour.green, (int) colour.red, (int) colour.blue);
     }
     statusLights.setData(statusBuffer);
-    shuffle.setTab("Data");
+    shuffle.setTab("Driver");
     shuffle.setColour("Lights", colour);
   }
 
@@ -108,7 +110,7 @@ public class LightSubsystem {
       } else {
         statusBuffer.setRGB(i, (int) colour2.green, (int) colour2.red, (int) colour2.blue);
       }
-      shuffle.setTab("Data");
+      shuffle.setTab("Driver");
       shuffle.setColour("Light Colour", colour2);
     }
     statusLights.setData(statusBuffer);

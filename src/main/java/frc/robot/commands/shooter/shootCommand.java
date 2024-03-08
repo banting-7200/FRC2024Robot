@@ -6,7 +6,6 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.copilotController;
 import frc.robot.Constants.maxCommandWaitTime;
@@ -58,8 +57,12 @@ public class shootCommand extends Command {
     this.controller = null;
   }
 
-   public shootCommand(
-      int rpm, ShooterSubsystem shooter, int waitTime, BooleanSupplier isSpeakerShot, Joystick controller) {
+  public shootCommand(
+      int rpm,
+      ShooterSubsystem shooter,
+      int waitTime,
+      BooleanSupplier isSpeakerShot,
+      Joystick controller) {
     this(() -> rpm, shooter, () -> waitTime, isSpeakerShot);
     this.controller = controller;
   }
@@ -76,7 +79,9 @@ public class shootCommand extends Command {
 
   @Override
   public void execute() {
-    if (hasNote == true || controller != null ? controller.getRawButton(copilotController.brakeButton) : false) { // if shooter has note in it
+    if (hasNote == true || controller != null
+        ? controller.getRawButton(copilotController.brakeButton)
+        : false) { // if shooter has note in it
       currentMillis = currentTime.millis(); // record current time
       if (currentMillis - startedMillis < 100
           && isSpeakerShot.getAsBoolean()) { // until 100 millis pass
@@ -101,7 +106,7 @@ public class shootCommand extends Command {
       if (currentMillis - startedMillis > 350) {
         shooter.spinShootToRPM(rpm.getAsInt());
       }
-  }
+    }
 
     // System.out.println("Current  HAS NOTE STATE: " + shooter.shooterHasNote());
   }

@@ -102,12 +102,12 @@ public class RobotContainer {
   public final Supplier<Double> joystickSquaredX =
       () -> {
         double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY());
-        return isRedAliance.getAsBoolean() ? d[0] : d[0] * -1;
+        return isRedAliance.getAsBoolean() ? d[0] * -1 : d[0];
       };
   public final Supplier<Double> joystickSquaredY =
       () -> {
         double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY());
-        return isRedAliance.getAsBoolean() ? d[1] : d[1] * -1;
+        return isRedAliance.getAsBoolean() ? d[1] * -1 : d[1];
       };
 
   public BooleanSupplier isSpeakerShot = () -> speakerShot;
@@ -145,13 +145,14 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
             () -> {
               if (isRedAliance.getAsBoolean())
-                return -driverXbox.getRightX(); // This code bad! Make gooder soon!
-              else return driverXbox.getRightX();
+                return driverXbox.getRightX(); // This code bad! Make gooder soon!
+              else return -driverXbox.getRightX();
             },
             () -> {
-              if (isRedAliance.getAsBoolean()) return -driverXbox.getRightY();
-              else return driverXbox.getRightY();
-            });
+              if (isRedAliance.getAsBoolean()) return driverXbox.getRightY();
+              else return -driverXbox.getRightY();
+            }
+            /*  } */ );
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot

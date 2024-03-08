@@ -61,12 +61,12 @@ public class shootCommand extends Command {
   }
 
   public shootCommand(
-      int rpm,
+      IntSupplier rpm,
       ShooterSubsystem shooter,
-      int waitTime,
+      IntSupplier waitTime,
       BooleanSupplier isSpeakerShot,
       Joystick controller) {
-    this(() -> rpm, shooter, () -> waitTime, isSpeakerShot);
+    this(rpm, shooter, waitTime, isSpeakerShot);
     this.controller = controller;
   }
 
@@ -98,9 +98,8 @@ public class shootCommand extends Command {
         shooter.stopIntakeMotor();
       }
       if (shooter.shooterHasNote() == true) {
-        sinceNoteLeft =
-            currentTime
-                .millis(); // if it see's the note it will set the since note left time for current
+        sinceNoteLeft = currentTime
+            .millis(); // if it see's the note it will set the since note left time for current
         // time
         hasSeenNote = true;
         // System.out.println("SAW THE NOTE");
@@ -110,12 +109,12 @@ public class shootCommand extends Command {
       }
     }
 
-    // System.out.println("Current  HAS NOTE STATE: " + shooter.shooterHasNote());
+    // System.out.println("Current HAS NOTE STATE: " + shooter.shooterHasNote());
   }
 
   public boolean isFinished() {
     return ((currentMillis - sinceNoteLeft) > /* shuffle.getNumber("shoot Ramp Down") */ 3000
-            && hasSeenNote == true)
+        && hasSeenNote == true)
         || (currentMillis - startedMillis > maxCommandWaitTime.shootCommandWaitTime);
   }
 
@@ -124,7 +123,9 @@ public class shootCommand extends Command {
     shooter.stopShootMotor();
     shooter.stopIntakeMotor();
     // System.out.println("Shooting Done");
-    if (!shooter.shooterHasNote()) lights.SetLightState(LightStates.ReadyForPickup);
-    // System.out.println("Has Note state is currently: " + shooter.shooterHasNote());
+    if (!shooter.shooterHasNote())
+      lights.SetLightState(LightStates.ReadyForPickup);
+    // System.out.println("Has Note state is currently: " +
+    // shooter.shooterHasNote());
   }
 }

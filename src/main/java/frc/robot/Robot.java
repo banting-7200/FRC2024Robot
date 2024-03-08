@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Feedback.LightSubsystem;
-import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Vision.LimelightDevice;
 import java.io.File;
@@ -104,7 +103,6 @@ public class Robot extends TimedRobot {
         false); // Turn off the limelight lights so the robot can be more easily approached on
     // disable.
     m_robotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0);
-    lights.SetLightState(LightStates.CarryingNote);
   }
 
   @Override
@@ -145,7 +143,6 @@ public class Robot extends TimedRobot {
     m_robotContainer.setDriveMode();
     m_robotContainer.setMotorBrake(true);
     limelight.setLight(true);
-    lights.SetLightState(LightStates.ReadyForPickup);
   }
 
   /** This function is called periodically during operator control. */

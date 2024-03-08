@@ -406,7 +406,9 @@ public class RobotContainer {
      * position of the arm, which can be found if you scroll up.
      */
     new JoystickButton(CoPilotController, copilotController.shootButton)
-        .onTrue(new shootCommand(shooterRPM, shooter, shooterWaitTime, isSpeakerShot));
+        .onTrue(
+            new shootCommand(
+                shooterRPM, shooter, shooterWaitTime, isSpeakerShot, CoPilotController));
 
     /*
      * Simply schedules a command to align the robot to the commands supplied april

@@ -320,7 +320,7 @@ public class RobotContainer {
      * trick the swerve into thinking its not moving and stop trying to correct
      * itself.
      */
-    new JoystickButton(CoPilotController, copilotController.brakeButton)
+    new JoystickButton(driverXbox, 4)
         .toggleOnTrue(new RepeatCommand(new InstantCommand(drivebase::resetOdometry, drivebase)));
 
     /*
@@ -412,7 +412,7 @@ public class RobotContainer {
      * Simply schedules a command to align the robot to the commands supplied april
      * tag
      */
-    new JoystickButton(CoPilotController, copilotController.limelightButton)
+    new JoystickButton(driverXbox, 6)
         .toggleOnTrue(
             new AprilTagAlign(drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign));
 

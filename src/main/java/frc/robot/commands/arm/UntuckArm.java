@@ -24,7 +24,7 @@ public class UntuckArm extends Command {
     arm.disableBrake();
     System.out.println("Untuck Arm");
     startTime = timer.millis();
-    System.out.println("start time is: " + startTime);
+    // System.out.println("start time is: " + startTime);
     ranUntuckCommand = false;
   }
 
@@ -39,7 +39,7 @@ public class UntuckArm extends Command {
       // move to safe tuck pos
       arm.moveToAngle(Arm.tuckSafeMin + 2);
     }
-    System.out.println("is it safe to untuck: " + (arm.getEncoderPosition() >= Arm.tuckSafeMin));
+    // System.out.println("is it safe to untuck: " + (arm.getEncoderPosition() >= Arm.tuckSafeMin));
   }
 
   @Override
@@ -50,6 +50,6 @@ public class UntuckArm extends Command {
   @Override
   public void end(boolean interrupted) {
     arm.stopArm();
-    System.out.println("elapsed time is: " + (timer.millis() - startTime));
+    // System.out.println("elapsed time is: " + (timer.millis() - startTime));
   }
 }

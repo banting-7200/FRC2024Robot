@@ -224,7 +224,7 @@ public class SwerveSubsystem extends SubsystemBase {
           double yInput =
               Math.pow(
                   translationY.getAsDouble() * speedMultiplier,
-                  3); // Smooth controll out (Speed multiplier for Creep Drive)        
+                  3); // Smooth controll out (Speed multiplier for Creep Drive)
           // Make the robot move
           driveFieldOriented(
               swerveDrive.swerveController.getTargetSpeeds(
@@ -407,6 +407,26 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveDrive.resetOdometry(getPose());
   }
 
+  private boolean isRedAlliance() {
+    var alliance = DriverStation.getAlliance();
+    return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
+  }
+
+  /**
+   * This will zero (calibrate) the robot to assume the current position is facing forward
+   *
+   * <p>If red alliance rotate the robot 180 after the drviebase zero command
+   */
+  public void zeroGyroWithAlliance() {
+    if (isRedAlliance()) {
+      zeroGyro();
+      // Set the pose 180 degrees
+      resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+    } else {
+      zeroGyro();
+    }
+  }
+
   /**
    * Sets the drive motors to brake/coast mode.
    *
@@ -463,7 +483,7 @@ public class SwerveSubsystem extends SubsystemBase {
 
   // Convert circular joystick input into a square shape. Todo: Further comment and update this
   // after com to be more efficent.
-  public double[] squareifyInput(double x, double y, double innerRoundness) {
+  public double[] squareifyInput(double x, double y) {
     double PiOverFour = Math.PI / 4;
 
     // Determine the theta angle

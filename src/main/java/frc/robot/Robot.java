@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -56,6 +57,7 @@ public class Robot extends TimedRobot {
 
     // start capture of connect camera to rio for the live stream camera
     // displays output of stream to shuffle board
+    CameraServer.startAutomaticCapture("Front Camera", 0);
     // Must be a PWM header, not MXP or DIO
 
     // Reuse buffer
@@ -114,6 +116,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_robotContainer.setMotorBrake(true);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    // m_robotContainer.zeroGyroWithAlliance();
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

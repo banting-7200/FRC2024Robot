@@ -32,7 +32,7 @@ public class ShuffleboardSubsystem {
   SimpleWidget lights;
 
   private ShuffleboardSubsystem() {
-    setTab("Debugging");
+    setTab("Driver");
     lights = tab.add("Lights", true).withWidget(BuiltInWidgets.kBooleanBox);
   }
 

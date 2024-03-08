@@ -34,8 +34,8 @@ public final class Constants {
   }
 
   public static final class xboxController {
-    public static final double rumbleStrength = 0.7; // 0 - 1 range
-    public static final double rumbleTime = 1000; // rumble time in milliseconds
+    public static final double rumbleStrength = 1; // 0 - 1 range
+    public static final double rumbleTime = 1253; // rumble time in milliseconds
   }
 
   public static final class copilotController {
@@ -138,7 +138,7 @@ public final class Constants {
     public static final double limelightToSpeakerHeight =
         0.1520; // from camera lens to speaker(goal - limelight height
     // from ground)
-    public static final double limelightMountAngle = 31;
+    public static final double limelightMountAngle = 150;
     public static final double armToLimelightDistance = 0.04;
   }
 
@@ -150,8 +150,8 @@ public final class Constants {
     public static final int intakeRPM = 6000;
     public static final int pullBackRPM = 2000;
     public static final int correctPositioningRPM = 500;
-    public static final int ampShootRPM = 2000;
-    public static final int speakerShootRPM = 7200;
+    public static final int ampShootRPM = 1000;
+    public static final int speakerShootRPM = 5000;
     public static final int ampWaitTime = 0;
     public static final int speakerWaitTime = 1000;
     public static final int shootRampDown = 1000;

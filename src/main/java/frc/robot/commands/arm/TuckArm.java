@@ -26,7 +26,7 @@ public class TuckArm extends Command {
     arm.disableBrake();
     System.out.println("Tuck Arm");
     startTime = timer.millis();
-    System.out.println("start time is: " + startTime);
+    // System.out.println("start time is: " + startTime);
     ranTuckCommand = false;
   }
 
@@ -58,6 +58,6 @@ public class TuckArm extends Command {
      * lights.SetLightState(LightStates.CarryingNote);
      * }
      */
-    System.out.println("elapsed time is: " + (timer.millis() - startTime));
+    // System.out.println("elapsed time is: " + (timer.millis() - startTime));
   }
 }

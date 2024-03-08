@@ -46,7 +46,6 @@ import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Vision.LimelightDevice;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
-import java.sql.Driver;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
@@ -90,7 +89,7 @@ public class RobotContainer {
               ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red
               : false; // This is a local reference to the DriverStation alliance
 
-  static boolean speakerShot =
+  boolean speakerShot =
       true; // Whether the robot is ready for a Speaker Shot or not. Initialized to true
   // because our
   // first shot is a speaker shot.
@@ -102,15 +101,16 @@ public class RobotContainer {
   // efficent.
   public final Supplier<Double> joystickSquaredX =
       () -> {
-        double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY(), 2);
-        return isRedAliance.getAsBoolean() ? d[0] * -1 : d[0];
+        double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY());
+        return isRedAliance.getAsBoolean() ? d[0] : d[0] * -1;
       };
   public final Supplier<Double> joystickSquaredY =
       () -> {
-        double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY(), 2);
-        return isRedAliance.getAsBoolean() ? d[1] * -1 : d[1];
+        double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY());
+        return isRedAliance.getAsBoolean() ? d[1] : d[1] * -1;
       };
-  ;
+
+  public BooleanSupplier isSpeakerShot = () -> speakerShot;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -144,7 +144,8 @@ public class RobotContainer {
             () ->
                 MathUtil.applyDeadband(-joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
             () -> {
-              if (isRedAliance.getAsBoolean()) return -driverXbox.getRightX();//This code bad! Make gooder soon!
+              if (isRedAliance.getAsBoolean())
+                return -driverXbox.getRightX(); // This code bad! Make gooder soon!
               else return driverXbox.getRightX();
             },
             () -> {
@@ -251,13 +252,11 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  public static final IntSupplier shooterRPM =
+  public final IntSupplier shooterRPM =
       () -> speakerShot ? Shooter.speakerShootRPM : Shooter.ampShootRPM;
 
-  public static final IntSupplier shooterWaitTime =
+  public final IntSupplier shooterWaitTime =
       () -> speakerShot ? Shooter.speakerWaitTime : Shooter.ampWaitTime;
-
-  public static BooleanSupplier isSpeakerShot = () -> speakerShot;
 
   static JoystickButton upButton =
       new JoystickButton(CoPilotController, copilotController.upButton);
@@ -281,6 +280,16 @@ public class RobotContainer {
 
   public BooleanSupplier hasNote = () -> shooter.shooterHasNote();
   public BooleanSupplier isTeleop = () -> DriverStation.isTeleop();
+
+  void setAmpShot() {
+    speakerShot = false;
+    System.out.println("is speaker shot: " + speakerShot);
+  }
+
+  void setSpeakerShot() {
+    speakerShot = true;
+    System.out.println("is speaker shot: " + speakerShot);
+  }
 
   private void configureBindings() {
 
@@ -417,11 +426,11 @@ public class RobotContainer {
      */
     new JoystickButton(CoPilotController, copilotController.speakerButton)
         .onTrue(
-            new TuckArm(arm)
+            new InstantCommand(() -> setSpeakerShot())
+                .andThen(new TuckArm(arm))
                 .andThen(new MoveArmToPosition(arm, speakerAngle))
                 .finallyDo(
                     (boolean interrupted) -> {
-                      speakerShot = true;
                       if (!interrupted) lights.SetLightState(LightStates.ReadyToSPEAKER);
                     }));
 
@@ -435,11 +444,11 @@ public class RobotContainer {
      */
     new JoystickButton(CoPilotController, copilotController.ampButton)
         .onTrue(
-            new UntuckArm(arm)
+            new InstantCommand(() -> setAmpShot())
+                .andThen(new UntuckArm(arm))
                 .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))
                 .finallyDo(
                     (boolean interrupted) -> {
-                      speakerShot = false;
                       if (!interrupted) lights.SetLightState(LightStates.ReadyToAMP);
                     }));
   }
@@ -515,9 +524,13 @@ public class RobotContainer {
 
   public void printSquareify() {
     double[] squareifedInputs =
-        drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY(), 2);
+        drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY());
     shuffle.setTab("Debugging");
     shuffle.setNumber("X", squareifedInputs[0]);
     shuffle.setNumber("Y", squareifedInputs[1]);
+  }
+
+  public void zeroGyroWithAlliance() {
+    drivebase.zeroGyroWithAlliance();
   }
 }

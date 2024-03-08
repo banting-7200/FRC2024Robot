@@ -279,7 +279,10 @@ public class RobotContainer {
               ? limelight.calculateArmShootAngle()
               : Arm.speakerArmAngle;
 
-  public BooleanSupplier hasNote = () -> shooter.shooterHasNote();
+  public BooleanSupplier hasNote =
+      () ->
+          shooter.shooterHasNote()
+              && Math.abs(arm.getEncoderPosition() - Arm.intakeArmAngle) < Arm.stopRange;
   public BooleanSupplier isTeleop = () -> DriverStation.isTeleop();
 
   void setAmpShot() {

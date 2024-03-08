@@ -66,7 +66,7 @@ public final class Constants {
     public static final int moveArmToPositionWaitTime = 3300;
     public static final int tuckArmWaitTime = 2000;
     public static final int unTuckWaitTime = 2000;
-    public static final int intakeCommandWaitTime = 7000;
+    public static final int intakeCommandWaitTime = 70000;
     public static final int shootCommandWaitTime = 3000;
     public static final int aprilTagAlignWaitTime = 7000;
     public static final int noteObjectAlignWaitTime = 7000;

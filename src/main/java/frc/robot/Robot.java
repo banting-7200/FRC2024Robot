@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Feedback.LightSubsystem;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Vision.LimelightDevice;
 import java.io.File;
@@ -32,6 +33,8 @@ public class Robot extends TimedRobot {
 
   private Timer disabledTimer; // Normal Robot container instance
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
+
+  LightSubsystem lights = LightSubsystem.getInstance();
 
   public Robot() {
     instance = this;

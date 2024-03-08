@@ -5,7 +5,9 @@
 
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.copilotController;
 import frc.robot.Constants.maxCommandWaitTime;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem;
@@ -29,8 +31,12 @@ public class shootCommand extends Command {
   boolean hasNote; // This variables is used for telling whether the note is already in the shooter
   BooleanSupplier isSpeakerShot;
 
+  Joystick controller;
+
   // or
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
+
+  boolean override;
 
   // not
 
@@ -43,6 +49,7 @@ public class shootCommand extends Command {
     this.shooter = shooter;
     this.waitTime = waitTime;
     this.isSpeakerShot = isSpeakerShot;
+    this.controller = null;
 
     addRequirements(shooter);
   }
@@ -50,6 +57,17 @@ public class shootCommand extends Command {
   public shootCommand(
       int rpm, ShooterSubsystem shooter, int waitTime, BooleanSupplier isSpeakerShot) {
     this(() -> rpm, shooter, () -> waitTime, isSpeakerShot);
+    this.controller = null;
+  }
+
+  public shootCommand(
+      int rpm,
+      ShooterSubsystem shooter,
+      int waitTime,
+      BooleanSupplier isSpeakerShot,
+      Joystick controller) {
+    this(() -> rpm, shooter, () -> waitTime, isSpeakerShot);
+    this.controller = controller;
   }
 
   @Override
@@ -60,11 +78,12 @@ public class shootCommand extends Command {
     hasNote = shooter.shooterHasNote();
     shooter.stopIntakeMotor(); // Stop the intake motor
     System.out.println("is Shoot state: " + isSpeakerShot.getAsBoolean());
+    override = controller != null ? controller.getRawButton(copilotController.brakeButton) : false;
   }
 
   @Override
   public void execute() {
-    if (hasNote == true) { // if shooter has note in it
+    if (hasNote == true || override) { // if shooter has note in it
       currentMillis = currentTime.millis(); // record current time
       if (currentMillis - startedMillis < 100
           && isSpeakerShot.getAsBoolean()) { // until 100 millis pass

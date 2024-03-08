@@ -125,7 +125,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 swerveDrive.swerveController.config.headingPIDF.i,
                 swerveDrive.swerveController.config.headingPIDF.d),
             // Rotation PID constants
-            4.5,
+            4.41,
             // Max module speed, in m/s
             swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
             // Drive base radius in meters. Distance from robot center to furthest module.
@@ -220,11 +220,11 @@ public class SwerveSubsystem extends SubsystemBase {
           double xInput =
               Math.pow(
                   translationX.getAsDouble() * speedMultiplier,
-                  3); // Smooth controll out (Speed multiplier for Creep Drive)
+                  1); // Smooth controll out (Speed multiplier for Creep Drive)
           double yInput =
               Math.pow(
                   translationY.getAsDouble() * speedMultiplier,
-                  3); // Smooth controll out (Speed multiplier for Creep Drive)
+                  1); // Smooth controll out (Speed multiplier for Creep Drive)
           // Make the robot move
           driveFieldOriented(
               swerveDrive.swerveController.getTargetSpeeds(
@@ -278,11 +278,11 @@ public class SwerveSubsystem extends SubsystemBase {
           // Make the robot move
           swerveDrive.drive(
               new Translation2d(
-                  Math.pow(translationX.getAsDouble() * speedMultiplier, 3)
+                  Math.pow(translationX.getAsDouble() * speedMultiplier, 1)
                       * swerveDrive.getMaximumVelocity(),
-                  Math.pow(translationY.getAsDouble() * speedMultiplier, 3)
+                  Math.pow(translationY.getAsDouble() * speedMultiplier, 1)
                       * swerveDrive.getMaximumVelocity()),
-              Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity(),
+              Math.pow(angularRotationX.getAsDouble(), 1) * swerveDrive.getMaximumAngularVelocity(),
               true,
               false);
         });
@@ -294,9 +294,9 @@ public class SwerveSubsystem extends SubsystemBase {
           // Make the robot move
           swerveDrive.drive(
               new Translation2d(
-                  Math.pow(translationX, 3) * swerveDrive.getMaximumVelocity(),
-                  Math.pow(translationY, 3) * swerveDrive.getMaximumVelocity()),
-              Math.pow(angularRotationX, 3) * swerveDrive.getMaximumAngularVelocity(),
+                  Math.pow(translationX, 1) * swerveDrive.getMaximumVelocity(),
+                  Math.pow(translationY, 1) * swerveDrive.getMaximumVelocity()),
+              Math.pow(angularRotationX, 1) * swerveDrive.getMaximumAngularVelocity(),
               true,
               false);
         });
@@ -459,8 +459,8 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public ChassisSpeeds getTargetSpeeds(
       double xInput, double yInput, double headingX, double headingY) {
-    xInput = Math.pow(xInput, 3);
-    yInput = Math.pow(yInput, 3);
+    xInput = Math.pow(xInput, 1);
+    yInput = Math.pow(yInput, 1);
     return swerveDrive.swerveController.getTargetSpeeds(
         xInput, yInput, headingX, headingY, getHeading().getRadians(), maximumSpeed);
   }
@@ -475,8 +475,8 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return {@link ChassisSpeeds} which can be sent to th Swerve Drive.
    */
   public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d angle) {
-    xInput = Math.pow(xInput, 3);
-    yInput = Math.pow(yInput, 3);
+    xInput = Math.pow(xInput, 1);
+    yInput = Math.pow(yInput, 1);
     return swerveDrive.swerveController.getTargetSpeeds(
         xInput, yInput, angle.getRadians(), getHeading().getRadians(), maximumSpeed);
   }

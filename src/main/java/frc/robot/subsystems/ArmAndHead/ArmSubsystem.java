@@ -378,7 +378,7 @@ public class ArmSubsystem extends SubsystemBase {
   public void setShuffleboard() {
     shuffleboard.setNumber("Arm Encoder", rightEncoder.getPosition());
 
-    shuffleboard.setBoolean("Shooter Tuck Switch", solenoidSwitch.get());
+    /*  shuffleboard.setBoolean("Shooter Tuck Switch", solenoidSwitch.get());
 
     shuffleboard.setBoolean("Is Brake Enabled", isBrakeEnabled());
     shuffleboard.setBoolean("Is Hook Deployed", isHookDeployed());
@@ -389,6 +389,6 @@ public class ArmSubsystem extends SubsystemBase {
     shuffleboard.setBoolean("Is Reverse Limit Pressed", reverseLimitSwitch.isPressed());
 
     shuffleboard.setNumber("right output voltage", rightArmMotor.getOutputCurrent());
-    shuffleboard.setNumber("left output voltage", leftArmMotor.getOutputCurrent());
+    shuffleboard.setNumber("left output voltage", leftArmMotor.getOutputCurrent()); */
   }
 }

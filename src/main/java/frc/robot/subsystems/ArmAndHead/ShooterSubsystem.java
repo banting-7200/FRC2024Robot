@@ -132,6 +132,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setShooterShuffleBoard() {
     shuffle.setTab("Debugging");
     shuffle.setBoolean("IR Sensor", shooterHasNote());
+    shuffle.setNumber(
+        "Shoot Motor RPM", m_shoot.getVelocity().getValueAsDouble() * 180 / 2 * Math.PI * 0.1143);
     /* shuffle.setNumber("shoot Ramp Down", 0); */
   }
 }

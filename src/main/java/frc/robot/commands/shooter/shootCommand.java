@@ -114,7 +114,7 @@ public class shootCommand extends Command {
 
   public boolean isFinished() {
     return ((currentMillis - sinceNoteLeft) > /* shuffle.getNumber("shoot Ramp Down") */ 3000
-        && hasSeenNote == true)
+            && hasSeenNote == true)
         || (currentMillis - startedMillis > maxCommandWaitTime.shootCommandWaitTime);
   }
 
@@ -123,8 +123,7 @@ public class shootCommand extends Command {
     shooter.stopShootMotor();
     shooter.stopIntakeMotor();
     // System.out.println("Shooting Done");
-    if (!shooter.shooterHasNote())
-      lights.SetLightState(LightStates.ReadyForPickup);
+    if (!shooter.shooterHasNote()) lights.SetLightState(LightStates.ReadyForPickup);
     // System.out.println("Has Note state is currently: " +
     // shooter.shooterHasNote());
   }

@@ -243,6 +243,10 @@ public class RobotContainer {
     autos.addOption("(R) Shoot Only Auto", "(R) Shoot Only Auto");
     autos.addOption("(L) Shoot Only Auto", "(L) Only Shoot Auto");
 
+    autos.addOption("(M) Shoot and Exit", "(M) Shoot and Exit");
+    autos.addOption("(R) Shoot and Exit", "(R) Shoot and Exit");
+    autos.addOption("(L) Shoot and Exit", "(L) Shoot and Exit");
+
     shuffle.newAutoChooser(autos);
   }
 

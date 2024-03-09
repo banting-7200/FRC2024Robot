@@ -108,13 +108,13 @@ public final class Constants {
 
     public static final double stopRange = 0.3;
     public static final double encoderHardMax = 34;
-    public static final long s_stateChangeDelay = 8;
+    public static final long s_stateChangeDelay = 4;
 
     public static final int smartMotionSlot = 0;
 
     // Arm movement constants
     public static final double tuckSafeMin =
-        25; // Robot hard min 25 ticks, min must be further tuned later
+        24; // Robot hard min 25 ticks, min must be further tuned later
     public static final double armGearRatio = 400;
 
     public static final double tuckArmAngle = 24;

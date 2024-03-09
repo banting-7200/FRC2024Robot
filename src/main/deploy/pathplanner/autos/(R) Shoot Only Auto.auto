@@ -22,6 +22,12 @@
           "data": {
             "name": "Shoot"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(R) Mini Start"
+          }
         }
       ]
     }

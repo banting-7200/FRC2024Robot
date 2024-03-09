@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.25,
-      "y": 5.55
+      "x": 1.6419230556007463,
+      "y": 5.492382339971527
     },
     "rotation": 0.0
   },
@@ -21,6 +21,12 @@
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(M) Mini Start"
           }
         }
       ]

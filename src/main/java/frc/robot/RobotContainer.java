@@ -251,6 +251,8 @@ public class RobotContainer {
     autos.addOption("(R) Shoot and Exit", "(R) Shoot and Exit");
     autos.addOption("(L) Shoot and Exit", "(L) Shoot and Exit");
 
+    autos.addOption("(M) Mid Note", "(M) Mid Note");
+
     shuffle.newAutoChooser(autos);
   }
 

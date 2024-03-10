@@ -380,6 +380,9 @@ public class ArmSubsystem extends SubsystemBase {
 
     shuffleboard.setBoolean("Shooter Tuck Switch", solenoidSwitch.get());
 
+    /*Arm.speakerArmAngle = shuffleboard.getNumber("Shoot Angle");*/
+    /*Arm.intakeArmAngle = shuffleboard.getNumber("Intake Angle");*/
+
     /*shuffleboard.setBoolean("Is Brake Enabled", isBrakeEnabled());
     shuffleboard.setBoolean("Is Hook Deployed", isHookDeployed());
     shuffleboard.setBoolean("Is Head Tucked", isTucked());

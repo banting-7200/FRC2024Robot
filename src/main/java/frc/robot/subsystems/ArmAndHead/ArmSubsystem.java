@@ -378,9 +378,9 @@ public class ArmSubsystem extends SubsystemBase {
   public void setShuffleboard() {
     shuffleboard.setNumber("Arm Encoder", rightEncoder.getPosition());
 
-    /*  shuffleboard.setBoolean("Shooter Tuck Switch", solenoidSwitch.get());
+    shuffleboard.setBoolean("Shooter Tuck Switch", solenoidSwitch.get());
 
-    shuffleboard.setBoolean("Is Brake Enabled", isBrakeEnabled());
+    /*shuffleboard.setBoolean("Is Brake Enabled", isBrakeEnabled());
     shuffleboard.setBoolean("Is Hook Deployed", isHookDeployed());
     shuffleboard.setBoolean("Is Head Tucked", isTucked());
     shuffleboard.setBoolean("Is  Head Tucked Raw", getIsTuckedRaw());

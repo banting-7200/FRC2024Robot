@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8924295166707293,
-      "y": 6.628333484912334
+      "x": 0.9978270455827631,
+      "y": 6.8157068696448375
     },
-    "rotation": 45.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -26,7 +26,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(L) Mini Start"
+            "pathName": "(L) Big Move"
           }
         }
       ]

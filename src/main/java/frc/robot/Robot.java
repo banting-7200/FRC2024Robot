@@ -63,7 +63,8 @@ public class Robot extends TimedRobot {
     CameraServer.startAutomaticCapture("Front Camera", 0);
     // Must be a PWM header, not MXP or DIO
 
-    // lights.setSolid(Color.kRed);
+    // lights.setSolid(Color.kWhite);
+    lights.UpdateLEDs("whiteChase");
 
     // Default to a length of 60, start empty output
 

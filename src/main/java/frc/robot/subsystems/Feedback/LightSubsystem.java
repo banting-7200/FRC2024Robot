@@ -1,7 +1,5 @@
 package frc.robot.subsystems.Feedback;
 
-import java.io.Serial;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.I2C;
@@ -14,10 +12,12 @@ public class LightSubsystem {
   private final AddressableLED statusLights;
   private final AddressableLEDBuffer statusBuffer;
   private static I2C arduinoLightI2c = new I2C(I2C.Port.kOnboard, 0x07);
-	// private SerialPort arduinoLightSPI = new SerialPort(9600, SerialPort.Port.kMXP); (Not worth it as it requires a lot more wires compared to i2c)
+  // private SerialPort arduinoLightSPI = new SerialPort(9600, SerialPort.Port.kMXP); (Not worth it
+  // as it requires a lot more wires compared to i2c)
   private static LightSubsystem instance = null; // creates Singleton instance
 
-  private ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance(); // Gets shuffleboard instance
+  private ShuffleboardSubsystem shuffle =
+      ShuffleboardSubsystem.getInstance(); // Gets shuffleboard instance
 
   private LimelightDevice limelight = LimelightDevice.getInstance(); // Gets limelight instance
 
@@ -47,7 +47,8 @@ public class LightSubsystem {
 
   private LightSubsystem(int lightPort, int stringLength) {
     statusLights = new AddressableLED(lightPort); // Inititalizes light string with passed in values
-    statusBuffer = new AddressableLEDBuffer(stringLength); // Inititalizes light buffer with passed in values
+    statusBuffer =
+        new AddressableLEDBuffer(stringLength); // Inititalizes light buffer with passed in values
     statusLights.setLength(stringLength);
     statusLights.start();
   }
@@ -121,19 +122,36 @@ public class LightSubsystem {
   }
 
   public void UpdateLEDs(String WriteString) // Constructor, pass it a string argument.
-	{ 
-		char[] CharArray = WriteString.toCharArray();  //Create an array of characters.  This breaks up the information into something that can be passed over the I2C bus.
-		byte[] RobotStatus = new byte[CharArray.length]; //Characters cannot be passed over I2C, thus we must convert them to bytes. This line creates the byte array.  
-		for (int i = 0; i < CharArray.length; i++)//Create a loop that fills the new  byte array. The new byte array is the same size as the character array. 
-		{
-			RobotStatus[i] = (byte) CharArray[i];  //Pass information slot by slot. This also converts the characters into bytes.
-		}
-		//arduino.transaction(RobotStatus, RobotStatus.length, null, 0);  //One type of sending info over the I2C bus.  This method asks for a response from the receiving unit. Caused null point exceptions. 
-		arduinoLightI2c.writeBulk(RobotStatus, RobotStatus.length); //This method sends info one way, without demanding a response from reader unit. 
+      {
+    char[] CharArray =
+        WriteString
+            .toCharArray(); // Create an array of characters.  This breaks up the information into
+    // something that can be passed over the I2C bus.
+    byte[] RobotStatus =
+        new byte
+            [CharArray
+                .length]; // Characters cannot be passed over I2C, thus we must convert them to
+    // bytes. This line creates the byte array.
+    for (int i = 0;
+        i < CharArray.length;
+        i++) // Create a loop that fills the new  byte array. The new byte array is the same size as
+    // the character array.
+    {
+      RobotStatus[i] =
+          (byte)
+              CharArray[i]; // Pass information slot by slot. This also converts the characters into
+      // bytes.
+    }
+    // arduino.transaction(RobotStatus, RobotStatus.length, null, 0);  //One type of sending info
+    // over the I2C bus.  This method asks for a response from the receiving unit. Caused null point
+    // exceptions.
+    arduinoLightI2c.writeBulk(
+        RobotStatus,
+        RobotStatus
+            .length); // This method sends info one way, without demanding a response from reader
+    // unit.
     // ty team 386
-	}
-
-   
+  }
 
   public void setDashed(Color colour1, Color colour2) {
     for (int i = 0; i < statusBuffer.getLength(); i++) {

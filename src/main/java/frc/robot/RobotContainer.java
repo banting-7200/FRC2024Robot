@@ -234,6 +234,7 @@ public class RobotContainer {
     autos.addOption("(M) Far Notes", "(M) Far Notes");
     autos.addOption("(L) Basic Auto", "(L) Basic Auto");
     autos.addOption("(M) Basic Auto", "(M) Basic Auto");
+    autos.addOption("(R) Basic Auto", "(R) Basic Auto");
 
     autos.addOption("(M) Basic Shoot Auto", "(M) Basic Shoot Auto");
     autos.addOption("(R) Basic Shoot Auto", "(R) Basic Shoot Auto");

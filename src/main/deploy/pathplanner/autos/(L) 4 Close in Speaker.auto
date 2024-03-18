@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.0,
-      "y": 7.0
+      "x": 0.7,
+      "y": 6.6
     },
-    "rotation": 45.0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -49,9 +49,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "(L) Speaker"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Shoot"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(M) Speaker"
+                }
+              }
+            ]
           }
         },
         {
@@ -73,7 +86,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(L) Middle Close"
+                  "pathName": "(M) Middle Close"
                 }
               },
               {
@@ -86,9 +99,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "(M) Speaker"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Shoot"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(M) Speaker"
+                }
+              }
+            ]
           }
         },
         {
@@ -123,9 +149,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "(R) Speaker"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(R) Speaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Shoot"
+                }
+              }
+            ]
           }
         },
         {

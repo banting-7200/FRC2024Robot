@@ -38,8 +38,8 @@ public class intakeCommand extends Command {
 
   @Override
   public void initialize() {
-    System.out.println("Has Note state is currently@IntakeStart: " + shooter.getHasNoteState());
-    System.out.println("I GOT TO INIT");
+    // System.out.println("Has Note state is currently@IntakeStart: " + shooter.getHasNoteState());
+    // System.out.println("I GOT TO INIT");
     startedMillis = 0;
     stopDryRun = false;
     commandInitMillis = currentTime.millis();
@@ -64,7 +64,7 @@ public class intakeCommand extends Command {
       shooter.setHasNoteState(true);
       System.out.println("Stage 2@intakeExecute");
     } */
-    System.out.println("Current timer: " + (currentTime.millis() - startedMillis));
+    // System.out.println("Current timer: " + (currentTime.millis() - startedMillis));
   }
 
   /* } */
@@ -78,8 +78,8 @@ public class intakeCommand extends Command {
   public void end(boolean interrupted) {
     shooter.stopIntakeMotor();
     if (shooter.shooterHasNote()) lights.SetLightState(LightStates.NotePickedUp);
-    System.out.println("Intake Command ShutDown");
-    System.out.println("Has Note state is currently@IntakeEnd: " + shooter.getHasNoteState());
+    // System.out.println("Intake Command ShutDown");
+    // System.out.println("Has Note state is currently@IntakeEnd: " + shooter.getHasNoteState());
     /*
      * if (!interrupted) {
      * shooter.setHasNoteState(true);

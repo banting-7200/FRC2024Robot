@@ -89,7 +89,7 @@ public class RobotContainer {
               ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red
               : false; // This is a local reference to the DriverStation alliance
 
-  static boolean speakerShot =
+  boolean speakerShot =
       true; // Whether the robot is ready for a Speaker Shot or not. Initialized to true
   // because our
   // first shot is a speaker shot.
@@ -101,15 +101,16 @@ public class RobotContainer {
   // efficent.
   public final Supplier<Double> joystickSquaredX =
       () -> {
-        double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY(), 2);
-        return d[0];
+        double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY());
+        return isRedAliance.getAsBoolean() ? d[0] * -1 : d[0];
       };
   public final Supplier<Double> joystickSquaredY =
       () -> {
-        double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY(), 2);
-        return d[1];
+        double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY());
+        return isRedAliance.getAsBoolean() ? d[1] * -1 : d[1];
       };
-  ;
+
+  public BooleanSupplier isSpeakerShot = () -> speakerShot;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -142,8 +143,16 @@ public class RobotContainer {
                 MathUtil.applyDeadband(-joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
             () ->
                 MathUtil.applyDeadband(-joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
-            () -> -driverXbox.getRightX(),
-            () -> -driverXbox.getRightY());
+            () -> {
+              if (isRedAliance.getAsBoolean())
+                return driverXbox.getRightX(); // This code bad! Make gooder soon!
+              else return -driverXbox.getRightX();
+            },
+            () -> {
+              if (isRedAliance.getAsBoolean()) return driverXbox.getRightY();
+              else return -driverXbox.getRightY();
+            }
+            /*  } */ );
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -218,8 +227,6 @@ public class RobotContainer {
     autos.addOption("(R) 4 in Speaker", "(R) 4 in Speaker");
     autos.addOption("(R) 2 in Speaker + 2 in Amp", "(R) 2 in Speaker + 2 in Amp");
     autos.addOption("(R) 3 in Speaker + 2 in Amp", "(R) 3 in Speaker + 2 in Amp");
-    autos.addOption("(R) Far Notes 1", "(R) Far Notes 1");
-    autos.addOption("(R) Far Notes 2", "(R) Far Notes 2");
     autos.addOption("(L) Left Side 4 in Speaker", " (L) Left Side 4 in Speaker");
     autos.addOption(
         "(L) Left Side 2 in Speaker + 2 in Amp", "(L) Left Side 2 in Speaker + 2 in Amp");
@@ -227,6 +234,20 @@ public class RobotContainer {
     autos.addOption("(M) Far Notes", "(M) Far Notes");
     autos.addOption("(L) Basic Auto", "(L) Basic Auto");
     autos.addOption("(M) Basic Auto", "(M) Basic Auto");
+
+    autos.addOption("(M) Basic Shoot Auto", "(M) Basic Shoot Auto");
+    autos.addOption("(R) Basic Shoot Auto", "(R) Basic Shoot Auto");
+    autos.addOption("(L) Basic Shoot Auto", "(L) Basic Shoot Auto");
+
+    autos.addOption("(M) Shoot Only Auto", "(M) Shoot Only Auto");
+    autos.addOption("(R) Shoot Only Auto", "(R) Shoot Only Auto");
+    autos.addOption("(L) Shoot Only Auto", "(L) Only Shoot Auto");
+
+    autos.addOption("(M) Shoot and Exit", "(M) Shoot and Exit");
+    autos.addOption("(R) Shoot and Exit", "(R) Shoot and Exit");
+    autos.addOption("(L) Shoot and Exit", "(L) Shoot and Exit");
+
+    autos.addOption("(M) Mid Note", "(M) Mid Note");
 
     shuffle.newAutoChooser(autos);
   }
@@ -246,13 +267,11 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  public static final IntSupplier shooterRPM =
+  public final IntSupplier shooterRPM =
       () -> speakerShot ? Shooter.speakerShootRPM : Shooter.ampShootRPM;
 
-  public static final IntSupplier shooterWaitTime =
+  public final IntSupplier shooterWaitTime =
       () -> speakerShot ? Shooter.speakerWaitTime : Shooter.ampWaitTime;
-
-  public static BooleanSupplier isSpeakerShot = () -> speakerShot;
 
   static JoystickButton upButton =
       new JoystickButton(CoPilotController, copilotController.upButton);
@@ -274,13 +293,25 @@ public class RobotContainer {
               ? limelight.calculateArmShootAngle()
               : Arm.speakerArmAngle;
 
-  public BooleanSupplier hasNote = () -> shooter.shooterHasNote();
+  public BooleanSupplier hasNote =
+      () ->
+          shooter.shooterHasNote()
+              && Math.abs(arm.getEncoderPosition() - Arm.intakeArmAngle) < Arm.stopRange;
   public BooleanSupplier isTeleop = () -> DriverStation.isTeleop();
+
+  void setAmpShot() {
+    speakerShot = false;
+    System.out.println("is speaker shot: " + speakerShot);
+  }
+
+  void setSpeakerShot() {
+    speakerShot = true;
+    System.out.println("is speaker shot: " + speakerShot);
+  }
 
   private void configureBindings() {
 
     // SWERVE STUFF
-
     new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
     new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 
@@ -306,7 +337,7 @@ public class RobotContainer {
      * trick the swerve into thinking its not moving and stop trying to correct
      * itself.
      */
-    new JoystickButton(CoPilotController, copilotController.brakeButton)
+    new JoystickButton(driverXbox, 4)
         .toggleOnTrue(new RepeatCommand(new InstantCommand(drivebase::resetOdometry, drivebase)));
 
     /*
@@ -392,13 +423,15 @@ public class RobotContainer {
      * position of the arm, which can be found if you scroll up.
      */
     new JoystickButton(CoPilotController, copilotController.shootButton)
-        .onTrue(new shootCommand(shooterRPM, shooter, shooterWaitTime, isSpeakerShot));
+        .onTrue(
+            new shootCommand(
+                shooterRPM, shooter, shooterWaitTime, isSpeakerShot, CoPilotController));
 
     /*
      * Simply schedules a command to align the robot to the commands supplied april
      * tag
      */
-    new JoystickButton(CoPilotController, copilotController.limelightButton)
+    new JoystickButton(driverXbox, 6)
         .toggleOnTrue(
             new AprilTagAlign(drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign));
 
@@ -413,11 +446,11 @@ public class RobotContainer {
      */
     new JoystickButton(CoPilotController, copilotController.speakerButton)
         .onTrue(
-            new TuckArm(arm)
+            new InstantCommand(() -> setSpeakerShot())
+                .andThen(new TuckArm(arm))
                 .andThen(new MoveArmToPosition(arm, speakerAngle))
                 .finallyDo(
                     (boolean interrupted) -> {
-                      speakerShot = true;
                       if (!interrupted) lights.SetLightState(LightStates.ReadyToSPEAKER);
                     }));
 
@@ -431,11 +464,11 @@ public class RobotContainer {
      */
     new JoystickButton(CoPilotController, copilotController.ampButton)
         .onTrue(
-            new UntuckArm(arm)
+            new InstantCommand(() -> setAmpShot())
+                .andThen(new UntuckArm(arm))
                 .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))
                 .finallyDo(
                     (boolean interrupted) -> {
-                      speakerShot = false;
                       if (!interrupted) lights.SetLightState(LightStates.ReadyToAMP);
                     }));
   }
@@ -511,9 +544,13 @@ public class RobotContainer {
 
   public void printSquareify() {
     double[] squareifedInputs =
-        drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY(), 2);
+        drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY());
     shuffle.setTab("Debugging");
     shuffle.setNumber("X", squareifedInputs[0]);
     shuffle.setNumber("Y", squareifedInputs[1]);
+  }
+
+  public void zeroGyroWithAlliance() {
+    drivebase.zeroGyroWithAlliance();
   }
 }

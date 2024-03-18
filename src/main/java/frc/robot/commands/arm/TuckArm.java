@@ -26,7 +26,7 @@ public class TuckArm extends Command {
     arm.disableBrake();
     System.out.println("Tuck Arm");
     startTime = timer.millis();
-    System.out.println("start time is: " + startTime);
+    // System.out.println("start time is: " + startTime);
     ranTuckCommand = false;
   }
 
@@ -39,7 +39,7 @@ public class TuckArm extends Command {
       }
     } else {
       // move to safe tuck pos
-      arm.moveToAngle(Arm.tuckSafeMin + 2);
+      arm.moveToAngle(Arm.tuckSafeMin + 1);
     }
     // System.out.println("is it safe to tuck: " + (arm.getEncoderPosition() >=
     // Arm.tuckSafeMin));
@@ -58,6 +58,6 @@ public class TuckArm extends Command {
      * lights.SetLightState(LightStates.CarryingNote);
      * }
      */
-    System.out.println("elapsed time is: " + (timer.millis() - startTime));
+    // System.out.println("elapsed time is: " + (timer.millis() - startTime));
   }
 }

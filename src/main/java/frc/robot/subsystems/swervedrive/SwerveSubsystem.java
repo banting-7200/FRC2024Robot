@@ -113,11 +113,11 @@ public class SwerveSubsystem extends SubsystemBase {
         // ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in
             // your Constants class
-            new PIDConstants(5.0, 0.0, 0.0), /*
-                                              * swerveDrive.swerveController.config.TranslationPID.p,
-                                              * swerveDrive.swerveController.config.TranslationPID.i,
-                                              * swerveDrive.swerveController.config.TranslationPID.d)
-                                              */
+            new PIDConstants(5.0, 0.0, 0.0),
+            /*  swerveDrive.swerveController.config..p,
+            swerveDrive.swerveController.config.TranslationPID.i,
+            swerveDrive.swerveController.config.TranslationPID.d), */
+
             // todo: check to see if this is necessary (removed in example code)
             // Translation PID constants
             new PIDConstants(
@@ -125,7 +125,7 @@ public class SwerveSubsystem extends SubsystemBase {
                 swerveDrive.swerveController.config.headingPIDF.i,
                 swerveDrive.swerveController.config.headingPIDF.d),
             // Rotation PID constants
-            4.5,
+            4.41,
             // Max module speed, in m/s
             swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
             // Drive base radius in meters. Distance from robot center to furthest module.
@@ -220,11 +220,11 @@ public class SwerveSubsystem extends SubsystemBase {
           double xInput =
               Math.pow(
                   translationX.getAsDouble() * speedMultiplier,
-                  3); // Smooth controll out (Speed multiplier for Creep Drive)
+                  1); // Smooth controll out (Speed multiplier for Creep Drive)
           double yInput =
               Math.pow(
                   translationY.getAsDouble() * speedMultiplier,
-                  3); // Smooth controll out (Speed multiplier for Creep Drive)
+                  1); // Smooth controll out (Speed multiplier for Creep Drive)
           // Make the robot move
           driveFieldOriented(
               swerveDrive.swerveController.getTargetSpeeds(
@@ -278,11 +278,11 @@ public class SwerveSubsystem extends SubsystemBase {
           // Make the robot move
           swerveDrive.drive(
               new Translation2d(
-                  Math.pow(translationX.getAsDouble() * speedMultiplier, 3)
+                  Math.pow(translationX.getAsDouble() * speedMultiplier, 1)
                       * swerveDrive.getMaximumVelocity(),
-                  Math.pow(translationY.getAsDouble() * speedMultiplier, 3)
+                  Math.pow(translationY.getAsDouble() * speedMultiplier, 1)
                       * swerveDrive.getMaximumVelocity()),
-              Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity(),
+              Math.pow(angularRotationX.getAsDouble(), 1) * swerveDrive.getMaximumAngularVelocity(),
               true,
               false);
         });
@@ -294,9 +294,9 @@ public class SwerveSubsystem extends SubsystemBase {
           // Make the robot move
           swerveDrive.drive(
               new Translation2d(
-                  Math.pow(translationX, 3) * swerveDrive.getMaximumVelocity(),
-                  Math.pow(translationY, 3) * swerveDrive.getMaximumVelocity()),
-              Math.pow(angularRotationX, 3) * swerveDrive.getMaximumAngularVelocity(),
+                  Math.pow(translationX, 1) * swerveDrive.getMaximumVelocity(),
+                  Math.pow(translationY, 1) * swerveDrive.getMaximumVelocity()),
+              Math.pow(angularRotationX, 1) * swerveDrive.getMaximumAngularVelocity(),
               true,
               false);
         });
@@ -407,6 +407,26 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveDrive.resetOdometry(getPose());
   }
 
+  private boolean isRedAlliance() {
+    var alliance = DriverStation.getAlliance();
+    return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
+  }
+
+  /**
+   * This will zero (calibrate) the robot to assume the current position is facing forward
+   *
+   * <p>If red alliance rotate the robot 180 after the drviebase zero command
+   */
+  public void zeroGyroWithAlliance() {
+    if (isRedAlliance()) {
+      zeroGyro();
+      // Set the pose 180 degrees
+      resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+    } else {
+      zeroGyro();
+    }
+  }
+
   /**
    * Sets the drive motors to brake/coast mode.
    *
@@ -439,8 +459,8 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public ChassisSpeeds getTargetSpeeds(
       double xInput, double yInput, double headingX, double headingY) {
-    xInput = Math.pow(xInput, 3);
-    yInput = Math.pow(yInput, 3);
+    xInput = Math.pow(xInput, 1);
+    yInput = Math.pow(yInput, 1);
     return swerveDrive.swerveController.getTargetSpeeds(
         xInput, yInput, headingX, headingY, getHeading().getRadians(), maximumSpeed);
   }
@@ -455,15 +475,15 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return {@link ChassisSpeeds} which can be sent to th Swerve Drive.
    */
   public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d angle) {
-    xInput = Math.pow(xInput, 3);
-    yInput = Math.pow(yInput, 3);
+    xInput = Math.pow(xInput, 1);
+    yInput = Math.pow(yInput, 1);
     return swerveDrive.swerveController.getTargetSpeeds(
         xInput, yInput, angle.getRadians(), getHeading().getRadians(), maximumSpeed);
   }
 
   // Convert circular joystick input into a square shape. Todo: Further comment and update this
   // after com to be more efficent.
-  public double[] squareifyInput(double x, double y, double innerRoundness) {
+  public double[] squareifyInput(double x, double y) {
     double PiOverFour = Math.PI / 4;
 
     // Determine the theta angle

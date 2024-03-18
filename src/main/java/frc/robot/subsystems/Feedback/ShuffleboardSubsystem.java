@@ -32,7 +32,7 @@ public class ShuffleboardSubsystem {
   SimpleWidget lights;
 
   private ShuffleboardSubsystem() {
-    setTab("Debugging");
+    setTab("Driver");
     lights = tab.add("Lights", true).withWidget(BuiltInWidgets.kBooleanBox);
   }
 
@@ -215,7 +215,7 @@ public class ShuffleboardSubsystem {
     setTab("Pre-Match");
     autos = inAutos;
     tab.add("Autos", autos).withSize(2, 1);
-    autos.setDefaultOption("No Auto Selected", null);
+    autos.setDefaultOption("No Auto Selected", "(M) Basic Auto");
   }
 
   public String getAuto() { // returns auto from drop down;

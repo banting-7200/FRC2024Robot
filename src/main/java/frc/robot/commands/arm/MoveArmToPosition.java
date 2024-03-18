@@ -36,9 +36,9 @@ public class MoveArmToPosition extends Command {
   public void initialize() {
     // supplier assignment goes here
     arm.disableBrake();
-    System.out.println("Move Arm To Position. setpoint is: " + angleSetpoint.getAsDouble());
+    // System.out.println("Move Arm To Position. setpoint is: " + angleSetpoint.getAsDouble());
     startTime = timer.millis();
-    System.out.println("start time is: " + startTime);
+    // System.out.println("start time is: " + startTime);
   }
 
   @Override
@@ -57,7 +57,7 @@ public class MoveArmToPosition extends Command {
   @Override
   public void end(boolean interrupted) {
     arm.stopArm();
-    System.out.println("Move to position command finished. interupted: " + interrupted);
-    System.out.println("elapsed time is: " + (timer.millis() - startTime));
+    /* System.out.println("Move to position command finished. interupted: " + interrupted);
+    System.out.println("elapsed time is: " + (timer.millis() - startTime)); */
   }
 }

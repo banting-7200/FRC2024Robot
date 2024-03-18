@@ -34,8 +34,8 @@ public final class Constants {
   }
 
   public static final class xboxController {
-    public static final double rumbleStrength = 0.7; // 0 - 1 range
-    public static final double rumbleTime = 1000; // rumble time in milliseconds
+    public static final double rumbleStrength = 1; // 0 - 1 range
+    public static final double rumbleTime = 1253; // rumble time in milliseconds
   }
 
   public static final class copilotController {
@@ -58,7 +58,7 @@ public final class Constants {
 
   public static final class Lights {
     public static final int lightID = 0;
-    public static final int lightStringLength = 50;
+    public static final int lightStringLength = 200;
   }
 
   public static final class maxCommandWaitTime {
@@ -66,7 +66,7 @@ public final class Constants {
     public static final int moveArmToPositionWaitTime = 3300;
     public static final int tuckArmWaitTime = 2000;
     public static final int unTuckWaitTime = 2000;
-    public static final int intakeCommandWaitTime = 7000;
+    public static final int intakeCommandWaitTime = 70000;
     public static final int shootCommandWaitTime = 3000;
     public static final int aprilTagAlignWaitTime = 7000;
     public static final int noteObjectAlignWaitTime = 7000;
@@ -108,20 +108,20 @@ public final class Constants {
 
     public static final double stopRange = 0.3;
     public static final double encoderHardMax = 34;
-    public static final long s_stateChangeDelay = 8;
+    public static final long s_stateChangeDelay = 6;
 
     public static final int smartMotionSlot = 0;
 
     // Arm movement constants
     public static final double tuckSafeMin =
-        25; // Robot hard min 25 ticks, min must be further tuned later
+        24; // Robot hard min 25 ticks, min must be further tuned later
     public static final double armGearRatio = 400;
 
     public static final double tuckArmAngle = 24;
     public static final double intakeArmAngle = 20.8;
     public static final double ampArmAngle = 31.3;
     public static final double liftArmAngle = 30.3;
-    public static final double speakerArmAngle = 28; // Todo: find a real value for this
+    public static final double speakerArmAngle = 28.4;
 
     public static final int kMeasuredPosHorizontal =
         21; // Default position measured when arm is horizontal from
@@ -138,7 +138,7 @@ public final class Constants {
     public static final double limelightToSpeakerHeight =
         0.1520; // from camera lens to speaker(goal - limelight height
     // from ground)
-    public static final double limelightMountAngle = 31;
+    public static final double limelightMountAngle = 150;
     public static final double armToLimelightDistance = 0.04;
   }
 
@@ -150,8 +150,8 @@ public final class Constants {
     public static final int intakeRPM = 6000;
     public static final int pullBackRPM = 2000;
     public static final int correctPositioningRPM = 500;
-    public static final int ampShootRPM = 2000;
-    public static final int speakerShootRPM = 7200;
+    public static final int ampShootRPM = 1000;
+    public static final int speakerShootRPM = 5000;
     public static final int ampWaitTime = 0;
     public static final int speakerWaitTime = 1000;
     public static final int shootRampDown = 1000;
@@ -173,7 +173,7 @@ public final class Constants {
 
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
-    public static final double creepSpeedMultiplier = 0.7;
+    public static final double creepSpeedMultiplier = 0.4;
   }
 
   public static class OperatorConstants {

@@ -11,15 +11,15 @@
     "(R) Paths"
   ],
   "autoFolders": [
-    "Left Autos",
-    "Middle Autos",
+    "AMP-Side Autos",
+    "MIDDLE Autos",
     "Other Autos",
-    "Right Autos",
+    "SOURCE-Side Autos",
     "Test Autos"
   ],
-  "defaultMaxVel": 4.4,
-  "defaultMaxAccel": 2.0,
-  "defaultMaxAngVel": 720.0,
-  "defaultMaxAngAccel": 720.0,
-  "maxModuleSpeed": 4.4
+  "defaultMaxVel": 4.41,
+  "defaultMaxAccel": 2.2,
+  "defaultMaxAngVel": 360.0,
+  "defaultMaxAngAccel": 90.0,
+  "maxModuleSpeed": 4.41
 }

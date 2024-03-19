@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7,
-      "y": 4.5
+      "x": 1.25,
+      "y": 5.55
     },
-    "rotation": -60.0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
@@ -42,7 +42,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(R) Right Close"
+                  "pathName": "(M) Middle Close"
                 }
               }
             ]
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(R) Speaker"
+                  "pathName": "(M) Speaker"
                 }
               }
             ]
@@ -76,6 +76,6 @@
       ]
     }
   },
-  "folder": "Other Autos",
+  "folder": "MIDDLE Autos",
   "choreoAuto": false
 }

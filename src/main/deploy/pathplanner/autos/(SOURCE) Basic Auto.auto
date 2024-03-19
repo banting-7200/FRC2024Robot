@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 0.7,
-      "y": 6.6
+      "y": 4.5
     },
-    "rotation": 60.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
@@ -42,7 +42,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(L) Left Close"
+                  "pathName": "(R) Right Close"
                 }
               }
             ]
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(L) Speaker"
+                  "pathName": "(R) Speaker"
                 }
               }
             ]
@@ -76,6 +76,6 @@
       ]
     }
   },
-  "folder": "Other Autos",
+  "folder": "SOURCE-Side Autos",
   "choreoAuto": false
 }

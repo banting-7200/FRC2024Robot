@@ -42,7 +42,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(R) Right Close"
+                  "pathName": "REVERT (R) 4th Far"
                 }
               }
             ]
@@ -61,7 +61,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(M) Speaker"
+                  "pathName": "(R Stage) Speaker"
                 }
               }
             ]
@@ -80,7 +80,7 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -92,7 +92,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(M) Middle Close"
+                  "pathName": "REVERT (R) 5th Far"
                 }
               }
             ]
@@ -111,57 +111,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(M) Speaker"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "(M) Left Close"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Prep Shoot"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "(L) Speaker"
+                  "pathName": "(R Stage) Speaker"
                 }
               }
             ]
@@ -176,6 +126,6 @@
       ]
     }
   },
-  "folder": "Right Autos",
+  "folder": null,
   "choreoAuto": false
 }

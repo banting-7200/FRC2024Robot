@@ -70,7 +70,7 @@ public class intakeCommand extends Command {
   /* } */
 
   public boolean isFinished() {
-    return shooter.shooterHasNote()
+    return (shooter.shooterHasNote() && currentTime.millis() - commandInitMillis > 1000)
         || (currentTime.millis() - commandInitMillis > maxCommandWaitTime.intakeCommandWaitTime);
   }
 

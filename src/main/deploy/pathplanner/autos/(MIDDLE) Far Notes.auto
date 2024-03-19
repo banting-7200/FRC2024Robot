@@ -30,13 +30,13 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(M) Middle Close Extended"
+                  "pathName": "(M) Middle Close"
                 }
               },
               {
@@ -57,7 +57,50 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Shoot"
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "REVERT (Speed) Under Stage Left"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "REVERT (Stage) 3rd Far"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Back Under Stage Left"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(M) Speaker"
           }
         },
         {
@@ -69,6 +112,6 @@
       ]
     }
   },
-  "folder": "Middle Autos",
+  "folder": "MIDDLE Autos",
   "choreoAuto": false
 }

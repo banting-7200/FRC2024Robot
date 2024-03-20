@@ -1,27 +1,41 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class PhotonCamera{ 
+public class PhotonCamera {
 
-        private static NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
-        private static NetworkTable table = tableInstance.getTable("photonvision");
+  private static NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
+  private static NetworkTable table;
+  private static PhotonCamera instance = null;
 
-        public static NetworkTableEntry has_targets(){ //is target in view?
+  public PhotonCamera() {
+    table =
+        NetworkTableInstance.getDefault()
+            .getTable("photonvision")
+            .getSubTable("FHD_Camera"); // gets the network table with key
+  }
 
-                //bool
-                NetworkTableEntry has_target = table.getEntry("hasTarget");
+  public static synchronized PhotonCamera getInstance() {
+    if (instance == null) {
+      instance = new PhotonCamera();
+    }
+    return instance;
+  }
 
-                return has_target; 
-        }
+  public boolean has_targets() { // is target in view?
 
-        public static NetworkTableEntry note_positions(){ 
+    // bool
+    boolean has_target = table.getEntry("hasTarget").getBoolean(false);
 
-                //(x, y, z, qw, qx, qy, qz)
-                NetworkTableEntry note_pos = table.getEntry("targetPose");
+    return has_target;
+  }
 
-                return note_pos; 
-        }
+  public double[] note_positions() {
+
+    // (x, y, z, qw, qx, qy, qz)
+    double[] note_pos = table.getEntry("targetPose").getDoubleArray(new double[] {});
+
+    return note_pos;
+  }
 }

@@ -38,4 +38,24 @@ public class PhotonCamera {
 
     return note_pos;
   }
+
+  public double getNoteYaw() {
+    double noteYaw = table.getEntry("targetYaw").getDouble(0);
+    return noteYaw;
+  }
+
+  public double getNotePitch() {
+    double notePitch = table.getEntry("targetPitch").getDouble(0);
+    return notePitch;
+  }
+
+  public double getNoteSkew() {
+    double noteSkew = table.getEntry("targetSkew").getDouble(0);
+    return noteSkew;
+  }
+
+  public double getNoteArea() {
+    double noteArea = table.getEntry("targetArea").getDouble(0);
+    return noteArea;
+  }
 }

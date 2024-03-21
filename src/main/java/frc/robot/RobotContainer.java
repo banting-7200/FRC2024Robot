@@ -19,7 +19,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.swervedrive.auto.NoteObjectAlign;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
+import frc.robot.subsystems.PhotonCamera;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import java.util.function.BooleanSupplier;
@@ -45,6 +47,7 @@ public class RobotContainer {
   // CommandJoystick driverController = new
   // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   static XboxController driverXbox = new XboxController(0);
+  PhotonCamera photonCam = PhotonCamera.getInstance();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -139,7 +142,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return drivebase.getAutonomousCommand("New Path", true);
+    return new NoteObjectAlign(drivebase, photonCam, 50);
   }
 
   public void setDriveMode() {

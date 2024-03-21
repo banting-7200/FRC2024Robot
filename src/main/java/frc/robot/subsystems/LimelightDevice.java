@@ -61,7 +61,8 @@ public class LimelightDevice extends SubsystemBase {
   }
 
   public void putTagData() { // publishes tag data to SmartDashboard
-    double ttarget = limeLightTable.getEntry("tv").getDouble(0); // may have to be double then converted
+    double ttarget =
+        limeLightTable.getEntry("tv").getDouble(0); // may have to be double then converted
     double tx = limeLightTable.getEntry("tx").getDouble(0);
     double ty = limeLightTable.getEntry("ty").getDouble(0);
     double ta = limeLightTable.getEntry("ta").getDouble(0);
@@ -79,7 +80,8 @@ public class LimelightDevice extends SubsystemBase {
       noteDetected() { // posts limelight note pipelinedata to SmartDashboard & returns true if note
     // is
     // detected
-    double ntarget = limeLightTable.getEntry("tv").getDouble(0); // may have to be double then converted
+    double ntarget =
+        limeLightTable.getEntry("tv").getDouble(0); // may have to be double then converted
     double nx = limeLightTable.getEntry("tx").getDouble(0);
     double ny = limeLightTable.getEntry("ty").getDouble(0);
     double na = limeLightTable.getEntry("ta").getDouble(0);

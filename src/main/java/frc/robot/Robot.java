@@ -33,9 +33,6 @@ public class Robot extends TimedRobot {
 
   private Timer disabledTimer;
 
-  private PhotonCamera photonTable = PhotonCamera.getInstance();
-  private double[] positions;
-
   public Robot() {
     instance = this;
   }
@@ -78,7 +75,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    positions = photonTable.note_positions();
     // Runs the Scheduler. This is responsible for polling buttons, adding
     // newly-scheduled
     // commands, running already-scheduled commands, removing finished or
@@ -87,7 +83,6 @@ public class Robot extends TimedRobot {
     // robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    System.out.println("x-position: " + positions[0]+ " y-positions: " + positions[1] + " z-positions: " + positions[2]);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

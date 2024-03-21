@@ -31,14 +31,6 @@ public class PhotonCamera {
     return has_target;
   }
 
-  public double[] note_positions() {
-
-    // (x, y, z, qw, qx, qy, qz)
-    double[] note_pos = table.getEntry("targetPose").getDoubleArray(new double[] {});
-
-    return note_pos;
-  }
-
   public double getNoteYaw() {
     double noteYaw = table.getEntry("targetYaw").getDouble(0);
     return noteYaw;

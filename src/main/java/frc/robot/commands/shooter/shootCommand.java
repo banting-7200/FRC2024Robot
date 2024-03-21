@@ -28,17 +28,16 @@ public class shootCommand extends Command {
   IntSupplier rpm; // Int supplier for different shoot rpm's(speaker/amp)
   Boolean hasSeenNote = false; // if note has been detected yet
   IntSupplier waitTime; // Int supplier for different wait times(speaker/amp)
-  boolean hasNote; // This variables is used for telling whether the note is already in the shooter
+  boolean
+      hasNote; // This variables is used for telling whether the note is already in the shooter or
+  // not
   BooleanSupplier isSpeakerShot;
 
   Joystick controller;
 
-  // or
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
 
-  boolean override;
-
-  // not
+  boolean pause;
 
   public shootCommand(
       IntSupplier rpm,
@@ -57,7 +56,6 @@ public class shootCommand extends Command {
   public shootCommand(
       int rpm, ShooterSubsystem shooter, int waitTime, BooleanSupplier isSpeakerShot) {
     this(() -> rpm, shooter, () -> waitTime, isSpeakerShot);
-    this.controller = null;
   }
 
   public shootCommand(
@@ -77,13 +75,13 @@ public class shootCommand extends Command {
     hasSeenNote = false;
     hasNote = shooter.shooterHasNote();
     shooter.stopIntakeMotor(); // Stop the intake motor
+    System.out.println("Started shoot command");
     System.out.println("is Shoot state: " + isSpeakerShot.getAsBoolean());
-    override = controller != null ? controller.getRawButton(copilotController.brakeButton) : false;
+    pause = controller != null ? controller.getRawButton(copilotController.shootButton) : false;
   }
 
   @Override
   public void execute() {
-    /*  if (hasNote == true || override) { // if shooter has note in it */
     currentMillis = currentTime.millis(); // record current time
     if (currentMillis - startedMillis < 100
         && isSpeakerShot.getAsBoolean()) { // until 100 millis pass
@@ -105,7 +103,7 @@ public class shootCommand extends Command {
       hasSeenNote = true;
       // System.out.println("SAW THE NOTE");
     }
-    if (currentMillis - startedMillis > 450) {
+    if (currentMillis - startedMillis > 450 && !pause) {
       shooter.spinShootToRPM(rpm.getAsInt());
     }
   }
@@ -122,7 +120,7 @@ public class shootCommand extends Command {
   public void end(boolean interrupted) {
     shooter.stopShootMotor();
     shooter.stopIntakeMotor();
-    // System.out.println("Shooting Done");
+    System.out.println("Shooting Done");
     if (!shooter.shooterHasNote()) lights.SetLightState(LightStates.ReadyForPickup);
     // System.out.println("Has Note state is currently: " +
     // shooter.shooterHasNote());

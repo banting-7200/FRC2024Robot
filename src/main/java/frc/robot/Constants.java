@@ -132,14 +132,19 @@ public final class Constants {
 
     // Arm angle calculation constants
     public static final double armToSpeakerHeight =
-        0.1524; // from the motor axel to speaker(goal - arm height from
-    // ground)
-    public static final double armToShooterAngle = 45;
+        74; // from the motor axel to speaker(goal - arm height from
+    // ground), in inches
+    public static final double armToShooterAngle =
+        64; // Angle between arm and shooter when shooter is in the tucked position, in
+    // rotational units of the arm(42 == 360 degrees). degrees is 64.
     public static final double limelightToSpeakerHeight =
-        0.1520; // from camera lens to speaker(goal - limelight height
-    // from ground)
-    public static final double limelightMountAngle = 150;
-    public static final double armToLimelightDistance = 0.04;
+        69.6; // from camera lens to speaker(goal - limelight height
+    // from ground), in inches
+    public static final double limelightMountAngle =
+        30; // 60; // Mount angle offset from perfectly vertical, in degrees
+    public static final double armToLimelightDistance =
+        0.04; // Horizontal distance from the center of the limelight lens to the motor axel, in
+    // inches.
   }
 
   public static final class Shooter {

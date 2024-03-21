@@ -22,7 +22,7 @@ public class UntuckArm extends Command {
   @Override
   public void initialize() {
     arm.disableBrake();
-    System.out.println("Untuck Arm");
+    System.out.println("Started Untuck Arm");
     startTime = timer.millis();
     // System.out.println("start time is: " + startTime);
     ranUntuckCommand = false;
@@ -50,6 +50,7 @@ public class UntuckArm extends Command {
   @Override
   public void end(boolean interrupted) {
     arm.stopArm();
+    System.out.println("Ended Untuck Arm");
     // System.out.println("elapsed time is: " + (timer.millis() - startTime));
   }
 }

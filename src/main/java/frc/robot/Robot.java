@@ -26,8 +26,8 @@ import swervelib.parser.SwerveParser;
  */
 public class Robot extends TimedRobot {
 
-  private static Robot instance; // Creates tehe Robotn.java instance
-  private RobotContainer m_robotContainer; // Creates the Robotcontainer instance
+  private static Robot instance; // Creates the Robot.java instance
+  private RobotContainer m_robotContainer; // Creates the Robot container instance
   private Command m_autonomousCommand; // The command that stores our auto
   private LimelightDevice limelight = LimelightDevice.getInstance();
 

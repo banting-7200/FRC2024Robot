@@ -24,6 +24,7 @@ public class intakeCommand extends Command {
   boolean stopDryRun = false;
   boolean readyNote = false;
   long commandInitMillis;
+  long seenMillis = 0;
 
   XboxController driveController;
 
@@ -51,6 +52,9 @@ public class intakeCommand extends Command {
     /* if (readyNote == false) { */
 
     shooter.spinIntakeToNegativeRPM(intakeRPM); // intake
+    if (shooter.shooterHasNote() && seenMillis == 0) {
+      seenMillis = currentTime.millis();
+    }
     /*     if (shooter.shooterHasNote() && stopDryRun == false) {
       startedMillis =
           currentTime.millis() + 100; // run for an extra 100ms after note has been detected
@@ -70,7 +74,7 @@ public class intakeCommand extends Command {
   /* } */
 
   public boolean isFinished() {
-    return shooter.shooterHasNote()
+    return (shooter.shooterHasNote() && currentTime.millis() - seenMillis > 500)
         || (currentTime.millis() - commandInitMillis > maxCommandWaitTime.intakeCommandWaitTime);
   }
 

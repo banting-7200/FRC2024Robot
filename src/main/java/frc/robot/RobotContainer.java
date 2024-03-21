@@ -111,13 +111,15 @@ public class RobotContainer {
       };
 
   public BooleanSupplier isSpeakerShot = () -> speakerShot;
+  public DoubleSupplier shuffleAngle;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     arm = new ArmSubsystem(); // Creating a new instance of Arm Subsytem
     shooter = new ShooterSubsystem(arm); // Creating a new instance of Shooter Subsytem
-
+    shuffle.setNumber("Arm Goal Position", 30);
+    shuffleAngle = () -> shuffle.getNumber("Arm Goal Position");
     configureBindings();
 
     AbsoluteDriveAdv closedAbsoluteDriveAdv =
@@ -180,8 +182,7 @@ public class RobotContainer {
     shuffle.setTab("Debugging");
     shuffle.setLayout("Debugging Tools", 1, 4);
     shuffle.setNumber("Arm Goal Position", Arm.ampArmAngle);
-    shuffle.newCommandButton(
-        "Move Arm To Position", new MoveArmToPosition(arm, shuffle.getNumber("Arm Goal Position")));
+    shuffle.newCommandButton("Move Arm To Position", new MoveArmToPosition(arm, shuffleAngle));
 
     shuffle.newCommandButton("Move To Amp", new MoveArmToPosition(arm, Arm.ampArmAngle));
     shuffle.newCommandButton("Move To Speaker", new MoveArmToPosition(arm, Arm.speakerArmAngle));
@@ -287,10 +288,14 @@ public class RobotContainer {
    * If it is, the supply a dynamicly calculated angle from the limelight,
    * if not, then supply a predetemined shoot angle.
    */
+
+    
+
+
   public final DoubleSupplier speakerAngle =
       () ->
           CoPilotController.getRawButton(copilotController.limelightButton) == true
-              ? limelight.calculateArmShootAngle()
+              ? limelight.calculateArmShootAngleSimple()
               : Arm.speakerArmAngle;
 
   public BooleanSupplier hasNote =

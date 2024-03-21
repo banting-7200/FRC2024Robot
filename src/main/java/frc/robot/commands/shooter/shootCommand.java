@@ -113,7 +113,7 @@ public class shootCommand extends Command {
   // System.out.println("Current  HAS NOTE STATE: " + shooter.shooterHasNote());
 
   public boolean isFinished() {
-    return ((currentMillis - sinceNoteLeft) > /* shuffle.getNumber("shoot Ramp Down") */ 3000
+    return ((currentMillis - sinceNoteLeft) > /* shuffle.getNumber("shoot Ramp Down") */ 1000
             && hasSeenNote == true)
         || (currentMillis - startedMillis > maxCommandWaitTime.shootCommandWaitTime);
   }

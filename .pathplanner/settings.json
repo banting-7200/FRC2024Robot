@@ -1,6 +1,6 @@
 {
-  "robotWidth": 0.7493,
-  "robotLength": 0.7747,
+  "robotWidth": 0.75,
+  "robotLength": 0.77,
   "holonomicMode": true,
   "pathFolders": [
     "(Old) Mid Start Paths",
@@ -17,9 +17,9 @@
     "SOURCE-Side Autos",
     "Test Autos"
   ],
-  "defaultMaxVel": 4.41,
-  "defaultMaxAccel": 2.2,
+  "defaultMaxVel": 2.2,
+  "defaultMaxAccel": 1.0,
   "defaultMaxAngVel": 360.0,
-  "defaultMaxAngAccel": 90.0,
-  "maxModuleSpeed": 4.41
+  "defaultMaxAngAccel": 160.0,
+  "maxModuleSpeed": 4.88
 }

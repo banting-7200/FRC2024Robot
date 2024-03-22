@@ -297,13 +297,10 @@ public class RobotContainer {
    * if not, then supply a predetemined shoot angle.
    */
 
-    
-
-
   public final DoubleSupplier speakerAngle =
       () ->
           CoPilotController.getRawButton(copilotController.limelightButton) == true
-              ? limelight.calculateArmShootAngleSimple()
+              ? limelight.calculateArmShootAngle()
               : Arm.speakerArmAngle;
 
   public BooleanSupplier hasNote =
@@ -472,9 +469,10 @@ public class RobotContainer {
                       if (!interrupted) lights.SetLightState(LightStates.ReadyToSPEAKER);
                     }));
 
-    new JoystickButton(driverXbox, copilotController.limelightButton)
+    new JoystickButton(CoPilotController, copilotController.limelightButton)
         .onTrue(
-            new InstantCommand(() -> setSpeakerShot())
+            /*  new AprilTagAlign(drivebase, limelight, 2, shootTagToAlign, true)
+            .andThen(*/ new InstantCommand(() -> setSpeakerShot() /* )*/)
                 .andThen(new TuckArm(arm))
                 .andThen(
                     new LimelightArmMovement(arm, limelight).onlyWhile(isLimelightButtonPressed)));

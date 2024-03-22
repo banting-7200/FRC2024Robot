@@ -26,10 +26,10 @@ public class LimelightArmMovement extends Command {
 
   @Override
   public void execute() {
-    if(reachedSetpoint && !isBrakeEnabled){
+    if (reachedSetpoint && !isBrakeEnabled) {
       arm.stopArm();
       isBrakeEnabled = true;
-    }else if(isBrakeEnabled){
+    } else if (!reachedSetpoint && isBrakeEnabled) {
       arm.disableBrake();
       isBrakeEnabled = false;
     }

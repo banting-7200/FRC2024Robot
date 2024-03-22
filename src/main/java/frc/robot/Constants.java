@@ -67,7 +67,7 @@ public final class Constants {
     public static final int tuckArmWaitTime = 2000;
     public static final int unTuckWaitTime = 2000;
     public static final int intakeCommandWaitTime = 70000;
-    public static final int shootCommandWaitTime = 3000;
+    public static final int shootCommandWaitTime = 2000;
     public static final int aprilTagAlignWaitTime = 7000;
     public static final int noteObjectAlignWaitTime = 7000;
   }
@@ -108,6 +108,7 @@ public final class Constants {
 
     public static final double stopRange = 0.3;
     public static final double encoderHardMax = 34;
+    public static final double encoderHardMin = 20.8;
     public static final long s_stateChangeDelay = 6;
 
     public static final int smartMotionSlot = 0;

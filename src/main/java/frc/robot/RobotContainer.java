@@ -366,7 +366,7 @@ public class RobotContainer {
         .onTrue(
             (new UntuckArm(arm)
                     .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
-                    .andThen(new intakeCommand(Shooter.intakeRPM, shooter))
+                    .alongWith(new intakeCommand(Shooter.intakeRPM, shooter))
                     .andThen(
                         new TuckArm(arm)
                             .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))

@@ -103,7 +103,7 @@ public class shootCommand extends Command {
       hasSeenNote = true;
       // System.out.println("SAW THE NOTE");
     }
-    if (currentMillis - startedMillis > 450 && !pause) {
+    if (currentMillis - startedMillis > 450 /*  && !pause */) {
       shooter.spinShootToRPM(rpm.getAsInt());
     }
   }

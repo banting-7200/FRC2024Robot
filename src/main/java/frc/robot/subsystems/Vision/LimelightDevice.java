@@ -145,7 +145,7 @@ public class LimelightDevice extends SubsystemBase {
   }
 
   public double calculateArmShootAngle() {
-   return 0;//temp
+    return 0; // temp
   }
 
   public double calculateArmShootAngleSimple() {

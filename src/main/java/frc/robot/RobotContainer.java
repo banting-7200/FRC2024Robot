@@ -164,7 +164,8 @@ public class RobotContainer {
                 MathUtil.applyDeadband(
                     -joystickSquared.get()[0], OperatorConstants.LEFT_X_DEADBAND),
             () -> rightStickSupplier.get()[0],
-            () -> rightStickSupplier.get()[1], driverRightTrigger);
+            () -> rightStickSupplier.get()[1],
+            driverRightTrigger);
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -304,9 +305,6 @@ public class RobotContainer {
    * If it is, the supply a dynamicly calculated angle from the limelight,
    * if not, then supply a predetemined shoot angle.
    */
-
-    
-
 
   public final DoubleSupplier speakerAngle =
       () ->

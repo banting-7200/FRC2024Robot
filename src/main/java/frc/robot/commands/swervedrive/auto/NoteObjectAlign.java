@@ -3,13 +3,10 @@ package frc.robot.commands.swervedrive.auto;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.shooter.intakeCommand;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
-import frc.robot.subsystems.Vision.LimelightDevice;
 import frc.robot.subsystems.Vision.PhotonCamera;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.commands.shooter.intakeCommand;
-
 
 public class NoteObjectAlign extends Command {
 
@@ -29,7 +26,10 @@ public class NoteObjectAlign extends Command {
   private Command s_command;
 
   public NoteObjectAlign(
-      SwerveSubsystem swerveSubsystem, PhotonCamera photonCam, double d_noteArea, ShooterSubsystem shooter) {
+      SwerveSubsystem swerveSubsystem,
+      PhotonCamera photonCam,
+      double d_noteArea,
+      ShooterSubsystem shooter) {
     this.swerveSubsystem = swerveSubsystem;
     this.photonCam = photonCam;
 
@@ -45,10 +45,8 @@ public class NoteObjectAlign extends Command {
     addRequirements(swerveSubsystem, photonCam);
   }
 
-
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
@@ -67,7 +65,6 @@ public class NoteObjectAlign extends Command {
     } else {
       swerveSubsystem.drive(new Translation2d(0, 0), 0, false);
     }
-
   }
 
   @Override

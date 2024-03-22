@@ -9,6 +9,9 @@ public class LimelightArmMovement extends Command {
   private ArmSubsystem arm;
   private LimelightDevice limelight;
 
+  private boolean reachedSetpoint = false;
+  private boolean isBrakeEnabled = false;
+
   public LimelightArmMovement(ArmSubsystem arm, LimelightDevice limelight) {
     this.arm = arm;
     this.limelight = limelight;
@@ -23,7 +26,15 @@ public class LimelightArmMovement extends Command {
 
   @Override
   public void execute() {
-    arm.moveToAngle(limelight.calculateArmShootAngle());
+    if(reachedSetpoint && !isBrakeEnabled){
+      arm.stopArm();
+      isBrakeEnabled = true;
+    }else if(isBrakeEnabled){
+      arm.disableBrake();
+      isBrakeEnabled = false;
+    }
+
+    reachedSetpoint = arm.moveToAngle(limelight.calculateArmShootAngle());
   }
 
   @Override

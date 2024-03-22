@@ -11,6 +11,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -512,29 +513,19 @@ public class SwerveSubsystem extends SubsystemBase {
       squared[0] = x * (-1 / Math.sin(angle));
       squared[1] = y * (-1 / Math.sin(angle));
     }
-    // Early-out for a perfect square output
-    /* if (innerRoundness == 0) */
 
     if (squared[0] > 1) {
       squared[0] = 1;
-    }
-    if (squared[0] < -1) {
+    } else if (squared[0] < -1) {
       squared[0] = -1;
     }
+
     if (squared[1] > 1) {
       squared[1] = 1;
-    }
-    if (squared[1] < -1) {
+    } else if (squared[1] < -1) {
       squared[1] = -1;
     }
     return squared;
-    /*
-     * // Find the inner-roundness scaling factor and LERP
-     * var length = point.Length();
-     * var factor = (float) Math.Pow(length, innerRoundness);
-     * return Vector2.Lerp(point, squared, factor);
-     */
-
   }
 
   /**
@@ -591,5 +582,30 @@ public class SwerveSubsystem extends SubsystemBase {
   public void addFakeVisionReading() {
     swerveDrive.addVisionMeasurement(
         new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
+  }
+
+  public void printModuleDriveSpeeds() {
+    shuffle.setTab("Swerve");
+    shuffle.setLayout("Modules");
+
+    // CANSparkMax[] Modules = new CANSparkMax[4];
+    /* List<CANSparkMax> Modules = new ArrayList<CANSparkMax>();
+    for (SwerveModule module : swerveDrive.getModules()) {
+      System.out.println(module.getDriveMotor().getMotor().getClass());
+      Modules.add((CANSparkMax) module.getDriveMotor().getMotor());
+    } */
+
+    shuffle.setNumber(
+        "Module 1",
+        ((CANSparkMax) swerveDrive.getModules()[0].getDriveMotor().getMotor()).getOutputCurrent());
+    shuffle.setNumber(
+        "Module 2",
+        ((CANSparkMax) swerveDrive.getModules()[1].getDriveMotor().getMotor()).getOutputCurrent());
+    shuffle.setNumber(
+        "Module 3",
+        ((CANSparkMax) swerveDrive.getModules()[2].getDriveMotor().getMotor()).getOutputCurrent());
+    shuffle.setNumber(
+        "Module 4",
+        ((CANSparkMax) swerveDrive.getModules()[3].getDriveMotor().getMotor()).getOutputCurrent());
   }
 }

@@ -29,6 +29,7 @@ import frc.robot.Constants.Shooter;
 import frc.robot.Constants.copilotController;
 import frc.robot.Constants.xboxController;
 import frc.robot.commands.RumbleCommand;
+import frc.robot.commands.arm.LimelightArmMovement;
 import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.arm.MoveArmToPosition;
 import frc.robot.commands.arm.TuckArm;
@@ -89,6 +90,8 @@ public class RobotContainer {
               ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red
               : false; // This is a local reference to the DriverStation alliance
 
+  double rStickInversionMultiplier = isRedAliance.getAsBoolean() ? 1 : -1;
+
   boolean speakerShot =
       true; // Whether the robot is ready for a Speaker Shot or not. Initialized to true
   // because our
@@ -97,34 +100,42 @@ public class RobotContainer {
   public final IntSupplier shootTagToAlign = () -> limelight.getSpeakerMiddleTag();
   public final IntSupplier ampTagToAlign = () -> limelight.getAmpTag();
 
-  // Supply square joystick input. Todo: Further comment and update this after com to be more
-  // efficent.
-  public final Supplier<Double> joystickSquaredX =
+  // Supply square joystick input.
+  public final Supplier<double[]> joystickSquared =
       () -> {
         double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY());
-        return isRedAliance.getAsBoolean() ? d[0] * -1 : d[0];
+        return isRedAliance.getAsBoolean() ? new double[] {d[0] * -1, d[1] * -1} : d;
       };
-  public final Supplier<Double> joystickSquaredY =
+
+  // Supply right stick input, flipped dependant on alliance.
+  public final Supplier<double[]> rightStickSupplier =
       () -> {
-        double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY());
-        return isRedAliance.getAsBoolean() ? d[1] * -1 : d[1];
+        double[] d = {
+          driverXbox.getRightX() * rStickInversionMultiplier,
+          driverXbox.getRightY() * rStickInversionMultiplier
+        };
+        return d;
       };
 
   public BooleanSupplier isSpeakerShot = () -> speakerShot;
+  public DoubleSupplier shuffleAngle;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     arm = new ArmSubsystem(); // Creating a new instance of Arm Subsytem
     shooter = new ShooterSubsystem(arm); // Creating a new instance of Shooter Subsytem
-
+    shuffle.setNumber("Arm Goal Position", 30);
+    shuffleAngle = () -> shuffle.getNumber("Arm Goal Position");
     configureBindings();
 
     AbsoluteDriveAdv closedAbsoluteDriveAdv =
         new AbsoluteDriveAdv(
             drivebase,
-            () -> MathUtil.applyDeadband(joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
+            () ->
+                MathUtil.applyDeadband(joystickSquared.get()[1], OperatorConstants.LEFT_Y_DEADBAND),
+            () ->
+                MathUtil.applyDeadband(joystickSquared.get()[0], OperatorConstants.LEFT_X_DEADBAND),
             () ->
                 MathUtil.applyDeadband(driverXbox.getRightX(), OperatorConstants.RIGHT_X_DEADBAND),
             driverXbox::getYButtonPressed,
@@ -140,19 +151,13 @@ public class RobotContainer {
     Command driveFieldOrientedDirectAngle =
         drivebase.driveCommand(
             () ->
-                MathUtil.applyDeadband(-joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
+                MathUtil.applyDeadband(
+                    -joystickSquared.get()[1], OperatorConstants.LEFT_Y_DEADBAND),
             () ->
-                MathUtil.applyDeadband(-joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
-            () -> {
-              if (isRedAliance.getAsBoolean())
-                return driverXbox.getRightX(); // This code bad! Make gooder soon!
-              else return -driverXbox.getRightX();
-            },
-            () -> {
-              if (isRedAliance.getAsBoolean()) return driverXbox.getRightY();
-              else return -driverXbox.getRightY();
-            }
-            /*  } */ );
+                MathUtil.applyDeadband(
+                    -joystickSquared.get()[0], OperatorConstants.LEFT_X_DEADBAND),
+            () -> rightStickSupplier.get()[0],
+            () -> rightStickSupplier.get()[1]);
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -161,14 +166,18 @@ public class RobotContainer {
     // right stick controls the angular velocity of the robot
     Command driveFieldOrientedAnglularVelocity =
         drivebase.driveCommand(
-            () -> MathUtil.applyDeadband(joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
+            () ->
+                MathUtil.applyDeadband(joystickSquared.get()[1], OperatorConstants.LEFT_Y_DEADBAND),
+            () ->
+                MathUtil.applyDeadband(joystickSquared.get()[0], OperatorConstants.LEFT_X_DEADBAND),
             () -> driverXbox.getRawAxis(2));
 
     Command driveFieldOrientedDirectAngleSim =
         drivebase.simDriveCommand(
-            () -> MathUtil.applyDeadband(joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
-            () -> MathUtil.applyDeadband(joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND),
+            () ->
+                MathUtil.applyDeadband(joystickSquared.get()[1], OperatorConstants.LEFT_Y_DEADBAND),
+            () ->
+                MathUtil.applyDeadband(joystickSquared.get()[0], OperatorConstants.LEFT_X_DEADBAND),
             () -> driverXbox.getRawAxis(2));
 
     drivebase.setDefaultCommand(
@@ -180,8 +189,7 @@ public class RobotContainer {
     shuffle.setTab("Debugging");
     shuffle.setLayout("Debugging Tools", 1, 4);
     shuffle.setNumber("Arm Goal Position", Arm.ampArmAngle);
-    shuffle.newCommandButton(
-        "Move Arm To Position", new MoveArmToPosition(arm, shuffle.getNumber("Arm Goal Position")));
+    shuffle.newCommandButton("Move Arm To Position", new MoveArmToPosition(arm, shuffleAngle));
 
     shuffle.newCommandButton("Move To Amp", new MoveArmToPosition(arm, Arm.ampArmAngle));
     shuffle.newCommandButton("Move To Speaker", new MoveArmToPosition(arm, Arm.speakerArmAngle));
@@ -211,11 +219,12 @@ public class RobotContainer {
             drivebase,
             limelight,
             Limelight.speakerTargetArea,
-            shootTagToAlign)); // fill in area and
+            shootTagToAlign,
+            true)); // fill in area and
     // tag id
     NamedCommands.registerCommand(
         "Amp Align",
-        new AprilTagAlign(drivebase, limelight, Limelight.ampTargetArea, ampTagToAlign));
+        new AprilTagAlign(drivebase, limelight, Limelight.ampTargetArea, ampTagToAlign, false));
     NamedCommands.registerCommand(
         "Prep Amp",
         new UntuckArm(arm)
@@ -288,10 +297,14 @@ public class RobotContainer {
    * If it is, the supply a dynamicly calculated angle from the limelight,
    * if not, then supply a predetemined shoot angle.
    */
+
+    
+
+
   public final DoubleSupplier speakerAngle =
       () ->
           CoPilotController.getRawButton(copilotController.limelightButton) == true
-              ? limelight.calculateArmShootAngle()
+              ? limelight.calculateArmShootAngleSimple()
               : Arm.speakerArmAngle;
 
   public BooleanSupplier hasNote =
@@ -299,6 +312,9 @@ public class RobotContainer {
           shooter.shooterHasNote()
               && Math.abs(arm.getEncoderPosition() - Arm.intakeArmAngle) < Arm.stopRange;
   public BooleanSupplier isTeleop = () -> DriverStation.isTeleop();
+
+  public BooleanSupplier isLimelightButtonPressed =
+      () -> CoPilotController.getRawButton(copilotController.limelightButton);
 
   void setAmpShot() {
     speakerShot = false;
@@ -354,17 +370,16 @@ public class RobotContainer {
     new JoystickButton(CoPilotController, copilotController.pickupButton)
         .onTrue(
             (new UntuckArm(arm)
-                    .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
-                    .andThen(new intakeCommand(Shooter.intakeRPM, shooter))
-                    .andThen(
-                        new TuckArm(arm)
-                            .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
-                            .finallyDo(
-                                (boolean interrupted) -> {
-                                  if (!interrupted && shooter.shooterHasNote())
-                                    lights.SetLightState(LightStates.CarryingNote);
-                                })))
-                .onlyIf(() -> !shooter.shooterHasNote())); // From what positions will we intake?
+                .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
+                .andThen(new intakeCommand(Shooter.intakeRPM, shooter))
+                .andThen(
+                    new TuckArm(arm)
+                        .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))
+                        .finallyDo(
+                            (boolean interrupted) -> {
+                              if (!interrupted && shooter.shooterHasNote())
+                                lights.SetLightState(LightStates.CarryingNote);
+                            }))));
 
     /*
      * On first press schedules a command to set the arm speed to climb speed,
@@ -372,11 +387,13 @@ public class RobotContainer {
      * On second press the hook is retracted.
      */
     new JoystickButton(CoPilotController, copilotController.hookButton)
-        /*  .onTrue(
-                new UntuckArm(arm)
-                        .andThen(new MoveArmToPosition(arm, Arm.liftArmAngle))
-                        .andThen(new InstantCommand(() -> arm.deployHook())))
-        .onFalse(new InstantCommand(() -> arm.retractHook())); */
+        /*
+         * .onTrue(
+         * new UntuckArm(arm)
+         * .andThen(new MoveArmToPosition(arm, Arm.liftArmAngle))
+         * .andThen(new InstantCommand(() -> arm.deployHook())))
+         * .onFalse(new InstantCommand(() -> arm.retractHook()));
+         */
 
         .toggleOnTrue(
             new StartEndCommand(
@@ -434,7 +451,8 @@ public class RobotContainer {
      */
     new JoystickButton(driverXbox, 6)
         .toggleOnTrue(
-            new AprilTagAlign(drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign));
+            new AprilTagAlign(
+                drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign, false));
 
     /*
      * On button press command the arm to move to the angle supplied by the
@@ -455,6 +473,12 @@ public class RobotContainer {
                       if (!interrupted) lights.SetLightState(LightStates.ReadyToSPEAKER);
                     }));
 
+    new JoystickButton(driverXbox, copilotController.limelightButton)
+        .onTrue(
+            new InstantCommand(() -> setSpeakerShot())
+                .andThen(new TuckArm(arm))
+                .andThen(
+                    new LimelightArmMovement(arm, limelight).onlyWhile(isLimelightButtonPressed)));
     /*
      * On button press, this binding commands the arm to move to the amp angle
      * it checks if it has been interrupted and if it
@@ -492,9 +516,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-    //   drivebase.zeroGyro();
-    //   drivebase.resetOdometry(
-    //       new Pose2d(drivebase.getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+    // drivebase.zeroGyro();
+    // drivebase.resetOdometry(
+    // new Pose2d(drivebase.getPose().getTranslation(),
+    // Rotation2d.fromDegrees(180)));
     // }
     // An example command will be run in autonomous
     return drivebase.getAutonomousCommand(shuffle.getAuto());
@@ -539,6 +564,7 @@ public class RobotContainer {
   public void setShuffleboard() { //
     arm.setShuffleboard();
     shooter.setShooterShuffleBoard();
+    drivebase.printModuleDriveSpeeds();
     // swerveNetworkTables.setSwerveShuffleboard();
     /* limelight.shuffleUpdate(); */
   }

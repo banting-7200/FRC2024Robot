@@ -29,16 +29,21 @@ public class AprilTagAlign extends Command {
   private long startedMillis;
   private long currentMillis;
 
+  boolean onlyRotate;
+
   public AprilTagAlign(
       SwerveSubsystem swerveSubsystem,
       LimelightDevice limelightSubsystem,
       double targetArea,
-      IntSupplier tagToAlign) {
+      IntSupplier tagToAlign,
+      boolean onlyRotate) {
     this.swerveSubsystem = swerveSubsystem;
     this.limelightSubsystem = limelightSubsystem;
 
     this.targetArea = targetArea;
     this.tagToAlign = tagToAlign;
+
+    this.onlyRotate = onlyRotate;
 
     positionController = new PIDController(1, 0, 0);
     positionController.setSetpoint(targetArea);
@@ -53,8 +58,9 @@ public class AprilTagAlign extends Command {
       SwerveSubsystem swerveSubsystem,
       LimelightDevice limelightSubsystem,
       double targetArea,
-      int tagToAlign) {
-    this(swerveSubsystem, limelightSubsystem, targetArea, () -> tagToAlign);
+      int tagToAlign,
+      boolean onlyRotate) {
+    this(swerveSubsystem, limelightSubsystem, targetArea, () -> tagToAlign, onlyRotate);
   }
 
   @Override
@@ -75,8 +81,12 @@ public class AprilTagAlign extends Command {
     double rotationAdjust = 0;
 
     if (tagToAlign.getAsInt() == limelightSubsystem.getTagID()) {
-      tagArea = limelightSubsystem.getTagArea();
-      fowardAdjust = positionController.calculate(tagArea, targetArea);
+      tagArea =
+          limelightSubsystem
+              .getTagArea(); // Todo: Might have to change translation from being dependant on tag
+      // area to being dependant on distance. Confirm acuracy with further
+      // testing.
+      if (!onlyRotate) fowardAdjust = positionController.calculate(tagArea, targetArea);
       rotationAdjust = rotationController.calculate(limelightSubsystem.getTagX(), 0);
       swerveSubsystem.drive(new Translation2d(fowardAdjust, 0), rotationAdjust, false);
     } else {

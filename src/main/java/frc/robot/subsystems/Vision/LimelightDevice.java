@@ -145,17 +145,25 @@ public class LimelightDevice extends SubsystemBase {
   }
 
   public double calculateArmShootAngle() {
-    double angleToGoalDegrees = Arm.limelightMountAngle + getTagY();
-    double angleToGoalRadians = angleToGoalDegrees * (3.14159 / 180.0);
+   return 0;//temp
+  }
 
-    double distanceFromLimelightToGoal =
-        Arm.limelightToSpeakerHeight / Math.tan(angleToGoalRadians);
-    double distanceFromArmToGoal = distanceFromLimelightToGoal + Arm.armToLimelightDistance;
+  public double calculateArmShootAngleSimple() {
+    double maxAngle = 29.38;
+    double minAngle = 28.52;
+    double maxDist = 0.41;
+    double minDist = 0.60;
 
-    return (Math.atan2(Arm.armToSpeakerHeight, distanceFromArmToGoal) + Arm.armToShooterAngle)
-            * (180.0 / 3.14159)
-            * (42 / 360)
-        + 21;
+    double tagDist = getTagArea();
+    double goalAngle;
+    goalAngle = maxDist - tagDist; // how far back the bot is from subwoofer as a positive number
+    goalAngle *=
+        ((maxAngle - minAngle)
+            / (maxDist - minDist)); // converts from area to angle and makes proportionate;
+    goalAngle += minAngle; // adds difference to minAngle
+    shuffle.setNumber("Arm Limelight Calc", goalAngle);
+    return /*tagDist == 0 && getTagID() == getSpeakerMiddleTag() ? goalAngle : */ Arm
+        .speakerArmAngle;
   }
 
   public Pose2d getFakeTagPose() { // input fake tag values for simulation

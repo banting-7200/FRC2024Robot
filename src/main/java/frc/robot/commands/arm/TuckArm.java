@@ -24,7 +24,7 @@ public class TuckArm extends Command {
   @Override
   public void initialize() {
     arm.disableBrake();
-    System.out.println("Tuck Arm");
+    System.out.println("Started Tuck Arm");
     startTime = timer.millis();
     // System.out.println("start time is: " + startTime);
     ranTuckCommand = false;
@@ -53,6 +53,7 @@ public class TuckArm extends Command {
   @Override
   public void end(boolean interrupted) {
     arm.stopArm();
+    System.out.println("Ended Tuck Arm");
     /*
      * if (!interrupted) {
      * lights.SetLightState(LightStates.CarryingNote);

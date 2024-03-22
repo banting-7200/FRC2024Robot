@@ -36,6 +36,7 @@ import frc.robot.commands.arm.UntuckArm;
 import frc.robot.commands.shooter.intakeCommand;
 import frc.robot.commands.shooter.shootCommand;
 import frc.robot.commands.swervedrive.auto.AprilTagAlign;
+import frc.robot.commands.swervedrive.auto.NoteObjectAlign;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
@@ -44,6 +45,7 @@ import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
 import frc.robot.subsystems.Feedback.NetworkTables;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Vision.LimelightDevice;
+import frc.robot.subsystems.Vision.PhotonCamera;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import java.util.function.BooleanSupplier;
@@ -80,7 +82,8 @@ public class RobotContainer {
   private LightSubsystem lights =
       LightSubsystem.getInstance(); // Getting instance of Light Subsystem
   private static ShuffleboardSubsystem shuffle =
-      ShuffleboardSubsystem.getInstance(); // Getting instance of Shooter
+      ShuffleboardSubsystem.getInstance(); // Getting instance of
+  // Shooter
   // Subsystem
 
   public BooleanSupplier isRedAliance =
@@ -97,7 +100,8 @@ public class RobotContainer {
   public final IntSupplier shootTagToAlign = () -> limelight.getSpeakerMiddleTag();
   public final IntSupplier ampTagToAlign = () -> limelight.getAmpTag();
 
-  // Supply square joystick input. Todo: Further comment and update this after com to be more
+  // Supply square joystick input. Todo: Further comment and update this after com
+  // to be more
   // efficent.
   public final Supplier<Double> joystickSquaredX =
       () -> {
@@ -111,6 +115,8 @@ public class RobotContainer {
       };
 
   public BooleanSupplier isSpeakerShot = () -> speakerShot;
+
+  PhotonCamera photonCam = PhotonCamera.getInstance();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -152,7 +158,7 @@ public class RobotContainer {
               if (isRedAliance.getAsBoolean()) return driverXbox.getRightY();
               else return -driverXbox.getRightY();
             }
-            /*  } */ );
+            /* } */ );
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot
@@ -364,7 +370,10 @@ public class RobotContainer {
                                   if (!interrupted && shooter.shooterHasNote())
                                     lights.SetLightState(LightStates.CarryingNote);
                                 })))
-                .onlyIf(() -> !shooter.shooterHasNote())); // From what positions will we intake?
+                .onlyIf(() -> !shooter.shooterHasNote())); // From what
+    // positions
+    // will we
+    // intake?
 
     /*
      * On first press schedules a command to set the arm speed to climb speed,
@@ -372,11 +381,13 @@ public class RobotContainer {
      * On second press the hook is retracted.
      */
     new JoystickButton(CoPilotController, copilotController.hookButton)
-        /*  .onTrue(
-                new UntuckArm(arm)
-                        .andThen(new MoveArmToPosition(arm, Arm.liftArmAngle))
-                        .andThen(new InstantCommand(() -> arm.deployHook())))
-        .onFalse(new InstantCommand(() -> arm.retractHook())); */
+        /*
+         * .onTrue(
+         * new UntuckArm(arm)
+         * .andThen(new MoveArmToPosition(arm, Arm.liftArmAngle))
+         * .andThen(new InstantCommand(() -> arm.deployHook())))
+         * .onFalse(new InstantCommand(() -> arm.retractHook()));
+         */
 
         .toggleOnTrue(
             new StartEndCommand(
@@ -432,10 +443,13 @@ public class RobotContainer {
      * Simply schedules a command to align the robot to the commands supplied april
      * tag
      */
+
     new JoystickButton(driverXbox, 6)
         .toggleOnTrue(
             new AprilTagAlign(drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign));
 
+    new JoystickButton(CoPilotController, copilotController.limelightButton)
+        .onTrue(new NoteObjectAlign(drivebase, photonCam, 35, shooter));
     /*
      * On button press command the arm to move to the angle supplied by the
      * speakerAngle double supplier.
@@ -492,9 +506,10 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // if (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) {
-    //   drivebase.zeroGyro();
-    //   drivebase.resetOdometry(
-    //       new Pose2d(drivebase.getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+    // drivebase.zeroGyro();
+    // drivebase.resetOdometry(
+    // new Pose2d(drivebase.getPose().getTranslation(),
+    // Rotation2d.fromDegrees(180)));
     // }
     // An example command will be run in autonomous
     return drivebase.getAutonomousCommand(shuffle.getAuto());

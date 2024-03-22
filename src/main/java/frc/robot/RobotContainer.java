@@ -125,6 +125,8 @@ public class RobotContainer {
   PhotonCamera photonCam = PhotonCamera.getInstance();
   public DoubleSupplier shuffleAngle;
 
+  public BooleanSupplier driverRightTrigger = () -> driverXbox.getRightTriggerAxis() > 0.5;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -162,7 +164,7 @@ public class RobotContainer {
                 MathUtil.applyDeadband(
                     -joystickSquared.get()[0], OperatorConstants.LEFT_X_DEADBAND),
             () -> rightStickSupplier.get()[0],
-            () -> rightStickSupplier.get()[1]);
+            () -> rightStickSupplier.get()[1], driverRightTrigger);
 
     // Applies deadbands and inverts controls because joysticks
     // are back-right positive while robot

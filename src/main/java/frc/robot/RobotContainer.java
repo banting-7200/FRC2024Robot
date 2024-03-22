@@ -37,6 +37,7 @@ import frc.robot.commands.arm.UntuckArm;
 import frc.robot.commands.shooter.intakeCommand;
 import frc.robot.commands.shooter.shootCommand;
 import frc.robot.commands.swervedrive.auto.AprilTagAlign;
+import frc.robot.commands.swervedrive.auto.NoteObjectAlign;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
@@ -45,6 +46,7 @@ import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
 import frc.robot.subsystems.Feedback.NetworkTables;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Vision.LimelightDevice;
+import frc.robot.subsystems.Vision.PhotonCamera;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import java.util.function.BooleanSupplier;
@@ -81,7 +83,8 @@ public class RobotContainer {
   private LightSubsystem lights =
       LightSubsystem.getInstance(); // Getting instance of Light Subsystem
   private static ShuffleboardSubsystem shuffle =
-      ShuffleboardSubsystem.getInstance(); // Getting instance of Shooter
+      ShuffleboardSubsystem.getInstance(); // Getting instance of
+  // Shooter
   // Subsystem
 
   public BooleanSupplier isRedAliance =
@@ -118,6 +121,8 @@ public class RobotContainer {
       };
 
   public BooleanSupplier isSpeakerShot = () -> speakerShot;
+
+  PhotonCamera photonCam = PhotonCamera.getInstance();
   public DoubleSupplier shuffleAngle;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -449,11 +454,14 @@ public class RobotContainer {
      * Simply schedules a command to align the robot to the commands supplied april
      * tag
      */
+
     new JoystickButton(driverXbox, 6)
         .toggleOnTrue(
             new AprilTagAlign(
                 drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign, false));
 
+    new JoystickButton(CoPilotController, copilotController.limelightButton)
+        .onTrue(new NoteObjectAlign(drivebase, photonCam, 35, shooter));
     /*
      * On button press command the arm to move to the angle supplied by the
      * speakerAngle double supplier.

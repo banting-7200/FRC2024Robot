@@ -108,7 +108,7 @@ public final class Constants {
 
     public static final double stopRange = 0.3;
     public static final double encoderHardMax = 34;
-    public static final long s_stateChangeDelay = 6;
+    public static /* final */ long s_stateChangeDelay = 6;
 
     public static final int smartMotionSlot = 0;
 

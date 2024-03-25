@@ -392,14 +392,6 @@ public class RobotContainer {
      * On second press the hook is retracted.
      */
     new JoystickButton(CoPilotController, copilotController.hookButton)
-        /*
-         * .onTrue(
-         * new UntuckArm(arm)
-         * .andThen(new MoveArmToPosition(arm, Arm.liftArmAngle))
-         * .andThen(new InstantCommand(() -> arm.deployHook())))
-         * .onFalse(new InstantCommand(() -> arm.retractHook()));
-         */
-
         .toggleOnTrue(
             new StartEndCommand(
                 () -> {
@@ -408,7 +400,7 @@ public class RobotContainer {
                       .schedule(
                           new UntuckArm(arm)
                               .andThen(new MoveArmToPosition(arm, Arm.liftArmAngle))
-                              .andThen(new InstantCommand(() -> arm.deployHook())));
+                              .alongWith(new InstantCommand(() -> arm.deployHook())));
                 },
                 () -> arm.retractHook()));
 

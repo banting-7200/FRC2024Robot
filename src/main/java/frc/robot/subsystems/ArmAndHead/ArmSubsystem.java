@@ -116,6 +116,7 @@ public class ArmSubsystem extends SubsystemBase {
     shuffleboard.setPID("arm PID", Arm.p, Arm.i, Arm.d, Arm.f, Arm.iz);
     shuffleboard.setNumber("arm min output", Arm.pidOutputMin);
     shuffleboard.setNumber("arm max output", Arm.pidOutputMax);
+    shuffleboard.setNumber("Shooter state change delay", Arm.s_stateChangeDelay);
     setPID();
     shuffleboard.newCommandButton("apply PID changes", new InstantCommand(() -> setPID()));
 
@@ -177,6 +178,8 @@ public class ArmSubsystem extends SubsystemBase {
     pidController.setIZone(Arm.iz, smartMotionSlot);
     // Sets the max and min motor output to the smart motion slot on the spark max
     pidController.setOutputRange(Arm.pidOutputMin, Arm.pidOutputMax, smartMotionSlot);
+
+    Arm.s_stateChangeDelay = (long) shuffleboard.getNumber("Shooter state change delay");
   }
 
   public void setMotorSpeed(double speed) {

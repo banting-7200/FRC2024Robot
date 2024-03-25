@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import swervelib.math.Matter;
 import swervelib.parser.PIDFConfig;
 
@@ -26,16 +27,159 @@ public final class Constants {
 
   public static final class Auton {
 
-    public static final PIDFConfig TranslationPID = new PIDFConfig(0.7, 0, 0);
+    public static final PIDFConfig TranslationPID = new PIDFConfig(0.7, 0, 0); // 5.0, 0.0, 0.0
     public static final PIDFConfig angleAutoPID = new PIDFConfig(0.4, 0, 0.01);
 
     public static final double MAX_ACCELERATION = 2;
+  }
+
+  public static final class xboxController {
+    public static final double rumbleStrength = 1; // 0 - 1 range
+    public static final double rumbleTime = 1253; // rumble time in milliseconds
+  }
+
+  public static final class copilotController {
+    public static final int upButton = 2;
+    public static final int downButton = 3;
+
+    public static final int brakeButton = 4;
+    public static final int pickupButton = 5;
+
+    public static final int hookButton = 6;
+    public static final int carryButton = 7;
+    public static final int extendButton = 8;
+
+    public static final int shootButton = 9;
+    public static final int limelightButton = 10;
+
+    public static final int speakerButton = 11;
+    public static final int ampButton = 12;
+  }
+
+  public static final class Lights {
+    public static final int lightID = 0;
+    public static final int lightStringLength = 200;
+  }
+
+  public static final class maxCommandWaitTime {
+    // todo: Tune All of these later
+    public static final int moveArmToPositionWaitTime = 3300;
+    public static final int tuckArmWaitTime = 2000;
+    public static final int unTuckWaitTime = 2000;
+    public static final int intakeCommandWaitTime = 70000;
+    public static final int shootCommandWaitTime = 3000;
+    public static final int aprilTagAlignWaitTime = 7000;
+    public static final int noteObjectAlignWaitTime = 7000;
+  }
+
+  /* */
+  public static final PneumaticHub m_pH = new PneumaticHub(3);
+
+  public static final class Arm {
+    public static final int leftArmMotorID = 33; // 21 Todo: update to an actual on robot value
+    public static final int rightArmMotorID = 32; // 20 Todo: update to an actual on robot value
+
+    public static final int solenoidSwitchID = 2;
+
+    public static final int sForward_Channel = 7;
+    public static final int sReverse_Channel = 8;
+    public static final int hForward_Channel = 6; // Todo: update these values
+    public static final int hReverse_Channel = 9; // Todo: update these values
+    public static final int b_Channel = 2;
+
+    // default arm pids
+    // Todo: calibrate these
+    public static /* final */ double p = 0.15;
+    public static /* final */ double i = 0.000009;
+    public static /* final */ double d = 0.01;
+    public static /* final */ double f = 0;
+    public static /* final */ double iz = 1.9;
+
+    public static /* final */ double pidOutputMin = -1;
+    public static /* final */ double pidOutputMax = 1;
+
+    public static final double motorManualSpeed = 0.5; // 0 - 1 range
+    public static final double motorManualSpeedClimb = 0.3; // 0 - 1 range
+
+    public static final double motorRampRate = 0.7;
+    public static final double motorPIDRampRate = 0.6;
+
+    public static final int currentLimit = 40;
+
+    public static final double stopRange = 0.3;
+    public static final double encoderHardMax = 34;
+    public static final long s_stateChangeDelay = 6;
+
+    public static final int smartMotionSlot = 0;
+
+    // Arm movement constants
+    public static final double tuckSafeMin =
+        24; // Robot hard min 25 ticks, min must be further tuned later
+    public static final double armGearRatio = 400;
+
+    public static final double tuckArmAngle = 24;
+    public static final double intakeArmAngle = 20.8;
+    public static final double ampArmAngle = 31.3;
+    public static final double liftArmAngle = 30.3;
+    public static final double speakerArmAngle = 28.4;
+
+    public static final int kMeasuredPosHorizontal =
+        21; // Default position measured when arm is horizontal from
+    // example. Todo: find the value
+    // for our arm.
+    public static final double maxGravityFF =
+        0.07; // Todo: Find the best gravity feed forward for our arm
+
+    // Arm angle calculation constants
+    public static final double armToSpeakerHeight =
+        74; // from the motor axel to speaker(goal - arm height from
+    // ground), in inches
+    public static final double armToShooterAngle =
+        64; // Angle between arm and shooter when shooter is in the tucked position, in
+    // rotational units of the arm(42 == 360 degrees). degrees is 64.
+    public static final double limelightToSpeakerHeight =
+        69.6; // from camera lens to speaker(goal - limelight height
+    // from ground), in inches
+    public static final double limelightMountAngle =
+        30; // 60; // Mount angle offset from perfectly vertical, in degrees
+    public static final double armToLimelightDistance =
+        0.04; // Horizontal distance from the center of the limelight lens to the motor axel, in
+    // inches.
+  }
+
+  public static final class Shooter {
+    public static final int shooterID = 30;
+    public static final int intakeID = 31;
+    public static final int shootIR = 0;
+
+    public static final int intakeRPM = 6000;
+    public static final int pullBackRPM = 2000;
+    public static final int correctPositioningRPM = 500;
+    public static final int ampShootRPM = 1000;
+    public static final int speakerShootRPM = 5000;
+    public static final int ampWaitTime = 0;
+    public static final int speakerWaitTime = 1000;
+    public static final int shootRampDown = 1000;
+
+    // Default PID values to be tuned later
+    public static final double shooterF = 0.13;
+    public static final double shooterP = 0.11;
+    public static final double shooterI = 0;
+    public static final double shooterD = 0;
+
+    // Default PID values to be tuned later
+    public static final double intakeF = 0.12;
+    public static final double intakeP = 0.11;
+    public static final double intakeI = 0.5;
+    public static final double intakeD = 0.0001;
   }
 
   public static final class Drivebase {
 
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
+    public static final double creepSpeedMultiplier = 0.4;
+    public static final double maxAngularVelocity = 5.627209491911525;
   }
 
   public static class OperatorConstants {
@@ -45,5 +189,29 @@ public final class Constants {
     public static final double LEFT_Y_DEADBAND = 0.1;
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT = 6;
+  }
+
+  public static final class Limelight {
+    public static final double speakerTargetArea = 1.15;
+    public static final double ampTargetArea = 2;
+  }
+
+  public static final class AprilTagID {
+    public static final int blueSourceInner = 1;
+    public static final int blueSourceOuter = 2;
+    public static final int redSpeakerSide = 3;
+    public static final int redSpeakerMiddle = 4;
+    public static final int redAmp = 5;
+    public static final int blueAmp = 6;
+    public static final int blueSpeakerMiddle = 7;
+    public static final int blueSpeakerSide = 8;
+    public static final int redSourceOuter = 9;
+    public static final int redSourceInner = 10;
+    public static final int redStageSourceSide = 11;
+    public static final int redStageAmpSide = 12;
+    public static final int redStageMiddle = 13;
+    public static final int blueStageMiddle = 14;
+    public static final int blueStageAmpSide = 15;
+    public static final int blueStageSourceSide = 16;
   }
 }

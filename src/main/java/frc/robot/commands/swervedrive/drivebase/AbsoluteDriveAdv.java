@@ -21,7 +21,7 @@ import swervelib.math.SwerveMath;
 public class AbsoluteDriveAdv extends Command {
 
   private final SwerveSubsystem swerve;
-  private final DoubleSupplier vX, vY;
+  private DoubleSupplier vX, vY;
   private final DoubleSupplier headingAdjust;
   private final BooleanSupplier lookAway, lookTowards, lookLeft, lookRight;
   private boolean resetHeading = false;

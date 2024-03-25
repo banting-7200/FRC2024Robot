@@ -5,11 +5,13 @@
 package frc.robot.subsystems.swervedrive;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -21,7 +23,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.Drivebase;
+import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import java.io.File;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -40,7 +45,10 @@ public class SwerveSubsystem extends SubsystemBase {
   /** Maximum speed of the robot in meters per second, used to limit acceleration. */
   public double maximumSpeed = Units.feetToMeters(14.5);
 
+  /* speed multiplier for creep */
   private double speedMultiplier = 1;
+
+  private ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -49,28 +57,31 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public SwerveSubsystem(File directory) {
     // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
-    //  In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
-    //  The encoder resolution per motor revolution is 1 per motor revolution.
-    double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(12.8);
-    // Motor conversion factor is (PI * WHEEL DIAMETER IN METERS) / (GEAR RATIO * ENCODER
-    // RESOLUTION).
-    //  In this case the wheel diameter is 4 inches, which must be converted to meters to get
+    // In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
+    // The encoder resolution per motor revolution is 1 per motor revolution.
+    double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(50);
+    // Motor conversion factor is:
+    // (PI * WHEEL DIAMETER IN METERS) / (GEAR RATIO * ENCODERRESOLUTION).
+    // In this case the wheel diameter is 4 inches, which must be converted to
+    // meters to get
     // meters/second.
-    //  The gear ratio is 6.75 motor revolutions per wheel rotation.
-    //  The encoder resolution per motor revolution is 1 per motor revolution.
+    // The gear ratio is 6.75 motor revolutions per wheel rotation.
+    // The encoder resolution per motor revolution is 1 per motor revolution.
     double driveConversionFactor =
-        SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 6.75);
+        SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 6);
     System.out.println("\"conversionFactor\": {");
     System.out.println("\t\"angle\": " + angleConversionFactor + ",");
     System.out.println("\t\"drive\": " + driveConversionFactor);
     System.out.println("}");
 
-    // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being
+    // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary
+    // objects being
     // created.
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try {
       swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed);
-      // Alternative method if you don't want to supply the conversion factor via JSON files.
+      // Alternative method if you don't want to supply the conversion factor via JSON
+      // files.
       // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed,
       // angleConversionFactor, driveConversionFactor);
     } catch (Exception e) {
@@ -78,6 +89,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     swerveDrive.setHeadingCorrection(
         false); // Heading correction should only be used while controlling the robot via angle.
+
+    System.out.println("max angular velocity is: " + swerveDrive.getMaximumAngularVelocity());
 
     setupPathPlanner();
   }
@@ -105,13 +118,20 @@ public class SwerveSubsystem extends SubsystemBase {
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in
             // your Constants class
             new PIDConstants(5.0, 0.0, 0.0),
+            /*
+             * swerveDrive.swerveController.config..p,
+             * swerveDrive.swerveController.config.TranslationPID.i,
+             * swerveDrive.swerveController.config.TranslationPID.d),
+             */
+
+            // todo: check to see if this is necessary (removed in example code)
             // Translation PID constants
             new PIDConstants(
                 swerveDrive.swerveController.config.headingPIDF.p,
                 swerveDrive.swerveController.config.headingPIDF.i,
                 swerveDrive.swerveController.config.headingPIDF.d),
             // Rotation PID constants
-            4.5,
+            4.41,
             // Max module speed, in m/s
             swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
             // Drive base radius in meters. Distance from robot center to furthest module.
@@ -119,7 +139,8 @@ public class SwerveSubsystem extends SubsystemBase {
             // Default path replanning config. See the API for the options here
             ),
         () -> {
-          // Boolean supplier that controls when the path will be mirrored for the red alliance
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
           // This will flip the path being followed to the red side of the field.
           // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
           var alliance = DriverStation.getAlliance();
@@ -129,11 +150,13 @@ public class SwerveSubsystem extends SubsystemBase {
         );
   }
 
-  public void setDriveSpeeds(boolean doCreep) {
+  public void setCreep(boolean doCreep) { // todo: move to constants
     if (doCreep) {
-      speedMultiplier = 0.7; // set creep speed
+      speedMultiplier = Drivebase.creepSpeedMultiplier; // set creep speed
+      // swerveDrive.swerveController.setMaximumAngularVelocity(Drivebase.maxAngularVelocity * 0.7);
     } else {
       speedMultiplier = 1; // set regular speed
+      // swerveDrive.swerveController.setMaximumAngularVelocity(Drivebase.maxAngularVelocity);
     }
   }
 
@@ -144,16 +167,8 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param setOdomToStart Set the odometry position to the start of the path.
    * @return {@link AutoBuilder#followPath(PathPlannerPath)} path command.
    */
-  public Command getAutonomousCommand(String pathName, boolean setOdomToStart) {
-    // Load the path you want to follow using its name in the GUI
-    PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-
-    if (setOdomToStart) {
-      resetOdometry(new Pose2d(path.getPoint(0).position, getHeading()));
-    }
-
-    // Create a path following command using AutoBuilder. This will also trigger event markers.
-    return AutoBuilder.followPath(path);
+  public Command getAutonomousCommand(String pathName) {
+    return new PathPlannerAuto(pathName);
   }
 
   /**
@@ -162,7 +177,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param pose Target {@link Pose2d} to go to.
    * @return PathFinding command
    */
-  public Command driveToPose(Pose2d pose) {
+  public Command driveToPose(Pose2d pose) { // todo: Do we need this?
     // Create the constraints to use while pathfinding
     PathConstraints constraints =
         new PathConstraints(
@@ -176,9 +191,18 @@ public class SwerveSubsystem extends SubsystemBase {
         pose,
         constraints,
         0.0, // Goal end velocity in meters/sec
-        0.0 // Rotation delay distance in meters. This is how far the robot should travel before
+        0.0 // Rotation delay distance in meters. This is how far the robot should travel
+        // before
         // attempting to rotate.
         );
+  }
+
+  public void printVelAndAngVel() {
+    System.out.println(
+        "max velocity is: "
+            + swerveDrive.getMaximumVelocity()
+            + " max angular velocity is: "
+            + swerveDrive.getMaximumAngularVelocity());
   }
 
   /**
@@ -194,24 +218,46 @@ public class SwerveSubsystem extends SubsystemBase {
       DoubleSupplier translationX,
       DoubleSupplier translationY,
       DoubleSupplier headingX,
-      DoubleSupplier headingY) {
-    // swerveDrive.setHeadingCorrection(true); // Normally you would want heading correction for
+      DoubleSupplier headingY,
+      BooleanSupplier isRobotOriented) {
+    // swerveDrive.setHeadingCorrection(true); // Normally you would want heading
+    // correction for
     // this kind of control.
+
     return run(
         () -> {
           double xInput =
-              Math.pow(translationX.getAsDouble() * speedMultiplier, 3); // Smooth controll out
+              Math.pow(
+                  translationX.getAsDouble() * speedMultiplier,
+                  1); // Smooth controll out (Speed multiplier for Creep Drive)
           double yInput =
-              Math.pow(translationY.getAsDouble() * speedMultiplier, 3); // Smooth controll out
+              Math.pow(
+                  translationY.getAsDouble() * speedMultiplier,
+                  1); // Smooth controll out (Speed multiplier for Creep Drive)
           // Make the robot move
-          driveFieldOriented(
-              swerveDrive.swerveController.getTargetSpeeds(
-                  xInput,
-                  yInput,
-                  headingX.getAsDouble(),
-                  headingY.getAsDouble(),
-                  swerveDrive.getOdometryHeading().getRadians(),
-                  swerveDrive.getMaximumVelocity()));
+          if (isRobotOriented.getAsBoolean()) {
+            drive(
+                swerveDrive.swerveController.getTargetSpeeds(
+                    xInput,
+                    yInput,
+                    headingX.getAsDouble(),
+                    headingY.getAsDouble(),
+                    swerveDrive.getOdometryHeading().getRadians(),
+                    swerveDrive.getMaximumVelocity()));
+          } else {
+            driveFieldOriented(
+                swerveDrive.swerveController.getTargetSpeeds(
+                    xInput,
+                    yInput,
+                    headingX.getAsDouble(),
+                    headingY.getAsDouble(),
+                    swerveDrive.getOdometryHeading().getRadians(),
+                    swerveDrive.getMaximumVelocity()));
+          }
+          /*
+           * headingX.getAsDouble(),
+           * headingY.getAsDouble()));
+           */
         });
   }
 
@@ -225,15 +271,16 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public Command simDriveCommand(
       DoubleSupplier translationX, DoubleSupplier translationY, DoubleSupplier rotation) {
-    // swerveDrive.setHeadingCorrection(true); // Normally you would want heading correction for
+    // swerveDrive.setHeadingCorrection(true); // Normally you would want heading
+    // correction for
     // this kind of control.
     return run(
         () -> {
           // Make the robot move
           driveFieldOriented(
               swerveDrive.swerveController.getTargetSpeeds(
-                  translationX.getAsDouble() * speedMultiplier,
-                  translationY.getAsDouble() * speedMultiplier,
+                  translationX.getAsDouble() * speedMultiplier, // Speed Multiplier for Creep
+                  translationY.getAsDouble() * speedMultiplier, // Speed Multiplier for Creep
                   rotation.getAsDouble() * Math.PI,
                   swerveDrive.getOdometryHeading().getRadians(),
                   swerveDrive.getMaximumVelocity()));
@@ -255,11 +302,25 @@ public class SwerveSubsystem extends SubsystemBase {
           // Make the robot move
           swerveDrive.drive(
               new Translation2d(
-                  Math.pow(translationX.getAsDouble() * speedMultiplier, 3)
+                  Math.pow(translationX.getAsDouble() * speedMultiplier, 1)
                       * swerveDrive.getMaximumVelocity(),
-                  Math.pow(translationY.getAsDouble() * speedMultiplier, 3)
+                  Math.pow(translationY.getAsDouble() * speedMultiplier, 1)
                       * swerveDrive.getMaximumVelocity()),
-              Math.pow(angularRotationX.getAsDouble(), 3) * swerveDrive.getMaximumAngularVelocity(),
+              Math.pow(angularRotationX.getAsDouble(), 1) * swerveDrive.getMaximumAngularVelocity(),
+              true,
+              false);
+        });
+  }
+
+  public Command driveCommand(double translationX, double translationY, double angularRotationX) {
+    return run(
+        () -> {
+          // Make the robot move
+          swerveDrive.drive(
+              new Translation2d(
+                  Math.pow(translationX, 1) * swerveDrive.getMaximumVelocity(),
+                  Math.pow(translationY, 1) * swerveDrive.getMaximumVelocity()),
+              Math.pow(angularRotationX, 1) * swerveDrive.getMaximumAngularVelocity(),
               true,
               false);
         });
@@ -366,6 +427,30 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveDrive.zeroGyro();
   }
 
+  public void resetOdometry() {
+    swerveDrive.resetOdometry(getPose());
+  }
+
+  private boolean isRedAlliance() {
+    var alliance = DriverStation.getAlliance();
+    return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
+  }
+
+  /**
+   * This will zero (calibrate) the robot to assume the current position is facing forward
+   *
+   * <p>If red alliance rotate the robot 180 after the drviebase zero command
+   */
+  public void zeroGyroWithAlliance() {
+    if (isRedAlliance()) {
+      zeroGyro();
+      // Set the pose 180 degrees
+      resetOdometry(new Pose2d(getPose().getTranslation(), Rotation2d.fromDegrees(180)));
+    } else {
+      zeroGyro();
+    }
+  }
+
   /**
    * Sets the drive motors to brake/coast mode.
    *
@@ -398,8 +483,8 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public ChassisSpeeds getTargetSpeeds(
       double xInput, double yInput, double headingX, double headingY) {
-    xInput = Math.pow(xInput, 3);
-    yInput = Math.pow(yInput, 3);
+    xInput = Math.pow(xInput, 1);
+    yInput = Math.pow(yInput, 1);
     return swerveDrive.swerveController.getTargetSpeeds(
         xInput, yInput, headingX, headingY, getHeading().getRadians(), maximumSpeed);
   }
@@ -414,10 +499,57 @@ public class SwerveSubsystem extends SubsystemBase {
    * @return {@link ChassisSpeeds} which can be sent to th Swerve Drive.
    */
   public ChassisSpeeds getTargetSpeeds(double xInput, double yInput, Rotation2d angle) {
-    xInput = Math.pow(xInput, 3);
-    yInput = Math.pow(yInput, 3);
+    xInput = Math.pow(xInput, 1);
+    yInput = Math.pow(yInput, 1);
     return swerveDrive.swerveController.getTargetSpeeds(
         xInput, yInput, angle.getRadians(), getHeading().getRadians(), maximumSpeed);
+  }
+
+  // Convert circular joystick input into a square shape. Todo: Further comment
+  // and update this
+  // after com to be more efficent.
+  public double[] squareifyInput(double x, double y) {
+    double PiOverFour = Math.PI / 4;
+
+    // Determine the theta angle
+    double angle = Math.atan2(y, x) + Math.PI;
+    double[] squared = {0, 0};
+
+    // Scale according to which wall we're clamping to
+    // X+ wall
+    if (angle <= PiOverFour || angle > 7 * PiOverFour) {
+      squared[0] = x * (1 / Math.cos(angle));
+      squared[1] = y * (1 / Math.cos(angle));
+    }
+    // Y+ wall
+    else if (angle > PiOverFour && angle <= 3 * PiOverFour) {
+
+      squared[0] = x * (1 / Math.sin(angle));
+      squared[1] = y * (1 / Math.sin(angle));
+    }
+    // X- wall
+    else if (angle > 3 * PiOverFour && angle <= 5 * PiOverFour) {
+      squared[0] = x * (-1 / Math.cos(angle));
+      squared[1] = y * (-1 / Math.cos(angle));
+    }
+    // Y- wall
+    else if (angle > 5 * PiOverFour && angle <= 7 * PiOverFour) {
+      squared[0] = x * (-1 / Math.sin(angle));
+      squared[1] = y * (-1 / Math.sin(angle));
+    }
+
+    if (squared[0] > 1) {
+      squared[0] = 1;
+    } else if (squared[0] < -1) {
+      squared[0] = -1;
+    }
+
+    if (squared[1] > 1) {
+      squared[1] = 1;
+    } else if (squared[1] < -1) {
+      squared[1] = -1;
+    }
+    return squared;
   }
 
   /**
@@ -474,5 +606,30 @@ public class SwerveSubsystem extends SubsystemBase {
   public void addFakeVisionReading() {
     swerveDrive.addVisionMeasurement(
         new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
+  }
+
+  public void printModuleDriveSpeeds() {
+    shuffle.setTab("Swerve");
+    shuffle.setLayout("Modules");
+
+    // CANSparkMax[] Modules = new CANSparkMax[4];
+    /* List<CANSparkMax> Modules = new ArrayList<CANSparkMax>();
+    for (SwerveModule module : swerveDrive.getModules()) {
+      System.out.println(module.getDriveMotor().getMotor().getClass());
+      Modules.add((CANSparkMax) module.getDriveMotor().getMotor());
+    } */
+
+    shuffle.setNumber(
+        "Module 1",
+        ((CANSparkMax) swerveDrive.getModules()[0].getDriveMotor().getMotor()).getOutputCurrent());
+    shuffle.setNumber(
+        "Module 2",
+        ((CANSparkMax) swerveDrive.getModules()[1].getDriveMotor().getMotor()).getOutputCurrent());
+    shuffle.setNumber(
+        "Module 3",
+        ((CANSparkMax) swerveDrive.getModules()[2].getDriveMotor().getMotor()).getOutputCurrent());
+    shuffle.setNumber(
+        "Module 4",
+        ((CANSparkMax) swerveDrive.getModules()[3].getDriveMotor().getMotor()).getOutputCurrent());
   }
 }

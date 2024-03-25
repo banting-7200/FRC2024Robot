@@ -37,7 +37,7 @@ public class UntuckArm extends Command {
       }
     } else {
       // move to safe tuck pos
-      arm.moveToAngle(Arm.tuckSafeMin + 1.5);
+      arm.moveToAngle(Arm.tuckSafeMin + 1.5, Arm.stopRange);
     }
     // System.out.println("is it safe to untuck: " + (arm.getEncoderPosition() >= Arm.tuckSafeMin));
   }

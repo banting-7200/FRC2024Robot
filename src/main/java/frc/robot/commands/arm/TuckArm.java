@@ -39,7 +39,7 @@ public class TuckArm extends Command {
       }
     } else {
       // move to safe tuck pos
-      arm.moveToAngle(Arm.tuckSafeMin + 1);
+      arm.moveToAngle(Arm.tuckSafeMin + 1, Arm.stopRange);
     }
     // System.out.println("is it safe to tuck: " + (arm.getEncoderPosition() >=
     // Arm.tuckSafeMin));

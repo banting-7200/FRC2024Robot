@@ -107,6 +107,8 @@ public final class Constants {
     public static final int currentLimit = 40;
 
     public static final double stopRange = 0.3;
+    public static final double limelightStopRange = 0.03;
+
     public static final double encoderHardMax = 34;
     public static final double encoderHardMin = 20.8;
     public static final long s_stateChangeDelay = 6;

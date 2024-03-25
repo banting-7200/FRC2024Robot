@@ -387,6 +387,17 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveDrive.drive(velocity);
   }
 
+  public void drive(double[] leftJoystick, double[] rightJoystick) {
+    swerveDrive.drive(
+        swerveDrive.swerveController.getTargetSpeeds(
+            -leftJoystick[1],
+            -leftJoystick[0],
+            rightJoystick[0],
+            rightJoystick[1],
+            swerveDrive.getOdometryHeading().getRadians(),
+            swerveDrive.getMaximumVelocity()));
+  }
+
   @Override
   public void periodic() {}
 
@@ -449,6 +460,10 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public void resetOdometry() {
     swerveDrive.resetOdometry(getPose());
+  }
+
+  public void setOdometry(Pose2d pose) {
+    swerveDrive.resetOdometry(pose);
   }
 
   private boolean isRedAlliance() {

@@ -153,7 +153,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public void setCreep(boolean doCreep) { // todo: move to constants
     if (doCreep) {
       speedMultiplier = Drivebase.creepSpeedMultiplier; // set creep speed
-      // swerveDrive.swerveController.setMaximumAngularVelocity(Drivebase.maxAngularVelocity * 0.7);
+      // swerveDrive.swerveController.setMaximumAngularVelocity(Drivebase.maxAngularVelocity
+      // * 0.7);
     } else {
       speedMultiplier = 1; // set regular speed
       // swerveDrive.swerveController.setMaximumAngularVelocity(Drivebase.maxAngularVelocity);
@@ -326,6 +327,14 @@ public class SwerveSubsystem extends SubsystemBase {
         });
   }
 
+  public Command driveCommand(ChassisSpeeds velocity) {
+    return run(
+        () -> {
+          // Make the robot move
+          swerveDrive.driveFieldOriented(velocity);
+        });
+  }
+
   /**
    * The primary method for controlling the drivebase. Takes a {@link Translation2d} and a rotation
    * rate, and calculates and commands module states accordingly. Can use either open-loop or
@@ -356,6 +365,17 @@ public class SwerveSubsystem extends SubsystemBase {
    */
   public void driveFieldOriented(ChassisSpeeds velocity) {
     swerveDrive.driveFieldOriented(velocity);
+  }
+
+  public void driveFieldOriented(double[] leftJoystick, double[] rightJoystick) {
+    swerveDrive.driveFieldOriented(
+        swerveDrive.swerveController.getTargetSpeeds(
+            leftJoystick[0],
+            leftJoystick[1],
+            rightJoystick[0],
+            rightJoystick[1],
+            swerveDrive.getOdometryHeading().getRadians(),
+            swerveDrive.getMaximumVelocity()));
   }
 
   /**
@@ -613,11 +633,13 @@ public class SwerveSubsystem extends SubsystemBase {
     shuffle.setLayout("Modules");
 
     // CANSparkMax[] Modules = new CANSparkMax[4];
-    /* List<CANSparkMax> Modules = new ArrayList<CANSparkMax>();
-    for (SwerveModule module : swerveDrive.getModules()) {
-      System.out.println(module.getDriveMotor().getMotor().getClass());
-      Modules.add((CANSparkMax) module.getDriveMotor().getMotor());
-    } */
+    /*
+     * List<CANSparkMax> Modules = new ArrayList<CANSparkMax>();
+     * for (SwerveModule module : swerveDrive.getModules()) {
+     * System.out.println(module.getDriveMotor().getMotor().getClass());
+     * Modules.add((CANSparkMax) module.getDriveMotor().getMotor());
+     * }
+     */
 
     shuffle.setNumber(
         "Module 1",

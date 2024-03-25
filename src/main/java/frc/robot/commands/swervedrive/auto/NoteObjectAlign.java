@@ -30,28 +30,24 @@ public class NoteObjectAlign extends Command {
 
   private Command s_command;
 
-  public final Supplier<Double> joystickSquaredX =
-      () -> {
-        double[] d = swerveSubsystem.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY());
-        return isRedAliance.getAsBoolean() ? d[0] * -1 : d[0];
-      };
-  public final Supplier<Double> joystickSquaredY =
-      () -> {
-        double[] d = swerveSubsystem.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY());
-        return isRedAliance.getAsBoolean() ? d[1] * -1 : d[1];
-      };
+  public final Supplier<double[]> leftJoystick;
+
+  public final Supplier<double[]> rightJoystick;
 
   public NoteObjectAlign(
       SwerveSubsystem swerveSubsystem,
       PhotonCamera photonCam,
-      XboxController driverXbox,
+      Supplier<double[]> leftJoystick,
+      Supplier<double[]> rightJoystick,
       BooleanSupplier isRedAlliance) {
     this.swerveSubsystem = swerveSubsystem;
     this.photonCam = photonCam;
 
     this.d_noteArea = d_noteArea;
 
-    this.driverXbox = driverXbox;
+    this.leftJoystick = leftJoystick;
+    this.rightJoystick = rightJoystick;
+
     this.isRedAliance = isRedAlliance;
 
     positionController = new PIDController(1, 0, 0);
@@ -78,36 +74,27 @@ public class NoteObjectAlign extends Command {
       rotationAdjust = rotationController.calculate(photonCam.getNoteYaw(), 0);
       swerveSubsystem.drive(
           new Translation2d(
-              MathUtil.applyDeadband(-joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
-              MathUtil.applyDeadband(-joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND)),
+              MathUtil.applyDeadband(leftJoystick.get()[1], OperatorConstants.LEFT_X_DEADBAND),
+              MathUtil.applyDeadband(leftJoystick.get()[0], OperatorConstants.LEFT_Y_DEADBAND)),
           rotationAdjust,
           false);
     } else {
-
-      swerveSubsystem.drive(
-          new Translation2d(
-              MathUtil.applyDeadband(-joystickSquaredY.get(), OperatorConstants.LEFT_Y_DEADBAND),
-              MathUtil.applyDeadband(-joystickSquaredX.get(), OperatorConstants.LEFT_X_DEADBAND)),
-          0,
-          true);
-    }
-    if (s_command == null) {
-      s_command.schedule();
+      swerveSubsystem.driveFieldOriented(leftJoystick.get(), rightJoystick.get());
     }
   }
 
   @Override
   public boolean isFinished() {
-    return rotationController.atSetpoint();
+    return false;
   }
 
   @Override
   public void end(boolean interrupted) {
     swerveSubsystem.lock();
     if (!interrupted) {
-      System.out.println("Ended Tag Align successfully");
+      System.out.println("Ended Note Align successfully");
     } else {
-      System.out.println("Interrupted Tag Align Commmand");
+      System.out.println("Interrupted Note Align Commmand");
     }
   }
 }

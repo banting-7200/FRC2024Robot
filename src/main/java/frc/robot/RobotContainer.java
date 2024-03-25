@@ -462,8 +462,10 @@ public class RobotContainer {
             new AprilTagAlign(
                 drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign, false));
 
-    new JoystickButton(CoPilotController, copilotController.limelightButton)
-        .onTrue(new NoteObjectAlign(drivebase, photonCam, driverXbox, isRedAliance));
+    new JoystickButton(driverXbox, 3)
+        .toggleOnTrue(
+            new NoteObjectAlign(
+                drivebase, photonCam, joystickSquared, rightStickSupplier, isRedAliance));
     /*
      * On button press command the arm to move to the angle supplied by the
      * speakerAngle double supplier.

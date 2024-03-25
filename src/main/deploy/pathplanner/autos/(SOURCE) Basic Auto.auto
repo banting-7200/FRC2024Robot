@@ -72,6 +72,12 @@
           "data": {
             "name": "Shoot"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "REVERT (R) 5th Far"
+          }
         }
       ]
     }

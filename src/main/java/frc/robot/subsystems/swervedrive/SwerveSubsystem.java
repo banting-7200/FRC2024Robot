@@ -11,6 +11,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -25,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.Drivebase;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import java.io.File;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -57,7 +59,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // Angle conversion factor is 360 / (GEAR RATIO * ENCODER RESOLUTION)
     // In this case the gear ratio is 12.8 motor revolutions per wheel rotation.
     // The encoder resolution per motor revolution is 1 per motor revolution.
-    double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(12.8);
+    double angleConversionFactor = SwerveMath.calculateDegreesPerSteeringRotation(50);
     // Motor conversion factor is:
     // (PI * WHEEL DIAMETER IN METERS) / (GEAR RATIO * ENCODERRESOLUTION).
     // In this case the wheel diameter is 4 inches, which must be converted to
@@ -66,7 +68,7 @@ public class SwerveSubsystem extends SubsystemBase {
     // The gear ratio is 6.75 motor revolutions per wheel rotation.
     // The encoder resolution per motor revolution is 1 per motor revolution.
     double driveConversionFactor =
-        SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 6.75);
+        SwerveMath.calculateMetersPerRotation(Units.inchesToMeters(4), 6);
     System.out.println("\"conversionFactor\": {");
     System.out.println("\t\"angle\": " + angleConversionFactor + ",");
     System.out.println("\t\"drive\": " + driveConversionFactor);
@@ -87,6 +89,8 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     swerveDrive.setHeadingCorrection(
         false); // Heading correction should only be used while controlling the robot via angle.
+
+    System.out.println("max angular velocity is: " + swerveDrive.getMaximumAngularVelocity());
 
     setupPathPlanner();
   }
@@ -141,8 +145,10 @@ public class SwerveSubsystem extends SubsystemBase {
   public void setCreep(boolean doCreep) { // todo: move to constants
     if (doCreep) {
       speedMultiplier = Drivebase.creepSpeedMultiplier; // set creep speed
+      // swerveDrive.swerveController.setMaximumAngularVelocity(Drivebase.maxAngularVelocity * 0.7);
     } else {
       speedMultiplier = 1; // set regular speed
+      // swerveDrive.swerveController.setMaximumAngularVelocity(Drivebase.maxAngularVelocity);
     }
   }
 
@@ -204,7 +210,8 @@ public class SwerveSubsystem extends SubsystemBase {
       DoubleSupplier translationX,
       DoubleSupplier translationY,
       DoubleSupplier headingX,
-      DoubleSupplier headingY) {
+      DoubleSupplier headingY,
+      BooleanSupplier isRobotOriented) {
     // swerveDrive.setHeadingCorrection(true); // Normally you would want heading
     // correction for
     // this kind of control.
@@ -220,14 +227,29 @@ public class SwerveSubsystem extends SubsystemBase {
                   translationY.getAsDouble() * speedMultiplier,
                   1); // Smooth controll out (Speed multiplier for Creep Drive)
           // Make the robot move
-          driveFieldOriented(
-              swerveDrive.swerveController.getTargetSpeeds(
-                  xInput,
-                  yInput,
-                  headingX.getAsDouble(),
-                  headingY.getAsDouble(),
-                  swerveDrive.getOdometryHeading().getRadians(),
-                  swerveDrive.getMaximumVelocity()));
+          if (isRobotOriented.getAsBoolean()) {
+            drive(
+                swerveDrive.swerveController.getTargetSpeeds(
+                    xInput,
+                    yInput,
+                    headingX.getAsDouble(),
+                    headingY.getAsDouble(),
+                    swerveDrive.getOdometryHeading().getRadians(),
+                    swerveDrive.getMaximumVelocity()));
+          } else {
+            driveFieldOriented(
+                swerveDrive.swerveController.getTargetSpeeds(
+                    xInput,
+                    yInput,
+                    headingX.getAsDouble(),
+                    headingY.getAsDouble(),
+                    swerveDrive.getOdometryHeading().getRadians(),
+                    swerveDrive.getMaximumVelocity()));
+          }
+          /*
+           * headingX.getAsDouble(),
+           * headingY.getAsDouble()));
+           */
         });
   }
 
@@ -475,7 +497,8 @@ public class SwerveSubsystem extends SubsystemBase {
         xInput, yInput, angle.getRadians(), getHeading().getRadians(), maximumSpeed);
   }
 
-  // Convert circular joystick input into a square shape. Todo: Further comment and update this
+  // Convert circular joystick input into a square shape. Todo: Further comment
+  // and update this
   // after com to be more efficent.
   public double[] squareifyInput(double x, double y) {
     double PiOverFour = Math.PI / 4;
@@ -506,29 +529,19 @@ public class SwerveSubsystem extends SubsystemBase {
       squared[0] = x * (-1 / Math.sin(angle));
       squared[1] = y * (-1 / Math.sin(angle));
     }
-    // Early-out for a perfect square output
-    /* if (innerRoundness == 0) */
 
     if (squared[0] > 1) {
       squared[0] = 1;
-    }
-    if (squared[0] < -1) {
+    } else if (squared[0] < -1) {
       squared[0] = -1;
     }
+
     if (squared[1] > 1) {
       squared[1] = 1;
-    }
-    if (squared[1] < -1) {
+    } else if (squared[1] < -1) {
       squared[1] = -1;
     }
     return squared;
-    /*
-     * // Find the inner-roundness scaling factor and LERP
-     * var length = point.Length();
-     * var factor = (float) Math.Pow(length, innerRoundness);
-     * return Vector2.Lerp(point, squared, factor);
-     */
-
   }
 
   /**
@@ -585,5 +598,30 @@ public class SwerveSubsystem extends SubsystemBase {
   public void addFakeVisionReading() {
     swerveDrive.addVisionMeasurement(
         new Pose2d(3, 3, Rotation2d.fromDegrees(65)), Timer.getFPGATimestamp());
+  }
+
+  public void printModuleDriveSpeeds() {
+    shuffle.setTab("Swerve");
+    shuffle.setLayout("Modules");
+
+    // CANSparkMax[] Modules = new CANSparkMax[4];
+    /* List<CANSparkMax> Modules = new ArrayList<CANSparkMax>();
+    for (SwerveModule module : swerveDrive.getModules()) {
+      System.out.println(module.getDriveMotor().getMotor().getClass());
+      Modules.add((CANSparkMax) module.getDriveMotor().getMotor());
+    } */
+
+    shuffle.setNumber(
+        "Module 1",
+        ((CANSparkMax) swerveDrive.getModules()[0].getDriveMotor().getMotor()).getOutputCurrent());
+    shuffle.setNumber(
+        "Module 2",
+        ((CANSparkMax) swerveDrive.getModules()[1].getDriveMotor().getMotor()).getOutputCurrent());
+    shuffle.setNumber(
+        "Module 3",
+        ((CANSparkMax) swerveDrive.getModules()[2].getDriveMotor().getMotor()).getOutputCurrent());
+    shuffle.setNumber(
+        "Module 4",
+        ((CANSparkMax) swerveDrive.getModules()[3].getDriveMotor().getMotor()).getOutputCurrent());
   }
 }

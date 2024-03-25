@@ -2,44 +2,32 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7,
-      "y": 4.5
+      "x": 1.3,
+      "y": 7.0
     },
-    "rotation": -60.0
+    "rotation": -90.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "Prep Shoot"
-          }
-        },
-        {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "REVERT (R) 4th Far"
+                  "pathName": "(Close) To Amp"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": "Prep Amp"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(R Stage) Speaker"
           }
         },
         {
@@ -55,28 +43,41 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "REVERT (R) 5th Far"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(L) Left Close"
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "(R Stage) Speaker"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Amp"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(Close) To Amp"
+                }
+              }
+            ]
           }
         },
         {
@@ -88,6 +89,6 @@
       ]
     }
   },
-  "folder": "SOURCE-Side Autos",
+  "folder": "Other Autos",
   "choreoAuto": false
 }

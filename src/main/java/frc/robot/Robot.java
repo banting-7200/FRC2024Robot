@@ -135,7 +135,6 @@ public class Robot extends TimedRobot {
     // this line or comment it out.
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-    
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();

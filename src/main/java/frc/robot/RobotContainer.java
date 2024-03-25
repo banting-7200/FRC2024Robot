@@ -25,8 +25,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Arm;
 import frc.robot.Constants.Limelight;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.swervedrive.auto.NoteObjectAlign;
-import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.Constants.Shooter;
 import frc.robot.Constants.copilotController;
 import frc.robot.Constants.xboxController;
@@ -465,7 +463,7 @@ public class RobotContainer {
                 drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign, false));
 
     new JoystickButton(CoPilotController, copilotController.limelightButton)
-        .onTrue(new NoteObjectAlign(drivebase, photonCam, 35, shooter));
+        .onTrue(new NoteObjectAlign(drivebase, photonCam, driverXbox, isRedAliance));
     /*
      * On button press command the arm to move to the angle supplied by the
      * speakerAngle double supplier.
@@ -487,8 +485,10 @@ public class RobotContainer {
 
     new JoystickButton(CoPilotController, copilotController.limelightButton)
         .onTrue(
-            /*  new AprilTagAlign(drivebase, limelight, 2, shootTagToAlign, true)
-            .andThen(*/ new InstantCommand(() -> setSpeakerShot() /* )*/)
+            /*
+             * new AprilTagAlign(drivebase, limelight, 2, shootTagToAlign, true)
+             * .andThen(
+             */ new InstantCommand(() -> setSpeakerShot() /* ) */)
                 .andThen(new TuckArm(arm))
                 .andThen(
                     new LimelightArmMovement(

@@ -26,7 +26,7 @@ public class ChainLift extends Command {
 
   @Override
   public void execute() {
-    reachedSetpoint = arm.moveToAngle(Arm.liftArmAngle);
+    reachedSetpoint = arm.moveToAngle(Arm.liftArmAngle, Arm.stopRange);
   }
 
   @Override

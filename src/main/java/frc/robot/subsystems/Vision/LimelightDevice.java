@@ -145,12 +145,9 @@ public class LimelightDevice extends SubsystemBase {
   }
 
   public double calculateArmShootAngle() {
-    return 0; // temp
-  }
-
-  public double calculateArmShootAngleSimple() {
     double maxAngle = 29.38;
     double minAngle = 28.52;
+
     double maxDist = 0.41;
     double minDist = 0.60;
 
@@ -160,10 +157,9 @@ public class LimelightDevice extends SubsystemBase {
     goalAngle *=
         ((maxAngle - minAngle)
             / (maxDist - minDist)); // converts from area to angle and makes proportionate;
-    goalAngle += minAngle; // adds difference to minAngle
+    goalAngle = maxAngle - goalAngle; // adds difference to minAngle
     shuffle.setNumber("Arm Limelight Calc", goalAngle);
-    return /*tagDist == 0 && getTagID() == getSpeakerMiddleTag() ? goalAngle : */ Arm
-        .speakerArmAngle;
+    return tagDist != 0 && getTagID() == getSpeakerMiddleTag() ? goalAngle : Arm.speakerArmAngle;
   }
 
   public Pose2d getFakeTagPose() { // input fake tag values for simulation

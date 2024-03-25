@@ -182,7 +182,8 @@ public class ArmSubsystem extends SubsystemBase {
   public void setMotorSpeed(double speed) {
     if ((rightEncoder.getPosition() >= Arm.encoderHardMax && speed > 0)
         || (forwardLimitSwitch.isPressed() && speed > 0)
-        || (reverseLimitSwitch.isPressed()
+        || (reverseLimitSwitch.isPressed() && speed < 0)
+        || (rightEncoder.getPosition() <= Arm.encoderHardMin
             && speed < 0)) { // Check if the arm is beyond the encoder hard /*
       /* Check if the arm is beyond the encoder hard max before we move.
        * If it is beyond the hard max then stop the motor and end the movement
@@ -200,10 +201,11 @@ public class ArmSubsystem extends SubsystemBase {
     return rightArmMotor.get();
   }
 
-  public boolean moveToAngle(double angle) {
+  public boolean moveToAngle(double angle, double stopRange) {
     if ((rightEncoder.getPosition() >= Arm.encoderHardMax && angle >= Arm.encoderHardMax)
         || (forwardLimitSwitch.isPressed() && angle > rightEncoder.getPosition())
-        || (reverseLimitSwitch.isPressed() && angle < rightEncoder.getPosition())) {
+        || (reverseLimitSwitch.isPressed() && angle < rightEncoder.getPosition())
+        || (rightEncoder.getPosition() <= Arm.encoderHardMin && angle <= Arm.encoderHardMin)) {
       /*
        * Check if the arm is beyond the encoder hard max before we move
        * If it is beyond the hard max then stop the motor and end the movement
@@ -218,7 +220,7 @@ public class ArmSubsystem extends SubsystemBase {
        */
       pidController.setReference(
           angle, CANSparkMax.ControlType.kPosition, Arm.smartMotionSlot, getArbFF());
-      return Math.abs(rightEncoder.getPosition() - angle) < Arm.stopRange;
+      return Math.abs(rightEncoder.getPosition() - angle) < stopRange;
       /*
        * Checks if the arm has entered the desired stopping range and returns true if
        * so.

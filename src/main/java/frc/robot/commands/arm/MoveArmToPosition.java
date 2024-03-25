@@ -1,6 +1,7 @@
 package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.Arm;
 import frc.robot.Constants.maxCommandWaitTime;
 import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem;
@@ -41,7 +42,7 @@ public class MoveArmToPosition extends Command {
 
   @Override
   public void execute() {
-    reachedSetpoint = arm.moveToAngle(angleSetpoint.getAsDouble());
+    reachedSetpoint = arm.moveToAngle(angleSetpoint.getAsDouble(), Arm.stopRange);
     shuffle.setNumber("command setpoint", angleSetpoint.getAsDouble());
     shuffle.setBoolean("reached setpoint", reachedSetpoint);
   }

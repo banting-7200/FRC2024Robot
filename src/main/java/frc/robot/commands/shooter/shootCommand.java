@@ -83,31 +83,44 @@ public class shootCommand extends Command {
   @Override
   public void execute() {
     currentMillis = currentTime.millis(); // record current time
+    if (isSpeakerShot.getAsBoolean()) {
+      if (currentMillis - startedMillis < 100 // pullback
+      ) { // until 100 millis pass
+        shooter.spinIntakeToPositiveRPM(2000); // reverse intake
+        shooter.spinShootNegativeToRPM(500);
 
-    if (currentMillis - startedMillis < 100
-        && isSpeakerShot.getAsBoolean()) { // until 100 millis pass
-      shooter.spinIntakeToPositiveRPM(2000); // reverse intake
-      shooter.spinShootNegativeToRPM(500);
-
-    } else if ((currentMillis - startedMillis) > waitTime.getAsInt()) {
-      // waits for 250 ms for it to turn on the shoot
-      // motor
-      shooter.spinIntakeToNegativeRPM(rpm.getAsInt()); // feeds to intake motor
-      // System.out.println("Run Shooter motor");
+      } else if ((currentMillis - startedMillis) > waitTime.getAsInt()) { // feed in
+        // waits for 250 ms for it to turn on the shoot
+        // motor
+        shooter.spinIntakeToNegativeRPM(rpm.getAsInt()); // feeds to intake motor
+        // System.out.println("Run Shooter motor");
+      } else {
+        shooter.stopIntakeMotor();
+      }
+      if (!shooter.shooterHasNote()
+          && currentMillis - startedMillis > 100 + waitTime.getAsInt()
+          && !hasSeenNote) {
+        // if it see's the note it will set the since note left time for current
+        // time
+        sinceNoteLeft = currentMillis;
+        hasSeenNote = true;
+        // System.out.println("SAW THE NOTE");
+      }
+      if (currentMillis - startedMillis > 450 /*&& !pause*/) { // rev up
+        shooter.spinShootToRPM(rpm.getAsInt());
+      }
     } else {
-      shooter.stopIntakeMotor();
-    }
-    if (!shooter.shooterHasNote()
-        && currentMillis - startedMillis > 100 + waitTime.getAsInt()
-        && !hasSeenNote) {
-      // if it see's the note it will set the since note left time for current
-      // time
-      sinceNoteLeft = currentMillis;
-      hasSeenNote = true;
-      // System.out.println("SAW THE NOTE");
-    }
-    if (currentMillis - startedMillis > 450 /*&& !pause*/) {
+      if (!shooter.shooterHasNote()
+          && currentMillis - startedMillis > 100 + waitTime.getAsInt()
+          && !hasSeenNote) {
+        // if it see's the note it will set the since note left time for current
+        // time
+        sinceNoteLeft = currentMillis;
+        hasSeenNote = true;
+        // System.out.println("SAW THE NOTE");
+      }
       shooter.spinShootToRPM(rpm.getAsInt());
+      shooter.spinIntakeToNegativeRPM(rpm.getAsInt());
     }
   }
 

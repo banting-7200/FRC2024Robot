@@ -36,6 +36,11 @@ public final class Constants {
   public static final class xboxController {
     public static final double rumbleStrength = 1; // 0 - 1 range
     public static final double rumbleTime = 1253; // rumble time in milliseconds
+
+    public static final int aprilTagOrbitButton = 2;
+    public static final int noteAlignButton = 3;
+    public static final int lockSwerveButton = 4;
+    public static final int zeroSwerveButton = 1;
   }
 
   public static final class copilotController {

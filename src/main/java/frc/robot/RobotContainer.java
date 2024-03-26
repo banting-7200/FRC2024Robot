@@ -37,6 +37,7 @@ import frc.robot.commands.arm.UntuckArm;
 import frc.robot.commands.shooter.intakeCommand;
 import frc.robot.commands.shooter.shootCommand;
 import frc.robot.commands.swervedrive.auto.AprilTagAlign;
+import frc.robot.commands.swervedrive.auto.AprilTagOrbit;
 import frc.robot.commands.swervedrive.auto.NoteObjectAlign;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
@@ -336,8 +337,8 @@ public class RobotContainer {
   private void configureBindings() {
 
     // SWERVE STUFF
-    new JoystickButton(driverXbox, 1).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
+    new JoystickButton(driverXbox, xboxController.zeroSwerveButton).onTrue((new InstantCommand(drivebase::zeroGyro)));
+    //new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
 
     // This binds the creep toggling in swerve subsystem to this trigger
     Trigger t = new Trigger(creepBoolean);
@@ -361,7 +362,7 @@ public class RobotContainer {
      * trick the swerve into thinking its not moving and stop trying to correct
      * itself.
      */
-    new JoystickButton(driverXbox, 4)
+    new JoystickButton(driverXbox, xboxController.lockSwerveButton)
         .toggleOnTrue(new RepeatCommand(new InstantCommand(drivebase::resetOdometry, drivebase)));
 
     /*
@@ -394,14 +395,6 @@ public class RobotContainer {
      * On second press the hook is retracted.
      */
     new JoystickButton(CoPilotController, copilotController.hookButton)
-        /*
-         * .onTrue(
-         * new UntuckArm(arm)
-         * .andThen(new MoveArmToPosition(arm, Arm.liftArmAngle))
-         * .andThen(new InstantCommand(() -> arm.deployHook())))
-         * .onFalse(new InstantCommand(() -> arm.retractHook()));
-         */
-
         .toggleOnTrue(
             new StartEndCommand(
                 () -> {
@@ -410,7 +403,7 @@ public class RobotContainer {
                       .schedule(
                           new UntuckArm(arm)
                               .andThen(new MoveArmToPosition(arm, Arm.liftArmAngle))
-                              .andThen(new InstantCommand(() -> arm.deployHook())));
+                              .alongWith(new InstantCommand(() -> arm.deployHook())));
                 },
                 () -> arm.retractHook()));
 
@@ -457,12 +450,12 @@ public class RobotContainer {
      * tag
      */
 
-    new JoystickButton(driverXbox, 6)
-        .toggleOnTrue(
-            new AprilTagAlign(
-                drivebase, limelight, Limelight.speakerTargetArea, shootTagToAlign, false));
+    new JoystickButton(driverXbox, xboxController.aprilTagOrbitButton)
+        .whileTrue(
+            new AprilTagOrbit(
+                drivebase, limelight, shootTagToAlign, joystickSquared, rightStickSupplier));
 
-    new JoystickButton(driverXbox, 3)
+    new JoystickButton(driverXbox, xboxController.noteAlignButton)
         .toggleOnTrue(
             new NoteObjectAlign(
                 drivebase, photonCam, joystickSquared, rightStickSupplier, isRedAliance));

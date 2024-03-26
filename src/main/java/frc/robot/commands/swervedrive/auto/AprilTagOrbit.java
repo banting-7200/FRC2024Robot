@@ -3,11 +3,8 @@ package frc.robot.commands.swervedrive.auto;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.maxCommandWaitTime;
-import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Vision.LimelightDevice;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import java.time.Clock;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 

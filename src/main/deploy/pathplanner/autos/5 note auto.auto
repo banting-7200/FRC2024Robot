@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.857297007033385,
+      "y": 4.098792791023527
+    },
+    "rotation": 122.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "First and Second Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Third Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Fourth Note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Drive Out Of Zone"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "Test Autos",
+  "choreoAuto": false
+}

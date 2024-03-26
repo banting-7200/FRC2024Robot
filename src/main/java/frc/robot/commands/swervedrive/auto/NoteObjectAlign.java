@@ -2,6 +2,7 @@ package frc.robot.commands.swervedrive.auto;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,6 +31,8 @@ public class NoteObjectAlign extends Command {
 
   private Command s_command;
 
+  private Pose2d initialPose2d;
+
   public final Supplier<double[]> leftJoystick;
 
   public final Supplier<double[]> rightJoystick;
@@ -42,8 +45,6 @@ public class NoteObjectAlign extends Command {
       BooleanSupplier isRedAlliance) {
     this.swerveSubsystem = swerveSubsystem;
     this.photonCam = photonCam;
-
-    this.d_noteArea = d_noteArea;
 
     this.leftJoystick = leftJoystick;
     this.rightJoystick = rightJoystick;
@@ -62,7 +63,10 @@ public class NoteObjectAlign extends Command {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    /*
+     * initialPose2d = swerveSubsystem.getPose();
+     */ }
 
   @Override
   public void execute() {
@@ -74,12 +78,15 @@ public class NoteObjectAlign extends Command {
       rotationAdjust = rotationController.calculate(photonCam.getNoteYaw(), 0);
       swerveSubsystem.drive(
           new Translation2d(
-              MathUtil.applyDeadband(leftJoystick.get()[1], OperatorConstants.LEFT_X_DEADBAND),
-              MathUtil.applyDeadband(leftJoystick.get()[0], OperatorConstants.LEFT_Y_DEADBAND)),
+              MathUtil.applyDeadband(-leftJoystick.get()[1], OperatorConstants.LEFT_X_DEADBAND),
+              MathUtil.applyDeadband(-leftJoystick.get()[0], OperatorConstants.LEFT_Y_DEADBAND)),
           rotationAdjust,
           false);
     } else {
-      swerveSubsystem.driveFieldOriented(leftJoystick.get(), rightJoystick.get());
+      /*
+       * swerveSubsystem.driveFieldOriented(leftJoystick.get(), rightJoystick.get());
+       */
+      swerveSubsystem.drive(leftJoystick.get(), rightJoystick.get());
     }
   }
 
@@ -90,6 +97,9 @@ public class NoteObjectAlign extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    /*
+     * swerveSubsystem.setOdometry(initialPose2d);
+     */
     swerveSubsystem.lock();
     if (!interrupted) {
       System.out.println("Ended Note Align successfully");

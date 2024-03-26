@@ -14,19 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Shoot"
+            "name": "Prep Intake"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
           }
         },
         {

@@ -197,6 +197,11 @@ public class RobotContainer {
     NamedCommands.registerCommand(
         "Shoot",
         new shootCommand(Shooter.speakerShootRPM, shooter, Shooter.speakerWaitTime, isSpeakerShot));
+
+        NamedCommands.registerCommand("Carry",   Commands.runOnce(() -> shooter.stopIntakeMotor())
+        .andThen(
+            new TuckArm(arm)
+                .andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))));
     NamedCommands.registerCommand(
         "Prep Intake", new UntuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle)));
     NamedCommands.registerCommand(

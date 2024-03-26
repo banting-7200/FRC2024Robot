@@ -117,11 +117,11 @@ public class SwerveSubsystem extends SubsystemBase {
         // ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in
             // your Constants class
-            new PIDConstants(5.0, 0.0, 0.0),
+            new PIDConstants(3.0, 0.0, 0.0),
 
             // todo: check to see if this is necessary (removed in example code)
             // Translation PID constants
-            new PIDConstants(5.0, 0.0, 0.0),
+            new PIDConstants(1.5, 0.0, 0.0),
             // Rotation PID constants
             4.88,
             // Max module speed, in m/s

@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Shoot"
+            "name": "Prep Intake"
           }
         },
         {
@@ -24,26 +24,20 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "(L) Left Close"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
               }
             ]
           }
@@ -52,12 +46,6 @@
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Prep Shoot"
-                }
-              },
               {
                 "type": "path",
                 "data": {
@@ -74,26 +62,20 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
               {
                 "type": "path",
                 "data": {
                   "pathName": "(M) Middle Close"
                 }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
               }
             ]
           }
@@ -102,12 +84,6 @@
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Prep Shoot"
-                }
-              },
               {
                 "type": "path",
                 "data": {
@@ -124,25 +100,19 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
-          }
-        },
-        {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "(M) Right Close"
-                }
-              },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(M) Right Close"
                 }
               }
             ]
@@ -156,12 +126,6 @@
                 "type": "path",
                 "data": {
                   "pathName": "(R) Speaker"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Prep Shoot"
                 }
               }
             ]

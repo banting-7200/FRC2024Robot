@@ -23,7 +23,9 @@ public class AprilTagOrbit extends Command {
   public AprilTagOrbit(
       SwerveSubsystem swerveSubsystem,
       LimelightDevice limelightSubsystem,
-      IntSupplier tagToAlign, Supplier<double[]> leftStick, Supplier<double[]> rightStick) {
+      IntSupplier tagToAlign,
+      Supplier<double[]> leftStick,
+      Supplier<double[]> rightStick) {
     this.swerveSubsystem = swerveSubsystem;
     this.limelightSubsystem = limelightSubsystem;
 
@@ -41,18 +43,21 @@ public class AprilTagOrbit extends Command {
   @Override
   public void initialize() {
     System.out.println("Started April Tag Orbit");
+    limelightSubsystem.setLight(true);
   }
 
   @Override
   public void execute() {
+    System.out.println("Currently Executing Tag Orbit Command");
     double rotationAdjust = 0;
 
-    if (tagToAlign.getAsInt() == limelightSubsystem.getTagID()) {
-      rotationAdjust = rotationController.calculate(limelightSubsystem.getTagX(), 0);
-      swerveSubsystem.drive(new Translation2d(leftStick.get()[0], leftStick.get()[1]), rotationAdjust, true);
-    } else {
+    /*  if (tagToAlign.getAsInt() == limelightSubsystem.getTagID()) { */
+    rotationAdjust = rotationController.calculate(limelightSubsystem.getTagX(), 0);
+    swerveSubsystem.drive(
+        new Translation2d(leftStick.get()[0], -leftStick.get()[1]), rotationAdjust, true);
+    /*  } else {
       swerveSubsystem.driveFieldOriented(leftStick.get(), rightStick.get());
-    }
+    } */
   }
 
   @Override
@@ -62,7 +67,8 @@ public class AprilTagOrbit extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    //swerveSubsystem.lock();
+    // swerveSubsystem.lock();
+    limelightSubsystem.setLight(false);
     if (!interrupted) {
       System.out.println("Ended Tag Orbit Successfully");
     } else {
@@ -70,4 +76,3 @@ public class AprilTagOrbit extends Command {
     }
   }
 }
-

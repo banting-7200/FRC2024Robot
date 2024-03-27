@@ -54,6 +54,7 @@ public class LimelightArmMovement extends Command {
 
     startedMillis = currentTime.millis();
     arm.disableBrake();
+    limelight.setLight(true);
   }
 
   @Override
@@ -90,6 +91,7 @@ public class LimelightArmMovement extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    limelight.setLight(false);
     shooter.stopShootMotor();
     shooter.stopIntakeMotor();
     System.out.println("Move to limelight position command finished. interupted: " + interrupted);

@@ -216,6 +216,10 @@ public class RobotContainer {
         "Shoot",
         new shootCommand(Shooter.speakerShootRPM, shooter, Shooter.speakerWaitTime, isSpeakerShot));
     NamedCommands.registerCommand(
+        "Carry",
+        Commands.runOnce(() -> shooter.stopIntakeMotor())
+            .andThen(new TuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.tuckArmAngle))));
+    NamedCommands.registerCommand(
         "Prep Intake", new UntuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle)));
     NamedCommands.registerCommand(
         "Prep Shoot",
@@ -337,8 +341,10 @@ public class RobotContainer {
   private void configureBindings() {
 
     // SWERVE STUFF
-    new JoystickButton(driverXbox, xboxController.zeroSwerveButton).onTrue((new InstantCommand(drivebase::zeroGyro)));
-    //new JoystickButton(driverXbox, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
+    new JoystickButton(driverXbox, xboxController.zeroSwerveButton)
+        .onTrue((new InstantCommand(drivebase::zeroGyro)));
+    // new JoystickButton(driverXbox, 3).onTrue(new
+    // InstantCommand(drivebase::addFakeVisionReading));
 
     // This binds the creep toggling in swerve subsystem to this trigger
     Trigger t = new Trigger(creepBoolean);

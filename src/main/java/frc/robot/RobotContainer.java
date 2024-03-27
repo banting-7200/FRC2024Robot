@@ -237,16 +237,19 @@ public class RobotContainer {
 
     autos.addOption("(AMP) 4 Close in Speaker", "(AMP) 4 Close in Speaker");
     autos.addOption("(AMP) Left Side 4 in Speaker", " (AMP) Left Side 4 in Speaker");
+    autos.addOption("(AMP) Two Note and Big Move Auto", "(AMP) Two Note and Big Move Auto");
 
     autos.addOption("(MIDDLE) Far Notes", "(MIDDLE) Far Notes");
     autos.addOption("(MIDDLE) 2056 Complimentary Auto", "(MIDDLE) 2056 Complimentary Auto");
     autos.addOption("(MIDDLE) 4 Close in Speaker", "(MIDDLE) 4 Close in Speaker");
+    autos.addOption("(MIDDLE) Two Note and Big Move", "(MIDDLE) Two Note and Big Move");
 
-    autos.addOption("(SOURCE) 4 in Speaker", "(SOURCE) 4 in Speaker");
+    autos.addOption("(SOURCE) 4 Close in Speaker", "(SOURCE) 4 Close in Speaker");
     autos.addOption("(SOURCE) Far Notes 1", "(SOURCE) Far Notes 1");
     autos.addOption("(SOURCE) Far Notes 2", "(SOURCE) Far Notes 2");
     autos.addOption("(SOURCE) 1325 Complimentary Auto", "(SOURCE) 1325 Complimentary Auto");
     autos.addOption("(SOURCE) 610 Complimentary Auto", "(SOURCE) 610 Complimentary Auto");
+    autos.addOption("(SOURCE) Two Note and Big Move Auto", "(SOURCE) Two Note and Big Move Auto");
 
     // autos.addOption("(SOURCE) 2 in Speaker + 2 in Amp", "(SOURCE) 2 in Speaker + 2 in Amp");
     // autos.addOption("(SOURCE) 3 in Speaker + 2 in Amp", "(SOURCE) 3 in Speaker + 2 in Amp");

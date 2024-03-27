@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 0.7,
-      "y": 4.5
+      "y": 6.6
     },
-    "rotation": -60.0
+    "rotation": 60.0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(R) Right Close"
+                  "pathName": "(L) Left Close"
                 }
               }
             ]
@@ -45,7 +45,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "(R) Speaker"
+            "pathName": "(L) Speaker"
           }
         },
         {
@@ -53,10 +53,16 @@
           "data": {
             "name": "Shoot"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "To Note 4 Mid"
+          }
         }
       ]
     }
   },
-  "folder": "SOURCE-Side Autos",
+  "folder": "AMP-Side Autos",
   "choreoAuto": false
 }

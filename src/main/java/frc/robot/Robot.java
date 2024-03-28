@@ -63,6 +63,7 @@ public class Robot extends TimedRobot {
 
     // start the camera server
     CameraServer.startAutomaticCapture("Front Camera", 0);
+    limelight.setLight(false);
   }
 
   /**

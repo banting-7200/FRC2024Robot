@@ -477,7 +477,7 @@ public class RobotContainer {
                 drivebase, limelight, shootTagToAlign, joystickSquared, rightStickSupplier));
 
     new JoystickButton(driverXbox, xboxController.noteAlignButton)
-        .toggleOnTrue(
+        .whileTrue(
             new NoteObjectAlign(
                 drivebase, photonCam, joystickSquared, rightStickSupplier, isRedAliance));
     /*

@@ -117,21 +117,13 @@ public class SwerveSubsystem extends SubsystemBase {
         // ChassisSpeeds
         new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in
             // your Constants class
-            new PIDConstants(5.0, 0.0, 0.0),
-            /*
-             * swerveDrive.swerveController.config..p,
-             * swerveDrive.swerveController.config.TranslationPID.i,
-             * swerveDrive.swerveController.config.TranslationPID.d),
-             */
+            new PIDConstants(3.0, 0.0, 0.0),
 
             // todo: check to see if this is necessary (removed in example code)
             // Translation PID constants
-            new PIDConstants(
-                swerveDrive.swerveController.config.headingPIDF.p,
-                swerveDrive.swerveController.config.headingPIDF.i,
-                swerveDrive.swerveController.config.headingPIDF.d),
+            new PIDConstants(1.5, 0.0, 0.0),
             // Rotation PID constants
-            4.41,
+            4.88,
             // Max module speed, in m/s
             swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),
             // Drive base radius in meters. Distance from robot center to furthest module.

@@ -27,6 +27,7 @@ public class shootCommand extends Command {
   long startedMillis; // time when started
   long currentMillis; // current time
   long sinceNoteLeft; // time since note left shooter
+  long passedMillis;
 
   IntSupplier rpm; // Int supplier for different shoot rpm's(speaker/amp)
   Boolean hasSeenNote = false; // if note has been detected yet
@@ -36,8 +37,6 @@ public class shootCommand extends Command {
   Joystick controller;
 
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
-
-  boolean pause;
 
   public shootCommand(
       IntSupplier rpm,
@@ -77,19 +76,20 @@ public class shootCommand extends Command {
     shooter.stopIntakeMotor(); // Stop the intake motor
     System.out.println("Started shoot command");
     System.out.println("is Shoot state: " + isSpeakerShot.getAsBoolean());
-    pause = controller != null ? controller.getRawButton(copilotController.shootButton) : false;
   }
 
   @Override
   public void execute() {
     currentMillis = currentTime.millis(); // record current time
+    passedMillis = currentMillis - startedMillis;
     if (isSpeakerShot.getAsBoolean()) {
-      if (currentMillis - startedMillis < 100 // pullback
+      if (passedMillis < 100 // pullback
       ) { // until 100 millis pass
         shooter.spinIntakeToPositiveRPM(2000); // reverse intake
         shooter.spinShootNegativeToRPM(500);
-
-      } else if ((currentMillis - startedMillis) > waitTime.getAsInt()) { // feed in
+      } else if (passedMillis > waitTime.getAsInt()
+          && (controller == null
+              || !controller.getRawButton(copilotController.shootButton))) { // feed in
         // waits for 250 ms for it to turn on the shoot
         // motor
         shooter.spinIntakeToNegativeRPM(rpm.getAsInt()); // feeds to intake motor
@@ -97,22 +97,18 @@ public class shootCommand extends Command {
       } else {
         shooter.stopIntakeMotor();
       }
-      if (!shooter.shooterHasNote()
-          && currentMillis - startedMillis > 100 + waitTime.getAsInt()
-          && !hasSeenNote) {
+      if (!shooter.shooterHasNote() && passedMillis > 100 + waitTime.getAsInt() && !hasSeenNote) {
         // if it see's the note it will set the since note left time for current
         // time
         sinceNoteLeft = currentMillis;
         hasSeenNote = true;
         // System.out.println("SAW THE NOTE");
       }
-      if (currentMillis - startedMillis > 450 /*&& !pause*/) { // rev up
+      if (passedMillis > 450 /*&& !pause*/) { // rev up
         shooter.spinShootToRPM(rpm.getAsInt());
       }
     } else {
-      if (!shooter.shooterHasNote()
-          && currentMillis - startedMillis > 100 + waitTime.getAsInt()
-          && !hasSeenNote) {
+      if (!shooter.shooterHasNote() && passedMillis > 100 + waitTime.getAsInt() && !hasSeenNote) {
         // if it see's the note it will set the since note left time for current
         // time
         sinceNoteLeft = currentMillis;

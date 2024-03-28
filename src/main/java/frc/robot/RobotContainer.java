@@ -247,32 +247,46 @@ public class RobotContainer {
             .andThen(new InstantCommand(() -> speakerShot = false)));
 
     // Initialize sendable chooser for autos
-    autos = new SendableChooser();
-    autos.addOption("(R) 4 in Speaker", "(R) 4 in Speaker");
-    autos.addOption("(R) 2 in Speaker + 2 in Amp", "(R) 2 in Speaker + 2 in Amp");
-    autos.addOption("(R) 3 in Speaker + 2 in Amp", "(R) 3 in Speaker + 2 in Amp");
-    autos.addOption("(L) Left Side 4 in Speaker", " (L) Left Side 4 in Speaker");
-    autos.addOption(
-        "(L) Left Side 2 in Speaker + 2 in Amp", "(L) Left Side 2 in Speaker + 2 in Amp");
-    autos.addOption("(L) 4 Close in Speaker", "(L) 4 Close in Speaker");
-    autos.addOption("(M) Far Notes", "(M) Far Notes");
-    autos.addOption("(L) Basic Auto", "(L) Basic Auto");
-    autos.addOption("(M) Basic Auto", "(M) Basic Auto");
-    autos.addOption("(R) Basic Auto", "(R) Basic Auto");
+    autos = new SendableChooser<String>();
 
-    autos.addOption("(M) Basic Shoot Auto", "(M) Basic Shoot Auto");
-    autos.addOption("(R) Basic Shoot Auto", "(R) Basic Shoot Auto");
-    autos.addOption("(L) Basic Shoot Auto", "(L) Basic Shoot Auto");
+    autos.addOption("(SOURCE) Basic Auto", "(SOURCE) Basic Auto");
+    autos.addOption("(MIDDLE) Basic Auto", "(MIDDLE) Basic Auto");
+    autos.addOption("(AMP) Basic Auto", "(AMP) Basic Auto");
 
-    autos.addOption("(M) Shoot Only Auto", "(M) Shoot Only Auto");
-    autos.addOption("(R) Shoot Only Auto", "(R) Shoot Only Auto");
-    autos.addOption("(L) Shoot Only Auto", "(L) Only Shoot Auto");
+    autos.addOption("(AMP) 4 Close in Speaker", "(AMP) 4 Close in Speaker");
+    autos.addOption("(AMP) Left Side 4 in Speaker", " (AMP) Left Side 4 in Speaker");
+    autos.addOption("(AMP) Two Note and Big Move Auto", "(AMP) Two Note and Big Move Auto");
 
-    autos.addOption("(M) Shoot and Exit", "(M) Shoot and Exit");
-    autos.addOption("(R) Shoot and Exit", "(R) Shoot and Exit");
-    autos.addOption("(L) Shoot and Exit", "(L) Shoot and Exit");
+    autos.addOption("(MIDDLE) Far Notes", "(MIDDLE) Far Notes");
+    autos.addOption("(MIDDLE) 2056 Complimentary Auto", "(MIDDLE) 2056 Complimentary Auto");
+    autos.addOption("(MIDDLE) 4 Close in Speaker", "(MIDDLE) 4 Close in Speaker");
+    autos.addOption("(MIDDLE) Two Note and Big Move", "(MIDDLE) Two Note and Big Move");
 
-    autos.addOption("(M) Mid Note", "(M) Mid Note");
+    autos.addOption("(SOURCE) 4 Close in Speaker", "(SOURCE) 4 Close in Speaker");
+    autos.addOption("(SOURCE) Far Notes 1", "(SOURCE) Far Notes 1");
+    autos.addOption("(SOURCE) Far Notes 2", "(SOURCE) Far Notes 2");
+    autos.addOption("(SOURCE) 1325 Complimentary Auto", "(SOURCE) 1325 Complimentary Auto");
+    autos.addOption("(SOURCE) 610 Complimentary Auto", "(SOURCE) 610 Complimentary Auto");
+    autos.addOption("(SOURCE) Two Note and Big Move Auto", "(SOURCE) Two Note and Big Move Auto");
+
+    // autos.addOption("(SOURCE) 2 in Speaker + 2 in Amp", "(SOURCE) 2 in Speaker + 2 in Amp");
+    // autos.addOption("(SOURCE) 3 in Speaker + 2 in Amp", "(SOURCE) 3 in Speaker + 2 in Amp");
+    // autos.addOption("(AMP) Left Side 2 in Speaker + 2 in Amp", "(AMP) Left Side 2 in Speaker + 2
+    // in Amp");
+
+    //    autos.addOption("(MIDDLE) Basic Shoot Auto", "(MIDDLE) Basic Shoot Auto");
+    //    autos.addOption("(SOURCE) Basic Shoot Auto", "(SOURCE) Basic Shoot Auto");
+    //    autos.addOption("(AMP) Basic Shoot Auto", "(AMP) Basic Shoot Auto");
+
+    //    autos.addOption("(MIDDLE) Shoot Only Auto", "(MIDDLE) Shoot Only Auto");
+    //    autos.addOption("(SOURCE) Shoot Only Auto", "(SOURCE) Shoot Only Auto");
+    //    autos.addOption("(AMP) Shoot Only Auto", "(AMP) Only Shoot Auto");
+
+    //    autos.addOption("(MIDDLE) Shoot and Exit", "(MIDDLE) Shoot and Exit");
+    //    autos.addOption("(SOURCE) Shoot and Exit", "(SOURCE) Shoot and Exit");
+    //    autos.addOption("(AMP) Shoot and Exit", "(AMP) Shoot and Exit");
+
+    //    autos.addOption("(MIDDLE) Mid Note", "(MIDDLE) Mid Note");
 
     shuffle.newAutoChooser(autos);
   }
@@ -385,6 +399,7 @@ public class RobotContainer {
         .onTrue(
             (new UntuckArm(arm)
                 .andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle))
+                /* McMaster: Change to alongWith? */
                 .andThen(new intakeCommand(Shooter.intakeRPM, shooter))
                 .andThen(
                     new TuckArm(arm)

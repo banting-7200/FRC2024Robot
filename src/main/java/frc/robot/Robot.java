@@ -63,7 +63,6 @@ public class Robot extends TimedRobot {
 
     // start the camera server
     CameraServer.startAutomaticCapture("Front Camera", 0);
-    limelight.setLight(false);
   }
 
   /**
@@ -108,6 +107,9 @@ public class Robot extends TimedRobot {
       disabledTimer.stop();
     }
     m_robotContainer.refreshTagIDs();
+    if (limelight.getLight()) {
+      limelight.setLight(false);
+    }
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

@@ -385,6 +385,8 @@ public class RobotContainer {
     new JoystickButton(driverXbox, xboxController.lockSwerveButton)
         .toggleOnTrue(new RepeatCommand(new InstantCommand(drivebase::resetOdometry, drivebase)));
 
+    //  new JoystickButton(CoPilotController, ampTag)
+
     /*
      * Simply runs intake routine which runs upon when the pickUpButton is clicked.
      * First it intakes the note with 3 different RPMS which do different things,

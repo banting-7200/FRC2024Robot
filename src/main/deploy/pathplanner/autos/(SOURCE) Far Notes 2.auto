@@ -17,12 +17,8 @@
             "name": "Shoot"
           }
         },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
-          }
-        },
+        
+        
         {
           "type": "race",
           "data": {
@@ -46,7 +42,7 @@
                     {
                       "type": "named",
                       "data": {
-                        "name": "Prep Intake"
+                        "name": "Intake"
                       }
                     }
                   ]

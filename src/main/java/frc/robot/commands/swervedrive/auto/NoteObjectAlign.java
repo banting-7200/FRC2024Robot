@@ -78,8 +78,10 @@ public class NoteObjectAlign extends Command {
       rotationAdjust = rotationController.calculate(photonCam.getNoteYaw(), 0);
       swerveSubsystem.drive(
           new Translation2d(
-              MathUtil.applyDeadband(-leftJoystick.get()[1], OperatorConstants.LEFT_X_DEADBAND) * 1.5,
-              MathUtil.applyDeadband(-leftJoystick.get()[0], OperatorConstants.LEFT_Y_DEADBAND) * 1.5),
+              MathUtil.applyDeadband(-leftJoystick.get()[1], OperatorConstants.LEFT_X_DEADBAND)
+                  * 1.5,
+              MathUtil.applyDeadband(-leftJoystick.get()[0], OperatorConstants.LEFT_Y_DEADBAND)
+                  * 1.5),
           rotationAdjust,
           false);
     } else {

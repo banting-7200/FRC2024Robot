@@ -76,6 +76,12 @@ public class LimelightDevice extends SubsystemBase {
     shuffle.setBoolean("LEDs On", on);
   }
 
+  public boolean getLight() {
+    double light;
+    light = (double) mainTable.getEntry("lightMode").getNumber(3);
+    return light == 1 ? false : true;
+  }
+
   public void setMode(int selection) { // sets pipeline
     mainTable.getEntry("pipeline").setNumber(selection);
     shuffle.setNumber("Pipeline", selection);

@@ -96,7 +96,7 @@ public class RobotContainer {
               ? DriverStation.getAlliance().get() == DriverStation.Alliance.Red
               : false; // This is a local reference to the DriverStation alliance
 
-  double rStickInversionMultiplier = isRedAliance.getAsBoolean() ? 1 : -1;
+  double rStickInversionMultiplier = /* isRedAliance.getAsBoolean() ? 1 : */ -1;
 
   boolean speakerShot =
       true; // Whether the robot is ready for a Speaker Shot or not. Initialized to true
@@ -110,7 +110,7 @@ public class RobotContainer {
   public final Supplier<double[]> joystickSquared =
       () -> {
         double[] d = drivebase.squareifyInput(driverXbox.getLeftX(), driverXbox.getLeftY());
-        return isRedAliance.getAsBoolean() ? new double[] {d[0] * -1, d[1] * -1} : d;
+        return /* isRedAliance.getAsBoolean() ? new double[] {d[0] * -1, d[1] * -1} : */ d;
       };
 
   // Supply right stick input, flipped dependant on alliance.

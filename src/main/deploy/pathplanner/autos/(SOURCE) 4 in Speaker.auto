@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Intake"
+            "name": "Shoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Prep Intake"
           }
         },
         {
@@ -125,7 +125,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(L) Speaker"
+                  "pathName": "(M) Speaker"
                 }
               }
             ]

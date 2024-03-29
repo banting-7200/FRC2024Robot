@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Intake"
+            "name": "Shoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Prep Intake"
           }
         },
         {
@@ -28,15 +28,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "(R) Right Close"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
                 }
               }
             ]
@@ -51,6 +51,12 @@
                 "data": {
                   "pathName": "(R) Speaker"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Shoot"
+                }
               }
             ]
           }
@@ -66,9 +72,22 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Intake"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Prep Intake"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -84,6 +103,12 @@
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Shoot"
+                }
+              },
               {
                 "type": "path",
                 "data": {

@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Intake"
+            "name": "Shoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Prep Intake"
           }
         },
         {
@@ -43,9 +43,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "(R) Speaker"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Shoot"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(R) Speaker"
+                }
+              }
+            ]
           }
         },
         {
@@ -58,6 +71,12 @@
           "type": "path",
           "data": {
             "pathName": "(R) 5th Far"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Intake"
           }
         }
       ]

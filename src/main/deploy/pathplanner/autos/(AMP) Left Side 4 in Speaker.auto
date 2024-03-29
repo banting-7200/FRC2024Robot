@@ -14,12 +14,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Shoot"
           }
         },
@@ -49,9 +43,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "(L) Speaker"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Shoot"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(L) Speaker"
+                }
+              }
+            ]
           }
         },
         {
@@ -86,9 +93,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "(L) Speaker"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(L) Speaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Shoot"
+                }
+              }
+            ]
           }
         },
         {
@@ -123,15 +143,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Prep Amp"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "(L) Speaker"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(L) Speaker"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Shoot"
+                }
+              }
+            ]
           }
         },
         {

@@ -14,6 +14,12 @@
         {
           "type": "named",
           "data": {
+            "name": "Prep Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot"
           }
         },
@@ -140,6 +146,6 @@
       ]
     }
   },
-  "folder": "SOURCE-Side Autos",
+  "folder": null,
   "choreoAuto": false
 }

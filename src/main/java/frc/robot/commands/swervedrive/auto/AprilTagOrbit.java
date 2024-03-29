@@ -54,7 +54,7 @@ public class AprilTagOrbit extends Command {
     /*  if (tagToAlign.getAsInt() == limelightSubsystem.getTagID()) { */
     rotationAdjust = rotationController.calculate(limelightSubsystem.getTagX(), 0);
     swerveSubsystem.drive(
-        new Translation2d(leftStick.get()[0], -leftStick.get()[1]), rotationAdjust, true);
+        new Translation2d(leftStick.get()[1], -leftStick.get()[0]), rotationAdjust, true);
     /*  } else {
       swerveSubsystem.driveFieldOriented(leftStick.get(), rightStick.get());
     } */

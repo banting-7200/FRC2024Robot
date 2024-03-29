@@ -14,11 +14,15 @@
         {
           "type": "named",
           "data": {
+            "name": "Prep Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "Shoot"
           }
         },
-        
-        
         {
           "type": "race",
           "data": {
@@ -136,6 +140,6 @@
       ]
     }
   },
-  "folder": "SOURCE-Side Autos",
+  "folder": null,
   "choreoAuto": false
 }

@@ -144,7 +144,7 @@ public class Robot extends TimedRobot {
     }
     m_robotContainer.setDriveMode();
     m_robotContainer.setMotorBrake(true);
-    // limelight.setLight(true);
+    m_robotContainer.zeroGyroWithAlliance();
   }
 
   /** This function is called periodically during operator control. */

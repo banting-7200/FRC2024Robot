@@ -382,8 +382,8 @@ public class SwerveSubsystem extends SubsystemBase {
   public void drive(double[] leftJoystick, double[] rightJoystick) {
     swerveDrive.drive(
         swerveDrive.swerveController.getTargetSpeeds(
-            -leftJoystick[1],
-            -leftJoystick[0],
+            -leftJoystick[1] * 1.5,
+            -leftJoystick[0] * 1.5,
             rightJoystick[0],
             rightJoystick[1],
             swerveDrive.getOdometryHeading().getRadians(),

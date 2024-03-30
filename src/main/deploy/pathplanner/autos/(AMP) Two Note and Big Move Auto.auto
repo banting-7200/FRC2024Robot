@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Shoot"
+            "name": "Prep Intake"
           }
         },
         {
@@ -24,7 +24,13 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
+          "data": {
+            "name": "Prep Intake"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -43,9 +49,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "(L) Speaker"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Shoot"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(L) Speaker"
+                }
+              }
+            ]
           }
         },
         {
@@ -55,9 +74,60 @@
           }
         },
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "To Note 4 Mid"
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Prep Intake"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "To Note 4 Mid"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Shoot"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(L) Speaker"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         }
       ]

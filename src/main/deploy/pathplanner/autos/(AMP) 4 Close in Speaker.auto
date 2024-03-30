@@ -14,12 +14,6 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "Shoot"
           }
         },

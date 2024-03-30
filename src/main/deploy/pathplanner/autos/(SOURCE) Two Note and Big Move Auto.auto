@@ -57,12 +57,12 @@
         {
           "type": "path",
           "data": {
-            "pathName": "REVERT (R) 5th Far"
+            "pathName": null
           }
         }
       ]
     }
   },
-  "folder": "SOURCE-Side Autos",
+  "folder": null,
   "choreoAuto": false
 }

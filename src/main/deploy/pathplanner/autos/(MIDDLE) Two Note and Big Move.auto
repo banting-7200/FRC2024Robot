@@ -79,7 +79,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "REVERT (Stage) 3rd Far"
+                  "pathName": null
                 }
               },
               {
@@ -94,6 +94,6 @@
       ]
     }
   },
-  "folder": "MIDDLE Autos",
+  "folder": null,
   "choreoAuto": false
 }

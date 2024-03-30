@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7,
-      "y": 4.5
+      "x": 1.3,
+      "y": 5.55
     },
-    "rotation": -60.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
@@ -14,13 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Prep Intake"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Prep Intake"
+            "name": "Shoot"
           }
         },
         {
@@ -36,29 +36,16 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(R) Right Close"
+                  "pathName": "(M) Middle Close"
                 }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Prep Shoot"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "(R) Speaker"
-                }
-              }
-            ]
+            "pathName": "(M) Speaker"
           }
         },
         {
@@ -68,20 +55,64 @@
           }
         },
         {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(M) Right Close Simple"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "(R) 5th Far"
+            "pathName": "(M) Speaker Right"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(M) Left Close Simple"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "(M) Speaker Right"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Prep Intake"
+            "name": "Shoot"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Test Autos",
   "choreoAuto": false
 }

@@ -53,16 +53,10 @@
           "data": {
             "name": "Shoot"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": null
-          }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "Outdated Autos",
   "choreoAuto": false
 }

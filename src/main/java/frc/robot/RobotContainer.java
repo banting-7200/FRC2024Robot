@@ -34,6 +34,9 @@ import frc.robot.commands.arm.MoveArm;
 import frc.robot.commands.arm.MoveArmToPosition;
 import frc.robot.commands.arm.TuckArm;
 import frc.robot.commands.arm.UntuckArm;
+import frc.robot.commands.autos.feedCommand;
+import frc.robot.commands.autos.pullbackCommand;
+import frc.robot.commands.autos.revCommand;
 import frc.robot.commands.shooter.intakeCommand;
 import frc.robot.commands.shooter.shootCommand;
 import frc.robot.commands.swervedrive.auto.AprilTagAlign;
@@ -246,6 +249,10 @@ public class RobotContainer {
             .andThen(new MoveArmToPosition(arm, Arm.ampArmAngle))
             .andThen(new InstantCommand(() -> speakerShot = false)));
 
+    NamedCommands.registerCommand("Pullback", new pullbackCommand(shooter));
+    NamedCommands.registerCommand("Rev Up", new revCommand(shooter));
+    NamedCommands.registerCommand("Feed", new feedCommand(shooter));
+
     // Initialize sendable chooser for autos
     autos = new SendableChooser<String>();
 
@@ -268,6 +275,8 @@ public class RobotContainer {
     autos.addOption("(SOURCE) 1325 Complimentary Auto", "(SOURCE) 1325 Complimentary Auto");
     autos.addOption("(SOURCE) 610 Complimentary Auto", "(SOURCE) 610 Complimentary Auto");
     autos.addOption("(SOURCE) Two Note and Big Move Auto", "(SOURCE) Two Note and Big Move Auto");
+
+    autos.addOption("(M) Simple 4 Note", "(M) Simple 4 Note");
 
     // autos.addOption("(SOURCE) 2 in Speaker + 2 in Amp", "(SOURCE) 2 in Speaker +
     // 2 in Amp");

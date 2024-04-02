@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Intake"
+            "name": "Prep Shoot"
           }
         },
         {
@@ -133,6 +133,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "Left Autos",
   "choreoAuto": false
 }

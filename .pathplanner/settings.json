@@ -11,9 +11,10 @@
     "(R) Paths"
   ],
   "autoFolders": [
+    "Complimentary Autos",
     "Left Autos",
     "Middle Autos",
-    "Other Autos",
+    "Outdated Autos",
     "Right Autos",
     "Test Autos"
   ],

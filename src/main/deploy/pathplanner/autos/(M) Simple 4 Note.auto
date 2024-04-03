@@ -12,15 +12,41 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Prep Intake"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Intake"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Pullback"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Rev Up"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Feed"
           }
         },
         {
@@ -43,40 +69,41 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "(M) Speaker"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(M) Right Close Simple"
+                  "pathName": "(M) Speaker"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "Intake"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Pullback"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Rev Up"
+                      }
+                    }
+                  ]
                 }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "(M) Speaker Right"
+            "name": "Feed"
           }
         },
         {
@@ -99,15 +126,98 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "(M) Speaker Right"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(M) Speaker Left"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Pullback"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Rev Up"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
+            "name": "Feed"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(M) Right Close Simple"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "(M) Speaker Right"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Pullback"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Rev Up"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Feed"
           }
         }
       ]

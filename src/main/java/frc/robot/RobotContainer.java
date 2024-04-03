@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -388,8 +389,10 @@ public class RobotContainer {
     new JoystickButton(driverXbox, xboxController.lockSwerveButton)
         .toggleOnTrue(new RepeatCommand(new InstantCommand(drivebase::resetOdometry, drivebase)));
 
-    new JoystickButton(CoPilotController, copilotController.brakeButton)
-        .onTrue(new MoveArmToPosition(arm, 26.96)); // For the trap, EXPERIMENTAL!!
+   /*  new JoystickButton(CoPilotController, copilotController.brakeButton)
+        .onTrue(new MoveArmToPosition(arm, 26.96)); */ // For the trap, EXPERIMENTAL!!
+         new JoystickButton(CoPilotController, copilotController.brakeButton)
+        .onTrue(new RunCommand(() -> shooter.spinIntakeToPositiveRPM(7200)).withTimeout(2));
 
     /*
      * Simply runs intake routine which runs upon when the pickUpButton is clicked.

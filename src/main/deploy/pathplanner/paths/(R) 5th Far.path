@@ -16,11 +16,11 @@
     },
     {
       "anchor": {
-        "x": 8.3,
+        "x": 8.8,
         "y": 0.75
       },
       "prevControl": {
-        "x": 8.200000000000001,
+        "x": 8.700000000000001,
         "y": 0.75
       },
       "nextControl": null,
@@ -40,7 +40,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": 0,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": "(R) Paths",

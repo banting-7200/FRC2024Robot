@@ -14,19 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Shoot"
+            "name": "Prep Intake"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
           }
         },
         {
@@ -70,25 +64,6 @@
           "type": "path",
           "data": {
             "pathName": "REVERT (Speed) Under Stage Left"
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": null
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
           }
         }
       ]

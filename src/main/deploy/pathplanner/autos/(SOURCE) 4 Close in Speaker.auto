@@ -14,13 +14,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Intake"
+            "name": "Prep Shoot"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Intake"
           }
         },
         {
@@ -84,6 +90,12 @@
           "type": "parallel",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Shoot"
+                }
+              },
               {
                 "type": "path",
                 "data": {

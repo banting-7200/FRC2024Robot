@@ -3,30 +3,50 @@
   "startingPose": {
     "position": {
       "x": 0.7,
-      "y": 6.6
+      "y": 4.5
     },
-    "rotation": 60.0
+    "rotation": -60.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "Prep Shoot"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Prep Shoot"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Pullback"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Rev Up"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
+            "name": "Feed"
           }
         },
         {
@@ -34,15 +54,28 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Intake"
+                  "pathName": "(R) 4th Far"
                 }
               },
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "(L) Left Close"
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Prep Intake"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "Intake"
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -61,7 +94,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "(L) Speaker"
+                  "pathName": "(R Stage) Speaker"
                 }
               },
               {
@@ -118,7 +151,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "To Note 4 Mid"
+                  "pathName": "(R) 5th Far"
                 }
               }
             ]
@@ -129,15 +162,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "Prep Shoot"
+                  "pathName": "(R Stage) Speaker"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "(L) Speaker"
+                  "name": "Prep Shoot"
                 }
               },
               {
@@ -171,6 +204,6 @@
       ]
     }
   },
-  "folder": "Left Autos",
+  "folder": "Right Autos",
   "choreoAuto": false
 }

@@ -16,6 +16,7 @@ public class pullbackCommand extends Command {
   int commandDuration = 100;
 
   public pullbackCommand(ShooterSubsystem shooter) {
+    this.shooter = shooter;
   }
 
   @Override

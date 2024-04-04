@@ -14,13 +14,19 @@
         {
           "type": "named",
           "data": {
-            "name": "Prep Intake"
+            "name": "Prep Shoot"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Intake"
           }
         },
         {
@@ -49,12 +55,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Prep Intake"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Back Under Stage Right"
@@ -64,6 +64,12 @@
           "type": "path",
           "data": {
             "pathName": "(R Stage) Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Shoot"
           }
         },
         {
@@ -101,6 +107,12 @@
           "type": "path",
           "data": {
             "pathName": "(R Stage) Speaker"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Prep Shoot"
           }
         },
         {

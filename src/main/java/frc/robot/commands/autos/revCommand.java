@@ -9,13 +9,14 @@ public class revCommand extends Command {
   public ShooterSubsystem shooter;
   Clock currentTime = Clock.systemDefaultZone();
 
-  long startedMillis; 
-  long currentMillis;  
+  long startedMillis;
+  long currentMillis;
   long passedMillis;
 
   int commandDuration = 500;
 
-  public revCommand(ShooterSubsystem shooter){
+  public revCommand(ShooterSubsystem shooter) {
+    this.shooter = shooter;
   }
 
   @Override
@@ -35,12 +36,14 @@ public class revCommand extends Command {
     }
   }
 
-
   public boolean isFinished() {
     return passedMillis > commandDuration;
   }
 
   @Override
   public void end(boolean interrupted) {
+    if (interrupted) {
+      shooter.stopShootMotor();
+    }
   }
 }

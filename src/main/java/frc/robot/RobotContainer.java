@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -278,6 +277,7 @@ public class RobotContainer {
     autos.addOption("(SOURCE) Two Note and Big Move Auto", "(SOURCE) Two Note and Big Move Auto");
 
     autos.addOption("(M) Simple 4 Note", "(M) Simple 4 Note");
+    autos.addOption("(Source) Simple Far Notes 2", "(Source) Simple Far Notes 2");
 
     // autos.addOption("(SOURCE) 2 in Speaker + 2 in Amp", "(SOURCE) 2 in Speaker +
     // 2 in Amp");
@@ -398,10 +398,21 @@ public class RobotContainer {
     new JoystickButton(driverXbox, xboxController.lockSwerveButton)
         .toggleOnTrue(new RepeatCommand(new InstantCommand(drivebase::resetOdometry, drivebase)));
 
-   /*  new JoystickButton(CoPilotController, copilotController.brakeButton)
-        .onTrue(new MoveArmToPosition(arm, 26.96)); */ // For the trap, EXPERIMENTAL!!
-         new JoystickButton(CoPilotController, copilotController.brakeButton)
-        .onTrue(new RunCommand(() -> shooter.spinIntakeToPositiveRPM(7200)).withTimeout(2));
+    /*  new JoystickButton(CoPilotController, copilotController.brakeButton)
+    .onTrue(new MoveArmToPosition(arm, 26.96)); */
+    // For the trap, EXPERIMENTAL!!
+    new JoystickButton(CoPilotController, copilotController.brakeButton)
+        .onTrue(
+            new StartEndCommand(
+                    () -> {
+                      shooter.spinIntakeToPositiveRPM(5000);
+                      shooter.spinShootNegativeToRPM(2000);
+                    },
+                    () -> {
+                      shooter.stopIntakeMotor();
+                      shooter.stopShootMotor();
+                    })
+                .withTimeout(1));
 
     /*
      * Simply runs intake routine which runs upon when the pickUpButton is clicked.
@@ -627,5 +638,10 @@ public class RobotContainer {
 
   public void zeroGyroWithAlliance() {
     drivebase.zeroGyroWithAlliance();
+  }
+
+  public void stopShootAndIntake() {
+    shooter.stopShootMotor();
+    shooter.stopIntakeMotor();
   }
 }

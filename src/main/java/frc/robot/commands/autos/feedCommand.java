@@ -15,7 +15,8 @@ public class feedCommand extends Command {
 
   long commandDuration = 500;
 
-  public feedCommand(ShooterSubsystem shooter){
+  public feedCommand(ShooterSubsystem shooter) {
+    this.shooter = shooter;
   }
 
   @Override
@@ -31,7 +32,7 @@ public class feedCommand extends Command {
 
     if (passedMillis < commandDuration) {
       shooter.spinIntakeToNegativeRPM(5000);
-      shooter.spinShootToRPM(1000);
+      shooter.spinShootToRPM(5000);
     }
   }
 

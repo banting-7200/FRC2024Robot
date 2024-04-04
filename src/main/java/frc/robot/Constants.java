@@ -125,7 +125,7 @@ public final class Constants {
         24; // Robot hard min 25 ticks, min must be further tuned later
     public static final double armGearRatio = 400;
 
-    public static final double tuckArmAngle = 24;
+    public static final double tuckArmAngle = 24.505;
     public static final double intakeArmAngle = 20.8;
     public static final double ampArmAngle = 31.3;
     public static final double liftArmAngle = 30.3;

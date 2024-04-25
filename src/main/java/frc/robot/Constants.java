@@ -129,7 +129,7 @@ public final class Constants {
     public static final double intakeArmAngle = 20.8;
     public static final double ampArmAngle = 31.3;
     public static final double liftArmAngle = 30.3;
-    public static final double speakerArmAngle = 28.4;
+    public static final double speakerArmAngle = 28.27;
 
     public static final int kMeasuredPosHorizontal =
         21; // Default position measured when arm is horizontal from

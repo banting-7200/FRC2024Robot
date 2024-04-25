@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 9.0,
-        "y": -1.0
+        "x": 1.0,
+        "y": 1.6
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.267949192431123,
-        "y": 0.0
+        "x": 2.0,
+        "y": 1.6
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.7,
-        "y": 4.5
+        "x": 2.5,
+        "y": 0.5
       },
       "prevControl": {
-        "x": 0.7707106781186539,
-        "y": 4.429289321881345
+        "x": 2.5,
+        "y": 1.5
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "(R) Speaker"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,17 +33,17 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.4,
-    "maxAcceleration": 2.2,
-    "maxAngularVelocity": 360.0,
-    "maxAngularAcceleration": 160.0
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 720.0,
+    "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.0,
+    "rotation": 0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "Positions",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

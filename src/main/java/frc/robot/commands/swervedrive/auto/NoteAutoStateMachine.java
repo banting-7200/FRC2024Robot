@@ -3,6 +3,7 @@ package frc.robot.commands.swervedrive.auto;
 import frc.robot.Constants.Arm;
 import frc.robot.Constants.Shooter;
 import frc.robot.commands.arm.MoveArmToPosition;
+import frc.robot.commands.swervedrive.auto.intakeNote;
 import frc.robot.commands.shooter.shootCommand;
 import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
@@ -27,12 +28,14 @@ public class NoteAutoStateMachine {
   private shootCommand shootCommand;
   private MoveArmToPosition armToPosition;
   private SearchNote searchNote;
+  private intakeNote intakeNote;
 
   public NoteAutoStateMachine(SwerveSubsystem swerveSubsystem, PhotonCamera photonCamera, LimelightDevice limelightDevice, ShooterSubsystem shooter, ArmSubsystem arm) {
     driveToNote = new DriveToNote(swerveSubsystem, photonCamera, 0);
     aprilTagAlign = new AprilTagAlign(swerveSubsystem, limelightDevice, 0, 0, false);//Make the tag id which ever tag we decide goes on the new target
     shootCommand = new shootCommand(Shooter.speakerShootRPM, shooter, Shooter.speakerWaitTime, true);//The shoot rpm may need to be calibrated to our new target
     armToPosition = new MoveArmToPosition(arm, Arm.speakerArmAngle);
+    intakeNote = new intakeNote(swerveSubsystem, shooter);
     searchNote = new SearchNote(swerveSubsystem, photonCamera);
   }
 
@@ -48,8 +51,8 @@ public class NoteAutoStateMachine {
         break;
           
       case PickUp:
-        //Create a pick up command and put it here
-        break;
+        intakeNote.schedule();        
+      break;
 
       case TargetAlign:
         armToPosition.schedule();

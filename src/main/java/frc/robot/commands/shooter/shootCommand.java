@@ -58,6 +58,11 @@ public class shootCommand extends Command {
   }
 
   public shootCommand(
+      int rpm, ShooterSubsystem shooter, int waitTime, boolean isSpeakerShot) {
+    this(() -> rpm, shooter, () -> waitTime, () -> isSpeakerShot);
+  }
+
+  public shootCommand(
       IntSupplier rpm,
       ShooterSubsystem shooter,
       IntSupplier waitTime,

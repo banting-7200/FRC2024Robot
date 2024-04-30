@@ -17,11 +17,13 @@ public class DriveToNote extends Command {
   private double d_noteArea;
 
  /*  private long startedMillis;
-  private long currentMillis;
-
-  private Command s_command;
-
-  private Pose2d initialPose2d; */
+ private long currentMillis;
+ 
+ private Command s_command;
+ 
+ private Pose2d initialPose2d; */
+  
+ private NoteAutoStateMachine stateInstance;
 
   public DriveToNote(
       SwerveSubsystem swerveSubsystem,
@@ -41,6 +43,14 @@ public class DriveToNote extends Command {
     rotationController.setTolerance(2, 4);
 
     addRequirements(swerveSubsystem, photonCam);
+  }
+
+  public DriveToNote(SwerveSubsystem swerveSubsystem,
+      PhotonCamera photonCam,
+      double d_noteArea, NoteAutoStateMachine stateInstance) {
+    this(swerveSubsystem, photonCam, d_noteArea);
+    this.stateInstance = stateInstance;
+    
   }
 
   @Override
@@ -73,6 +83,9 @@ public class DriveToNote extends Command {
      * swerveSubsystem.setOdometry(initialPose2d);
      */
     swerveSubsystem.lock();
+    if(stateInstance != null){
+       stateInstance.MoveToState(NoteAutoStateMachine.States.PickUp);
+    }
     if (!interrupted) {
       System.out.println("Ended Note Drive Successfully");
     } else {

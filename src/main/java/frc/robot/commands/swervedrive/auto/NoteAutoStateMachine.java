@@ -1,5 +1,6 @@
 package frc.robot.commands.swervedrive.auto;
 
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.Arm;
 import frc.robot.Constants.Shooter;
 import frc.robot.commands.arm.MoveArmToPosition;
@@ -25,12 +26,15 @@ public class NoteAutoStateMachine {
   private AprilTagAlign aprilTagAlign;
   private shootCommand shootCommand;
   private MoveArmToPosition armToPosition;
+  private PrepForShoot prepForShoot;
 
-  public NoteAutoStateMachine(SwerveSubsystem swerveSubsystem, PhotonCamera photonCamera, LimelightDevice limelightDevice, ShooterSubsystem shooter, ArmSubsystem arm) {
-    driveToNote = new DriveToNote(swerveSubsystem, photonCamera, 0);
+   NoteAutoStateMachine(SwerveSubsystem swerveSubsystem, PhotonCamera photonCamera,
+      LimelightDevice limelightDevice, ShooterSubsystem shooter, ArmSubsystem arm) {
+    driveToNote = new DriveToNote(swerveSubsystem, photonCamera, 0, this);
     aprilTagAlign = new AprilTagAlign(swerveSubsystem, limelightDevice, 0, 0, false);//Make the tag id which ever tag we decide goes on the new target
     shootCommand = new shootCommand(Shooter.speakerShootRPM, shooter, Shooter.speakerWaitTime, true);//The shoot rpm may need to be calibrated to our new target
     armToPosition = new MoveArmToPosition(arm, Arm.speakerArmAngle);
+
   }
 
   //Method to switch between the diffrent states of the auto
@@ -49,8 +53,7 @@ public class NoteAutoStateMachine {
         break;
 
       case TargetAlign:
-        armToPosition.schedule();
-        aprilTagAlign.schedule();
+      
         break;
 
       case Shoot:

@@ -14,7 +14,7 @@ public class PhotonCamera extends SubsystemBase {
     table =
         NetworkTableInstance.getDefault()
             .getTable("photonvision")
-            .getSubTable("Microsoft_LifeCam_HD-3000"); // gets the network table with key
+            .getSubTable("Arducam USB Camera"); // gets the network table with key
   }
 
   public static synchronized PhotonCamera getInstance() {

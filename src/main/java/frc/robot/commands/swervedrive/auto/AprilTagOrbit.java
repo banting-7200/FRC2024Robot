@@ -43,7 +43,6 @@ public class AprilTagOrbit extends Command {
   @Override
   public void initialize() {
     System.out.println("Started April Tag Orbit");
-    limelightSubsystem.setLight(true);
   }
 
   @Override
@@ -68,7 +67,6 @@ public class AprilTagOrbit extends Command {
   @Override
   public void end(boolean interrupted) {
     // swerveSubsystem.lock();
-    limelightSubsystem.setLight(false);
     if (!interrupted) {
       System.out.println("Ended Tag Orbit Successfully");
     } else {

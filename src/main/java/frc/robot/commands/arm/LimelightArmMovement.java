@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Arm;
 import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
-import frc.robot.subsystems.Vision.LimelightDevice;
+import frc.robot.subsystems.Vision.AprilTagSubsystem;
 import java.time.Clock;
 import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
@@ -12,7 +12,7 @@ import java.util.function.IntSupplier;
 public class LimelightArmMovement extends Command {
 
   private ArmSubsystem arm;
-  private LimelightDevice limelight;
+  private AprilTagSubsystem limelight;
   private ShooterSubsystem shooter;
 
   private BooleanSupplier limelightButton;
@@ -30,7 +30,7 @@ public class LimelightArmMovement extends Command {
 
   public LimelightArmMovement(
       ArmSubsystem arm,
-      LimelightDevice limelight,
+      AprilTagSubsystem limelight,
       ShooterSubsystem shooter,
       IntSupplier rpm,
       BooleanSupplier limelightButton) {

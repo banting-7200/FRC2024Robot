@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Constants.Lights;
-import frc.robot.subsystems.Vision.LimelightDevice;
+import frc.robot.subsystems.Vision.AprilTagSubsystem;
 
 public class LightSubsystem {
 
@@ -19,7 +19,7 @@ public class LightSubsystem {
   private ShuffleboardSubsystem shuffle =
       ShuffleboardSubsystem.getInstance(); // Gets shuffleboard instance
 
-  private LimelightDevice limelight = LimelightDevice.getInstance(); // Gets limelight instance
+  private AprilTagSubsystem limelight = AprilTagSubsystem.getInstance(); // Gets limelight instance
 
   public enum LightStates {
     ReadyForPickup, // in intake position and intake on

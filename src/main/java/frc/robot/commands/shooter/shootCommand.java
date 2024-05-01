@@ -61,7 +61,11 @@ public class shootCommand extends Command {
   }
 
   public shootCommand(
-      int rpm, ShooterSubsystem shooter, int waitTime, boolean isSpeakerShot, NoteAutoStateMachine stateInstance) {
+      int rpm,
+      ShooterSubsystem shooter,
+      int waitTime,
+      boolean isSpeakerShot,
+      NoteAutoStateMachine stateInstance) {
     this(() -> rpm, shooter, () -> waitTime, () -> isSpeakerShot);
     this.stateInstance = stateInstance;
   }
@@ -142,12 +146,11 @@ public class shootCommand extends Command {
     shooter.stopShootMotor();
     shooter.stopIntakeMotor();
     System.out.println("Shooting Done");
-    if (!shooter.shooterHasNote())
-      lights.SetLightState(LightStates.ReadyForPickup);
-    if(stateInstance != null){
+    if (!shooter.shooterHasNote()) lights.SetLightState(LightStates.ReadyForPickup);
+    if (stateInstance != null) {
       stateInstance.MoveToState(NoteAutoStateMachine.States.Search);
     }
-    
+
     // System.out.println("Has Note state is currently: " +
     // shooter.shooterHasNote());
   }

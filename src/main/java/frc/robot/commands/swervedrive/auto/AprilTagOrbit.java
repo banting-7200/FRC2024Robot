@@ -3,7 +3,7 @@ package frc.robot.commands.swervedrive.auto;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Vision.LimelightDevice;
+import frc.robot.subsystems.Vision.AprilTagSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 public class AprilTagOrbit extends Command {
 
   private final SwerveSubsystem swerveSubsystem;
-  private final LimelightDevice limelightSubsystem;
+  private final AprilTagSubsystem limelightSubsystem;
 
   private final PIDController rotationController;
 
@@ -22,7 +22,7 @@ public class AprilTagOrbit extends Command {
 
   public AprilTagOrbit(
       SwerveSubsystem swerveSubsystem,
-      LimelightDevice limelightSubsystem,
+      AprilTagSubsystem limelightSubsystem,
       IntSupplier tagToAlign,
       Supplier<double[]> leftStick,
       Supplier<double[]> rightStick) {

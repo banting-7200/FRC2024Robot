@@ -7,7 +7,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.subsystems.Vision.PhotonCamera;
+import frc.robot.subsystems.Vision.ObjectTrackingSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 public class NoteObjectAlign extends Command {
 
   private SwerveSubsystem swerveSubsystem = null;
-  private final PhotonCamera photonCam;
+  private final ObjectTrackingSubsystem photonCam;
 
   private final PIDController positionController;
   private final PIDController rotationController;
@@ -39,7 +39,7 @@ public class NoteObjectAlign extends Command {
 
   public NoteObjectAlign(
       SwerveSubsystem swerveSubsystem,
-      PhotonCamera photonCam,
+      ObjectTrackingSubsystem photonCam,
       Supplier<double[]> leftJoystick,
       Supplier<double[]> rightJoystick,
       BooleanSupplier isRedAlliance) {

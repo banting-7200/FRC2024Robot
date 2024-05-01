@@ -8,25 +8,26 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AprilTagID;
 import frc.robot.Constants.Arm;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
+import org.photonvision.PhotonCamera;
 
-public class LimelightDevice extends SubsystemBase {
+public class AprilTagSubsystem extends SubsystemBase {
   private NetworkTable mainTable;
   public int mode;
-  private static LimelightDevice instance = null;
+  private static AprilTagSubsystem instance = null;
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
   public int speakerMiddleTag;
   public int speakerSideTag;
   public int ampTag;
 
-  public LimelightDevice() {
-    mainTable = NetworkTableInstance.getDefault().getTable("photonvision").getSubTable("Arducam OV9281 USB Camera"); // gets the network table with key
+  private PhotonCamera cam;
 
-    mode = 0;
+  public AprilTagSubsystem() {
+   cam = new PhotonCamera("Arducam OV9281 USB Camera"); // gets the network table with key
   }
 
-  public static synchronized LimelightDevice getInstance() {
+  public static synchronized AprilTagSubsystem getInstance() {
     if (instance == null) {
-      instance = new LimelightDevice();
+      instance = new AprilTagSubsystem();
     }
     return instance;
   }
@@ -49,9 +50,9 @@ public class LimelightDevice extends SubsystemBase {
     shuffle.setLayout(null);
   }
 
-  public void shuffleUpdate() {
+  public void shuffleUpdate() {//Update this it is danger
     double ttarget = mainTable.getEntry("hasTarget").getDouble(0);
-    double tid = mainTable.getEntry("tid"/* FIND THE KEY NAME */).getDouble(-1);
+    double tid = mainTable.getEntry("tid" /* FIND THE KEY NAME */).getDouble(-1);
     double tx = mainTable.getEntry("targetYaw").getDouble(0);
     double ty = mainTable.getEntry("targetPitch").getDouble(0);
     double ta = mainTable.getEntry("targetArea").getDouble(0);
@@ -67,64 +68,44 @@ public class LimelightDevice extends SubsystemBase {
 
   /*
   OLD CODE USED FOR LIMELIGHT
-  
+
   public void setLight(boolean on) { // toggles lights (true for on, false for off)
     mainTable.getEntry("ledMode").setNumber(on ? 3 : 1);
     shuffle.setBoolean("LEDs On", on);
   }
-  
-  
+
+
   public boolean getLight() {
     double light;
     light = (double) mainTable.getEntry("lightMode").getNumber(3);
     return light == 1 ? false : true;
   }
-  
+
   public void setMode(int selection) { // sets pipeline
     mainTable.getEntry("pipeline").setNumber(selection);
     shuffle.setNumber("Pipeline", selection);
   }
   */
   public boolean tagDetected() { // returns true if tag is detected
-    double ttarget = 0;
-    try {
-      ttarget = mainTable.getEntry("hasTarget").getDouble(0);
-    } catch (NullPointerException e) {
-      System.out.println("ttarget ERROR, EXCEPTION: " + e);
-      ttarget = 0;
-    }
-    boolean tdetected = ttarget == 0 ? false : true;
+    boolean tdetected = cam.getLatestResult().hasTargets();
     shuffle.setBoolean("Tag Detected", tdetected);
     return tdetected;
   }
 
   public int getTagID() { // returns id of apriltag or -1 if no tag is detected.
-    int tid = 0;
-    try {
-      tid = (int) mainTable.getEntry("tid" /* FIND THE KEY NAME */).getDouble(-1);
-    } catch (NullPointerException e) {
-      System.out.println("tid ERROR, EXCEPTION: " + e);
-      tid = -1;
-    }
+    int tid = cam.getLatestResult().getBestTarget().getFiducialId();
     shuffle.setNumber("Tag ID", tid);
     return tid;
   }
 
   public double getTagArea() { // return tag area
-    double ta = 0;
-    try {
-      ta = mainTable.getEntry("targetArea").getDouble(0);
-
-    } catch (NullPointerException e) {
-      System.out.println("Tag Area ERROR, EXCEPTION: " + e);
-      ta = 0;
-    }
+    double ta = cam.getLatestResult().getBestTarget().getArea();
     shuffle.setNumber("Tag Area", ta);
     return ta;
   }
 
   public double getTagX() { // return tag x value (horizontal across camera screen)
-    double tx = 0;
+    double tx = cam.getLatestResult().getBestTarget().getPitch();
     try {
       tx = mainTable.getEntry("targetYaw").getDouble(0);
     } catch (NullPointerException e) {
@@ -136,14 +117,7 @@ public class LimelightDevice extends SubsystemBase {
   }
 
   public double getTagY() { // return tag y value (vertical across camera screen)
-    double ty = 0;
-    try {
-      ty = mainTable.getEntry("targetPitch").getDouble(0);
-    } catch (NullPointerException e) {
-      System.out.println("ty ERROR, EXCEPTION: " + e);
-      ty = 0;
-    }
-
+    double ty = cam.getLatestResult().getBestTarget().getYaw();
     shuffle.setNumber("Tag Y", ty);
     return ty;
   }
@@ -158,8 +132,9 @@ public class LimelightDevice extends SubsystemBase {
     double tagDist = getTagArea();
     double goalAngle;
     goalAngle = maxDist - tagDist; // how far back the bot is from subwoofer as a positive number
-    goalAngle *= ((maxAngle - minAngle)
-        / (maxDist - minDist)); // converts from area to angle and makes proportionate;
+    goalAngle *=
+        ((maxAngle - minAngle)
+            / (maxDist - minDist)); // converts from area to angle and makes proportionate;
     goalAngle = maxAngle - goalAngle; // adds difference to minAngle
     shuffle.setNumber("Arm Limelight Calc", goalAngle);
     return tagDist != 0 && getTagID() == getSpeakerMiddleTag() ? goalAngle : Arm.speakerArmAngle;

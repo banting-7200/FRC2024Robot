@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.maxCommandWaitTime;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
-import frc.robot.subsystems.Vision.LimelightDevice;
+import frc.robot.subsystems.Vision.AprilTagSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.time.Clock;
 import java.util.function.IntSupplier;
@@ -13,7 +13,7 @@ import java.util.function.IntSupplier;
 public class AprilTagAlign extends Command {
 
   private final SwerveSubsystem swerveSubsystem;
-  private final LimelightDevice limelightSubsystem;
+  private final AprilTagSubsystem limelightSubsystem;
 
   private ShuffleboardSubsystem shuffle;
 
@@ -33,7 +33,7 @@ public class AprilTagAlign extends Command {
 
   public AprilTagAlign(
       SwerveSubsystem swerveSubsystem,
-      LimelightDevice limelightSubsystem,
+      AprilTagSubsystem limelightSubsystem,
       double targetArea,
       IntSupplier tagToAlign,
       boolean onlyRotate) {
@@ -56,7 +56,7 @@ public class AprilTagAlign extends Command {
 
   public AprilTagAlign(
       SwerveSubsystem swerveSubsystem,
-      LimelightDevice limelightSubsystem,
+      AprilTagSubsystem limelightSubsystem,
       double targetArea,
       int tagToAlign,
       boolean onlyRotate) {

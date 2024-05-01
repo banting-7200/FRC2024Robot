@@ -50,8 +50,8 @@ import frc.robot.subsystems.Feedback.LightSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
 import frc.robot.subsystems.Feedback.NetworkTables;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
-import frc.robot.subsystems.Vision.LimelightDevice;
-import frc.robot.subsystems.Vision.PhotonCamera;
+import frc.robot.subsystems.Vision.AprilTagSubsystem;
+import frc.robot.subsystems.Vision.ObjectTrackingSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.io.File;
 import java.util.function.BooleanSupplier;
@@ -85,8 +85,8 @@ public class RobotContainer {
   // CommandJoystick(3);//(OperatorConstants.DRIVER_CONTROLLER_PORT);
   private ArmSubsystem arm; // Instance of Arm Subsystem
   private ShooterSubsystem shooter; // Instance of Shooter Subsystem
-  private LimelightDevice limelight =
-      LimelightDevice.getInstance(); // Getting instance of Limelight Subsystem
+  private AprilTagSubsystem limelight =
+      AprilTagSubsystem.getInstance(); // Getting instance of Limelight Subsystem
   private LightSubsystem lights =
       LightSubsystem.getInstance(); // Getting instance of Light Subsystem
   private static ShuffleboardSubsystem shuffle =
@@ -129,7 +129,7 @@ public class RobotContainer {
 
   public BooleanSupplier isSpeakerShot = () -> speakerShot;
 
-  PhotonCamera photonCam = PhotonCamera.getInstance();
+  ObjectTrackingSubsystem photonCam = ObjectTrackingSubsystem.getInstance();
   public DoubleSupplier shuffleAngle;
 
   public BooleanSupplier driverRightTrigger = () -> driverXbox.getRightTriggerAxis() > 0.5;
@@ -142,7 +142,7 @@ public class RobotContainer {
     shuffle.setNumber("Arm Goal Position", 30);
     shuffleAngle = () -> shuffle.getNumber("Arm Goal Position");
 
-    //Create a Note Auto State Machine
+    // Create a Note Auto State Machine
     stateMachine = new NoteAutoStateMachine(drivebase, photonCam, limelight, shooter, arm);
 
     configureBindings();

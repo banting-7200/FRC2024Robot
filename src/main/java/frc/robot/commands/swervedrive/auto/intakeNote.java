@@ -1,11 +1,11 @@
 package frc.robot.commands.swervedrive.auto;
-import java.time.Clock;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Shooter;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import java.time.Clock;
 
 public class intakeNote extends Command {
 
@@ -16,8 +16,10 @@ public class intakeNote extends Command {
   private long passedTime;
   private NoteAutoStateMachine stateInstance;
 
-
-  public intakeNote(SwerveSubsystem swerveSubsystem, ShooterSubsystem shooter, NoteAutoStateMachine stateInstance) {
+  public intakeNote(
+      SwerveSubsystem swerveSubsystem,
+      ShooterSubsystem shooter,
+      NoteAutoStateMachine stateInstance) {
     this.swerveSubsystem = swerveSubsystem;
     this.shooter = shooter;
     this.stateInstance = stateInstance;
@@ -28,7 +30,6 @@ public class intakeNote extends Command {
   public void initialize() {
     startTime = currentTime.millis();
     passedTime = currentTime.millis();
-
   }
 
   @Override

@@ -34,6 +34,7 @@ public class DriveToNote extends Command {
 
     this.d_noteArea = d_noteArea;
 
+    //Initialize PID controlers with P, I, and D values as well as a setpoint
     positionController = new PIDController(1, 0, 0);
     positionController.setSetpoint(d_noteArea);
 
@@ -61,10 +62,13 @@ public class DriveToNote extends Command {
     System.out.println("Current yaw: " + photonCam.getNoteYaw());
     double fowardAdjust = 0;
     double rotationAdjust = 0;
+
     if (photonCam.hasTarget()) {
       c_noteArea = photonCam.getNoteArea();
-      fowardAdjust = positionController.calculate(c_noteArea, d_noteArea);
-      rotationAdjust = rotationController.calculate(photonCam.getNoteYaw(), 0);
+      fowardAdjust = positionController.calculate(c_noteArea, d_noteArea);//Calculate the adjustments needed to be made to drive up to the note
+      rotationAdjust = rotationController.calculate(photonCam.getNoteYaw(), 0);//Calculate the adjustments needed to be made to rotate towards the note
+
+      //Drive and rotate the bot proportionally to the error
       swerveSubsystem.drive(
           new Translation2d(fowardAdjust, 0),
           rotationAdjust,
@@ -73,17 +77,14 @@ public class DriveToNote extends Command {
   }
 
   @Override
-  public boolean isFinished() {
+  public boolean isFinished() {//Only finish when both PID controllers have reached there setpoint
     return rotationController.atSetpoint() && positionController.atSetpoint();
   }
 
   @Override
   public void end(boolean interrupted) {
-    /*
-     * swerveSubsystem.setOdometry(initialPose2d);
-     */
-    swerveSubsystem.lock();
-    if(stateInstance != null){
+    swerveSubsystem.lock();//Lock the swerve base
+    if(stateInstance != null){//Advance to the next state in the state machine
        stateInstance.MoveToState(NoteAutoStateMachine.States.PickUp);
     }
     if (!interrupted) {

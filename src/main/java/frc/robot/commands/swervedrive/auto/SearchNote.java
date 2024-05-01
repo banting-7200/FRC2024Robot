@@ -6,15 +6,19 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 public class SearchNote extends Command {
 
 private SwerveSubsystem swerveSubsystem;
-  private final PhotonCamera photonCamera;
+private final PhotonCamera photonCamera;
+private NoteAutoStateMachine stateInstance;
   
   public SearchNote(
       SwerveSubsystem swerveSubsystem,
-      PhotonCamera photonCamera
+      PhotonCamera photonCamera,
+      NoteAutoStateMachine stateInstance
       ) {
 
     this.swerveSubsystem = swerveSubsystem;
     this.photonCamera = photonCamera;
+
+    this.stateInstance = stateInstance;
       
     this.swerveSubsystem = swerveSubsystem;
     addRequirements(swerveSubsystem, photonCamera);
@@ -41,6 +45,7 @@ public void initialize() {
   @Override
   public void end(boolean interrupted) {
     swerveSubsystem.drive(null, 0, false);
+    stateInstance.MoveToState(NoteAutoStateMachine.States.Drive);
     if (!interrupted) {
       System.out.println("Successfully ended Search Note command");
     } else {

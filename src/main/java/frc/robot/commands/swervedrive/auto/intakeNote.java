@@ -14,11 +14,13 @@ public class intakeNote extends Command {
   private Clock currentTime = Clock.systemDefaultZone();
   private long startTime;
   private long passedTime;
+  private NoteAutoStateMachine stateInstance;
 
 
-  public intakeNote(SwerveSubsystem swerveSubsystem, ShooterSubsystem shooter) {
+  public intakeNote(SwerveSubsystem swerveSubsystem, ShooterSubsystem shooter, NoteAutoStateMachine stateInstance) {
     this.swerveSubsystem = swerveSubsystem;
     this.shooter = shooter;
+    this.stateInstance = stateInstance;
     addRequirements(swerveSubsystem, shooter);
   }
 
@@ -44,5 +46,6 @@ public class intakeNote extends Command {
   @Override
   public void end(boolean interrupted) {
     shooter.stopIntakeMotor();
+    stateInstance.MoveToState(NoteAutoStateMachine.States.TargetAlign);
   }
 }

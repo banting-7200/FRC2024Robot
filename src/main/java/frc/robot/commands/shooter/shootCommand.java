@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.copilotController;
 import frc.robot.Constants.maxCommandWaitTime;
+import frc.robot.commands.swervedrive.auto.NoteAutoStateMachine;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
@@ -38,6 +39,8 @@ public class shootCommand extends Command {
 
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
 
+  private NoteAutoStateMachine stateInstance;
+
   public shootCommand(
       IntSupplier rpm,
       ShooterSubsystem shooter,
@@ -58,8 +61,9 @@ public class shootCommand extends Command {
   }
 
   public shootCommand(
-      int rpm, ShooterSubsystem shooter, int waitTime, boolean isSpeakerShot) {
+      int rpm, ShooterSubsystem shooter, int waitTime, boolean isSpeakerShot, NoteAutoStateMachine stateInstance) {
     this(() -> rpm, shooter, () -> waitTime, () -> isSpeakerShot);
+    this.stateInstance = stateInstance;
   }
 
   public shootCommand(
@@ -138,7 +142,12 @@ public class shootCommand extends Command {
     shooter.stopShootMotor();
     shooter.stopIntakeMotor();
     System.out.println("Shooting Done");
-    if (!shooter.shooterHasNote()) lights.SetLightState(LightStates.ReadyForPickup);
+    if (!shooter.shooterHasNote())
+      lights.SetLightState(LightStates.ReadyForPickup);
+    if(stateInstance != null){
+      stateInstance.MoveToState(NoteAutoStateMachine.States.Search);
+    }
+    
     // System.out.println("Has Note state is currently: " +
     // shooter.shooterHasNote());
   }

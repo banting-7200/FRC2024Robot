@@ -41,6 +41,7 @@ import frc.robot.commands.shooter.intakeCommand;
 import frc.robot.commands.shooter.shootCommand;
 import frc.robot.commands.swervedrive.auto.AprilTagAlign;
 import frc.robot.commands.swervedrive.auto.AprilTagOrbit;
+import frc.robot.commands.swervedrive.auto.NoteAutoStateMachine;
 import frc.robot.commands.swervedrive.auto.NoteObjectAlign;
 import frc.robot.commands.swervedrive.drivebase.AbsoluteDriveAdv;
 import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
@@ -90,8 +91,8 @@ public class RobotContainer {
       LightSubsystem.getInstance(); // Getting instance of Light Subsystem
   private static ShuffleboardSubsystem shuffle =
       ShuffleboardSubsystem.getInstance(); // Getting instance of
-  // Shooter
-  // Subsystem
+
+  private NoteAutoStateMachine stateMachine;
 
   public BooleanSupplier isRedAliance =
       () ->
@@ -140,6 +141,10 @@ public class RobotContainer {
     shooter = new ShooterSubsystem(arm); // Creating a new instance of Shooter Subsytem
     shuffle.setNumber("Arm Goal Position", 30);
     shuffleAngle = () -> shuffle.getNumber("Arm Goal Position");
+
+    //Create a Note Auto State Machine
+    stateMachine = new NoteAutoStateMachine(drivebase, photonCam, limelight, shooter, arm);
+
     configureBindings();
 
     AbsoluteDriveAdv closedAbsoluteDriveAdv =
@@ -583,6 +588,14 @@ public class RobotContainer {
     // }
     // An example command will be run in autonomous
     return drivebase.getAutonomousCommand(shuffle.getAuto());
+  }
+
+  public void StartStateMachine() {
+    stateMachine.MoveToState(NoteAutoStateMachine.States.Search);
+  }
+
+  public void EndStateMachine() {
+    stateMachine.Cancel();
   }
 
   public void setDriveMode() {

@@ -111,12 +111,14 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_robotContainer.setMotorBrake(true);
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     // m_robotContainer.zeroGyroWithAlliance();
 
-    if (m_autonomousCommand != null) {
+    m_robotContainer.StartStateMachine();
+
+    /* if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
-    }
+    } */
   }
 
   /** This function is called periodically during autonomous. */
@@ -131,11 +133,14 @@ public class Robot extends TimedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
 
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+   /*  m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+   
+   if (m_autonomousCommand != null) {
+    m_autonomousCommand.cancel();
+   } */
+    
+    m_robotContainer.EndStateMachine();
 
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
     m_robotContainer.setDriveMode();
     m_robotContainer.setMotorBrake(true);
     m_robotContainer.zeroGyroWithAlliance();

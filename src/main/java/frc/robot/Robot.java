@@ -94,8 +94,6 @@ public class Robot extends TimedRobot {
     disabledTimer.start();
     m_robotContainer.stopArm(); // ensure the arm is stopped
     m_robotContainer.resetArmManualSpeed(); // reset the arm speed to it's regular state
-    limelight.setLight(
-        false); // Turn off the limelight lights so the robot can be more easily approached on
     // disable.
     m_robotContainer.driverXbox.setRumble(RumbleType.kBothRumble, 0);
   }
@@ -107,9 +105,6 @@ public class Robot extends TimedRobot {
       disabledTimer.stop();
     }
     m_robotContainer.refreshTagIDs();
-    if (limelight.getLight()) {
-      limelight.setLight(false);
-    }
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
@@ -122,7 +117,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-    limelight.setLight(true);
   }
 
   /** This function is called periodically during autonomous. */

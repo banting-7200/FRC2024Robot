@@ -3,7 +3,6 @@ package frc.robot.subsystems.Vision;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AprilTagID;
 import frc.robot.Constants.Arm;
@@ -50,14 +49,12 @@ public class AprilTagSubsystem extends SubsystemBase {
     shuffle.setLayout(null);
   }
 
-  public void shuffleUpdate() {//Update this it is danger
-    double ttarget = mainTable.getEntry("hasTarget").getDouble(0);
-    double tid = mainTable.getEntry("tid" /* FIND THE KEY NAME */).getDouble(-1);
-    double tx = mainTable.getEntry("targetYaw").getDouble(0);
-    double ty = mainTable.getEntry("targetPitch").getDouble(0);
-    double ta = mainTable.getEntry("targetArea").getDouble(0);
-
-    boolean tdetected = ttarget == 0 ? false : true;
+  public void shuffleUpdate() {
+    boolean tdetected = tagDetected();
+    double tid = getTagID();
+    double tx = getTagX();
+    double ty = getTagY();
+    double ta = getTagArea();
 
     shuffle.setBoolean("Tag Detected", tdetected);
     shuffle.setNumber("Tag ID", tid);

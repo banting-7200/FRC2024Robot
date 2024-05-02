@@ -1,15 +1,10 @@
 package frc.robot.subsystems.Vision;
 
 import org.photonvision.PhotonCamera;
-
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ObjectTrackingSubsystem extends SubsystemBase {
 
-  private static NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
-  private static NetworkTable table;
   private static ObjectTrackingSubsystem instance = null;
   private PhotonCamera cam;
 

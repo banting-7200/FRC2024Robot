@@ -21,7 +21,7 @@ public class AprilTagSubsystem extends SubsystemBase {
   private PhotonCamera cam;
 
   public AprilTagSubsystem() {
-   cam = new PhotonCamera("Arducam OV9281 USB Camera"); // gets the network table with key
+    cam = new PhotonCamera("Arducam_OV9281_USB_Camera"); // gets the network table with key
   }
 
   public static synchronized AprilTagSubsystem getInstance() {

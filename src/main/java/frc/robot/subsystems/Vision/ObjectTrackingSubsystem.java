@@ -1,7 +1,7 @@
 package frc.robot.subsystems.Vision;
 
-import org.photonvision.PhotonCamera;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.photonvision.PhotonCamera;
 
 public class ObjectTrackingSubsystem extends SubsystemBase {
 
@@ -9,7 +9,7 @@ public class ObjectTrackingSubsystem extends SubsystemBase {
   private PhotonCamera cam;
 
   public ObjectTrackingSubsystem() {
-   cam = new PhotonCamera("Arducam USB Camera"); // gets the network table with key
+    cam = new PhotonCamera("Arducam_USB_Camera"); // gets the network table with key
   }
 
   public static synchronized ObjectTrackingSubsystem getInstance() {

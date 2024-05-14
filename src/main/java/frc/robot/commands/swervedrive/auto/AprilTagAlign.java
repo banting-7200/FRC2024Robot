@@ -90,7 +90,7 @@ public class AprilTagAlign extends Command {
       rotationAdjust = rotationController.calculate(limelightSubsystem.getTagX(), 0);
       swerveSubsystem.drive(new Translation2d(fowardAdjust, 0), rotationAdjust, false);
     } else {
-      swerveSubsystem.drive(new Translation2d(0, 0), 0, false);
+      swerveSubsystem.drive(new Translation2d(0, 0), 1, false);
     }
     shuffle.setTab("Debugging");
     shuffle.setNumber("Tag Area", tagArea);

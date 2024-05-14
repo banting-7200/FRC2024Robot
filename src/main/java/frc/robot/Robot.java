@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Feedback.LightSubsystem;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
@@ -28,7 +27,7 @@ public class Robot extends TimedRobot {
 
   private static Robot instance; // Creates the Robot.java instance
   private RobotContainer m_robotContainer; // Creates the Robot container instance
-  private Command m_autonomousCommand; // The command that stores our auto
+  // private Command m_autonomousCommand; // The command that stores our auto
   private AprilTagSubsystem limelight = AprilTagSubsystem.getInstance();
 
   private Timer disabledTimer; // Normal Robot container instance

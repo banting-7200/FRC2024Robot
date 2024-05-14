@@ -1,5 +1,6 @@
 package frc.robot.commands.swervedrive.auto;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Vision.ObjectTrackingSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -32,7 +33,7 @@ public class SearchNote extends Command {
   @Override
   public void execute() {
     System.out.println("Looking for note...");
-    swerveSubsystem.drive(null, 2, false);
+    swerveSubsystem.drive(new Translation2d(0, 0), 2, false);
   }
 
   @Override
@@ -42,7 +43,7 @@ public class SearchNote extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    swerveSubsystem.drive(null, 0, false);
+    swerveSubsystem.drive(new Translation2d(0, 0), 0, false);
     stateInstance.MoveToState(NoteAutoStateMachine.States.Drive);
     if (!interrupted) {
       System.out.println("Successfully ended Search Note command");

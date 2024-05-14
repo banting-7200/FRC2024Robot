@@ -1,9 +1,11 @@
 package frc.robot.commands.swervedrive.auto;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.Arm;
 import frc.robot.Constants.Shooter;
 import frc.robot.commands.arm.MoveArmToPosition;
+import frc.robot.commands.arm.UntuckArm;
 import frc.robot.commands.shooter.shootCommand;
 import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
 import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
@@ -26,13 +28,15 @@ public class NoteAutoStateMachine {
   private AprilTagAlign aprilTagAlign;
   private shootCommand shootCommand;
   private MoveArmToPosition armToShootPosition;
-  private MoveArmToPosition armToIntakePosition;
+  private Command armToIntakePosition;
   private PrepForShoot prepForShoot;
   private SearchNote searchNote;
   private intakeNote intakeNote;
 
+  private ArmSubsystem arm;
+
   // A command variable to store the command being currently run
-  private Command currentCommand;
+  private SequentialCommandGroup currentCommand = new SequentialCommandGroup();
 
   public NoteAutoStateMachine(
       SwerveSubsystem swerveSubsystem,
@@ -40,11 +44,12 @@ public class NoteAutoStateMachine {
       AprilTagSubsystem limelightDevice,
       ShooterSubsystem shooter,
       ArmSubsystem arm) {
+    this.arm = arm;
     driveToNote =
         new DriveToNote(
             swerveSubsystem,
             photonCamera,
-            0,
+            28.50,
             this); // See waht the best note area is for our applications
 
     shootCommand =
@@ -59,13 +64,14 @@ public class NoteAutoStateMachine {
         new AprilTagAlign(
             swerveSubsystem,
             limelightDevice,
-            0,
-            0,
+            0.60,
+            16, // 6
             false); // Make the tag id which ever tag we decide goes on the new target
     armToShootPosition = new MoveArmToPosition(arm, Arm.speakerArmAngle);
     prepForShoot = new PrepForShoot(aprilTagAlign, armToShootPosition, this);
 
-    armToIntakePosition = new MoveArmToPosition(arm, Arm.intakeArmAngle);
+    armToIntakePosition =
+        new UntuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle));
 
     intakeNote = new intakeNote(swerveSubsystem, shooter, this);
     searchNote = new SearchNote(swerveSubsystem, photonCamera, this);
@@ -73,25 +79,32 @@ public class NoteAutoStateMachine {
 
   // Method to switch between the diffrent states of the auto
   public void MoveToState(States newState) {
+    Cancel();
+
     switch (newState) {
       case Search:
-        currentCommand = armToIntakePosition.andThen(searchNote);
+        if (!arm.isTucked()) {
+          currentCommand.addCommands(searchNote);
+        } else {
+          currentCommand = armToIntakePosition.andThen(searchNote);
+        }
         break;
 
       case Drive:
-        currentCommand = driveToNote;
+        currentCommand.addCommands(driveToNote);
         break;
 
       case PickUp:
-        currentCommand = intakeNote;
+        currentCommand.addCommands(intakeNote);
         break;
 
       case TargetAlign:
-        currentCommand = prepForShoot;
+        currentCommand.addCommands(prepForShoot);
         break;
 
       case Shoot:
-        currentCommand = shootCommand;
+        currentCommand.addCommands(shootCommand);
+        ;
         break;
     }
     currentCommand.schedule();

@@ -3,6 +3,7 @@ package frc.robot.commands.arm;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.Arm;
 import frc.robot.Constants.maxCommandWaitTime;
+import frc.robot.commands.swervedrive.auto.NoteAutoStateMachine;
 import frc.robot.subsystems.ArmAndHead.ArmSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
@@ -22,6 +23,8 @@ public class MoveArmToPosition extends Command {
   Clock timer = Clock.systemDefaultZone();
   long startTime;
 
+  private NoteAutoStateMachine stateInstance;
+
   public MoveArmToPosition(ArmSubsystem arm, DoubleSupplier angleSetpoint) {
     this.arm = arm;
     this.angleSetpoint = angleSetpoint;
@@ -31,6 +34,12 @@ public class MoveArmToPosition extends Command {
 
   public MoveArmToPosition(ArmSubsystem arm, double angleSetpoint) {
     this(arm, () -> angleSetpoint);
+  }
+
+  public MoveArmToPosition(
+      ArmSubsystem arm, double angleSetpoint, NoteAutoStateMachine stateInstance) {
+    this(arm, () -> angleSetpoint);
+    this.stateInstance = stateInstance;
   }
 
   @Override
@@ -56,6 +65,9 @@ public class MoveArmToPosition extends Command {
   @Override
   public void end(boolean interrupted) {
     arm.stopArm();
+    if (stateInstance != null) {
+      stateInstance.MoveToState(NoteAutoStateMachine.States.Search);
+    }
     System.out.println("Move to position command finished. interupted: " + interrupted);
   }
 }

@@ -591,7 +591,7 @@ public class RobotContainer {
   }
 
   public void StartStateMachine() {
-    stateMachine.MoveToState(NoteAutoStateMachine.States.Search);
+    stateMachine.MoveToState(NoteAutoStateMachine.States.MoveToIntake);
   }
 
   public void EndStateMachine() {

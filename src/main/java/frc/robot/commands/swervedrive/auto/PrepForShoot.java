@@ -1,17 +1,15 @@
 package frc.robot.commands.swervedrive.auto;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.arm.MoveArmToPosition;
 
 /*The class is a helper for the Note Auto State Machine to schedule two commands at once and advance the satte machine once both finish.*/
 public class PrepForShoot extends Command {
 
   AprilTagAlign tagAlign;
-  MoveArmToPosition moveArm;
+  Command moveArm;
   NoteAutoStateMachine stateInstance;
 
-  public PrepForShoot(
-      AprilTagAlign tagAlign, MoveArmToPosition moveArm, NoteAutoStateMachine stateInstance) {
+  public PrepForShoot(AprilTagAlign tagAlign, Command moveArm, NoteAutoStateMachine stateInstance) {
     this.tagAlign = tagAlign;
     this.moveArm = moveArm;
     this.stateInstance = stateInstance;

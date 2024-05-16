@@ -148,7 +148,7 @@ public class shootCommand extends Command {
     System.out.println("Shooting Done");
     if (!shooter.shooterHasNote()) lights.SetLightState(LightStates.ReadyForPickup);
     if (stateInstance != null) {
-      stateInstance.MoveToState(NoteAutoStateMachine.States.Search);
+      stateInstance.MoveToState(NoteAutoStateMachine.States.MoveToIntake);
     }
 
     // System.out.println("Has Note state is currently: " +

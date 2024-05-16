@@ -3,7 +3,6 @@ package frc.robot.commands.swervedrive.auto;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.maxCommandWaitTime;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Vision.AprilTagSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -31,6 +30,8 @@ public class AprilTagAlign extends Command {
 
   boolean onlyRotate;
 
+  private NoteAutoStateMachine stateInstance;
+
   public AprilTagAlign(
       SwerveSubsystem swerveSubsystem,
       AprilTagSubsystem limelightSubsystem,
@@ -45,10 +46,10 @@ public class AprilTagAlign extends Command {
 
     this.onlyRotate = onlyRotate;
 
-    positionController = new PIDController(1, 0, 0);
+    positionController = new PIDController(1.8, 0.0001, 0.01);
     positionController.setSetpoint(targetArea);
 
-    rotationController = new PIDController(0.035, 0.0001, 0);
+    rotationController = new PIDController(0.02, 0.00001, 0.01);
     rotationController.setSetpoint(0);
 
     addRequirements(swerveSubsystem, limelightSubsystem);
@@ -61,6 +62,17 @@ public class AprilTagAlign extends Command {
       int tagToAlign,
       boolean onlyRotate) {
     this(swerveSubsystem, limelightSubsystem, targetArea, () -> tagToAlign, onlyRotate);
+  }
+
+  public AprilTagAlign(
+      SwerveSubsystem swerveSubsystem,
+      AprilTagSubsystem limelightSubsystem,
+      double targetArea,
+      int tagToAlign,
+      boolean onlyRotate,
+      NoteAutoStateMachine stateInstance) {
+    this(swerveSubsystem, limelightSubsystem, targetArea, () -> tagToAlign, onlyRotate);
+    this.stateInstance = stateInstance;
   }
 
   @Override
@@ -88,7 +100,7 @@ public class AprilTagAlign extends Command {
       // testing.
       if (!onlyRotate) fowardAdjust = positionController.calculate(tagArea, targetArea);
       rotationAdjust = rotationController.calculate(limelightSubsystem.getTagX(), 0);
-      swerveSubsystem.drive(new Translation2d(fowardAdjust, 0), rotationAdjust, false);
+      swerveSubsystem.drive(new Translation2d(-fowardAdjust, 0), rotationAdjust, false);
     } else {
       swerveSubsystem.drive(new Translation2d(0, 0), 1, false);
     }
@@ -104,12 +116,15 @@ public class AprilTagAlign extends Command {
   @Override
   public boolean isFinished() {
     return (positionController.atSetpoint() && rotationController.atSetpoint())
-        || currentMillis - startedMillis > maxCommandWaitTime.aprilTagAlignWaitTime;
+    /* || currentMillis - startedMillis > maxCommandWaitTime.aprilTagAlignWaitTime */ ;
   }
 
   @Override
   public void end(boolean interrupted) {
     swerveSubsystem.lock();
+    if (stateInstance != null) {
+      stateInstance.MoveToState(NoteAutoStateMachine.States.Shoot);
+    }
     if (!interrupted) {
       System.out.println("Ended Tag Align successfully");
     } else {

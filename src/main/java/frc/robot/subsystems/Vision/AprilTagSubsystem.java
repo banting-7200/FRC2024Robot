@@ -8,6 +8,7 @@ import frc.robot.Constants.AprilTagID;
 import frc.robot.Constants.Arm;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class AprilTagSubsystem extends SubsystemBase {
   private NetworkTable mainTable;
@@ -90,33 +91,47 @@ public class AprilTagSubsystem extends SubsystemBase {
   }
 
   public int getTagID() { // returns id of apriltag or -1 if no tag is detected.
-    int tid = cam.getLatestResult().getBestTarget().getFiducialId();
-    shuffle.setNumber("Tag ID", tid);
-    return tid;
+    PhotonTrackedTarget bestTarget = cam.getLatestResult().getBestTarget();
+    if (bestTarget != null) {
+      int tid = bestTarget.getFiducialId();
+      shuffle.setNumber("Tag ID", tid);
+      return tid;
+    } else {
+      return -1;
+    }
   }
 
   public double getTagArea() { // return tag area
-    double ta = cam.getLatestResult().getBestTarget().getArea();
-    shuffle.setNumber("Tag Area", ta);
-    return ta;
+    PhotonTrackedTarget bestTarget = cam.getLatestResult().getBestTarget();
+    if (bestTarget != null) {
+      double ta = bestTarget.getArea();
+      shuffle.setNumber("Tag Area", ta);
+      return ta;
+    } else {
+      return 0.0;
+    }
   }
 
   public double getTagX() { // return tag x value (horizontal across camera screen)
-    double tx = cam.getLatestResult().getBestTarget().getPitch();
-    try {
-      tx = mainTable.getEntry("targetYaw").getDouble(0);
-    } catch (NullPointerException e) {
-      System.out.println("tx ERROR, EXCEPTION: " + e);
-      tx = 0;
+    PhotonTrackedTarget bestTarget = cam.getLatestResult().getBestTarget();
+    if (bestTarget != null) {
+      double tx = bestTarget.getYaw();
+      shuffle.setNumber("Tag X", tx);
+      return tx;
+    } else {
+      return 0;
     }
-    shuffle.setNumber("Tag X", tx);
-    return tx;
   }
 
   public double getTagY() { // return tag y value (vertical across camera screen)
-    double ty = cam.getLatestResult().getBestTarget().getYaw();
-    shuffle.setNumber("Tag Y", ty);
-    return ty;
+    PhotonTrackedTarget bestTarget = cam.getLatestResult().getBestTarget();
+    if (bestTarget != null) {
+      double ty = bestTarget.getPitch();
+      shuffle.setNumber("Tag Y", ty);
+      return ty;
+    } else {
+      return 0;
+    }
   }
 
   public double calculateArmShootAngle() {

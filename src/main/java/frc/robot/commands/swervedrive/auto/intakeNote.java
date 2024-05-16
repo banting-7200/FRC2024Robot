@@ -41,12 +41,12 @@ public class intakeNote extends Command {
 
   @Override
   public boolean isFinished() {
-    return passedTime > 3000;
+    return (passedTime > 3000) || shooter.shooterHasNote();
   }
 
   @Override
   public void end(boolean interrupted) {
     shooter.stopIntakeMotor();
-    stateInstance.MoveToState(NoteAutoStateMachine.States.TargetAlign);
+    stateInstance.MoveToState(NoteAutoStateMachine.States.Search);
   }
 }

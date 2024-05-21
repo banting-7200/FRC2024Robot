@@ -199,9 +199,11 @@ public final class Constants {
     public static final double TURN_CONSTANT = 6;
   }
 
-  public static final class Limelight {
+  public static final class AprilTags {
     public static final double speakerTargetArea = 1.15;
     public static final double ampTargetArea = 2;
+    public static final double maxDist = 0.41;
+    public static final double minDist = 0.60;
   }
 
   public static final class AprilTagID {

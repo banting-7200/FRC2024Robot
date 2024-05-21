@@ -3,6 +3,7 @@ package frc.robot.commands.swervedrive.auto;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.AprilTags;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Vision.AprilTagSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -46,7 +47,7 @@ public class AprilTagAlign extends Command {
 
     this.onlyRotate = onlyRotate;
 
-    positionController = new PIDController(1.8, 0.0001, 0.01);
+    positionController = new PIDController(1.8, 0.001, 0.01);
     positionController.setSetpoint(targetArea);
 
     rotationController = new PIDController(0.02, 0.00001, 0.01);
@@ -115,7 +116,7 @@ public class AprilTagAlign extends Command {
 
   @Override
   public boolean isFinished() {
-    return (positionController.atSetpoint() && rotationController.atSetpoint())
+    return (tagArea <= AprilTags.maxDist && tagArea >= AprilTags.minDist) && rotationController.atSetpoint()
     /* || currentMillis - startedMillis > maxCommandWaitTime.aprilTagAlignWaitTime */ ;
   }
 

@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.Arm;
-import frc.robot.Constants.Limelight;
+import frc.robot.Constants.AprilTags;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.Shooter;
 import frc.robot.Constants.copilotController;
@@ -241,13 +241,13 @@ public class RobotContainer {
         new AprilTagAlign(
             drivebase,
             limelight,
-            Limelight.speakerTargetArea,
+            AprilTags.speakerTargetArea,
             shootTagToAlign,
             true)); // fill in area and
     // tag id
     NamedCommands.registerCommand(
         "Amp Align",
-        new AprilTagAlign(drivebase, limelight, Limelight.ampTargetArea, ampTagToAlign, false));
+        new AprilTagAlign(drivebase, limelight, AprilTags.ampTargetArea, ampTagToAlign, false));
     NamedCommands.registerCommand(
         "Prep Amp",
         new UntuckArm(arm)

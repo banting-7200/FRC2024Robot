@@ -27,7 +27,7 @@ public class NoteAutoStateMachine {
   // Instances of the commands the autos impliment
   private DriveToNote driveToNote;
   private AprilTagAlign aprilTagAlign;
-  private shootCommand shootCommand;
+  private Command shootCommand;
   private Command armToShootPosition;
   private Command armToIntakePosition;
   private PrepForShoot prepForShoot;
@@ -48,7 +48,7 @@ public class NoteAutoStateMachine {
             swerveSubsystem,
             photonCamera,
             28.50,
-            this); // See waht the best note area is for our applications
+            this); // See what the best note area is for our applications
 
     shootCommand =
         new shootCommand(
@@ -62,7 +62,7 @@ public class NoteAutoStateMachine {
         new AprilTagAlign(
             swerveSubsystem,
             limelightDevice,
-            0.60,
+            0.50,
             16, // 6
             false,
             this); // Make the tag id which ever tag we decide goes on the new target

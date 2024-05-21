@@ -149,7 +149,7 @@ public class AprilTagSubsystem extends SubsystemBase {
             / (maxDist - minDist)); // converts from area to angle and makes proportionate;
     goalAngle = maxAngle - goalAngle; // adds difference to minAngle
     shuffle.setNumber("Arm Limelight Calc", goalAngle);
-    return tagDist != 0 && getTagID() == getSpeakerMiddleTag() ? goalAngle : Arm.speakerArmAngle;
+    return tagDist != 0 ? goalAngle : Arm.speakerArmAngle;
   }
 
   public Pose2d getFakeTagPose() { // input fake tag values for simulation

@@ -23,7 +23,6 @@ public class DriveToNote extends Command {
 
   private Clock currentTime = Clock.systemDefaultZone();
   private long startedMillis;
-  private long currentMillis;
 
   private NoteAutoStateMachine stateInstance;
 
@@ -92,7 +91,7 @@ public class DriveToNote extends Command {
   public boolean isFinished() { // Only finish when both PID controllers have reached there setpoint
     return (rotationController.atSetpoint() && positionController.atSetpoint())
         || !photonCam.hasTarget()
-        || currentMillis - startedMillis > 10000;
+        || currentTime.millis() - startedMillis > 10000;
   }
 
   @Override

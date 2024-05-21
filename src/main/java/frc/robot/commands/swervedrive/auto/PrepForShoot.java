@@ -12,7 +12,6 @@ public class PrepForShoot extends Command {
 
   private Clock currentTime = Clock.systemDefaultZone();
   private long startedMillis;
-  private long currentMillis;
 
   public PrepForShoot(Command prepShoot, NoteAutoStateMachine stateInstance) {
     // this.tagAlign = tagAlign;
@@ -29,7 +28,7 @@ public class PrepForShoot extends Command {
 
   @Override
   public boolean isFinished() { // End the helper command only if both commands have ended
-    return prepShoot.isFinished() || currentMillis - startedMillis > 10000;
+    return prepShoot.isFinished() || currentTime.millis() - startedMillis > 6000;
   }
 
   @Override

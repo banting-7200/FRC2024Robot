@@ -23,6 +23,8 @@ public class AprilTagAlign extends Command {
   private double tagArea;
   private double targetArea;
 
+  private double tagYaw;
+
   private IntSupplier tagToAlign;
 
   private Clock currentTime = Clock.systemDefaultZone();
@@ -47,10 +49,10 @@ public class AprilTagAlign extends Command {
 
     this.onlyRotate = onlyRotate;
 
-    positionController = new PIDController(1.8, 0.001, 0.01);
+    positionController = new PIDController(5, 0.001, 0);
     positionController.setSetpoint(targetArea);
 
-    rotationController = new PIDController(0.02, 0.00001, 0.01);
+    rotationController = new PIDController(0.06, 0.0001, 0.01);
     rotationController.setSetpoint(0);
 
     addRequirements(swerveSubsystem, limelightSubsystem);
@@ -98,9 +100,10 @@ public class AprilTagAlign extends Command {
           limelightSubsystem
               .getTagArea(); // Todo: Might have to change translation from being dependant on tag
       // area to being dependant on distance. Confirm acuracy with further
+      tagYaw = limelightSubsystem.getTagX();
       // testing.
       if (!onlyRotate) fowardAdjust = positionController.calculate(tagArea, targetArea);
-      rotationAdjust = rotationController.calculate(limelightSubsystem.getTagX(), 0);
+      rotationAdjust = rotationController.calculate(tagYaw, 0);
       swerveSubsystem.drive(new Translation2d(-fowardAdjust, 0), rotationAdjust, false);
     } else {
       swerveSubsystem.drive(new Translation2d(0, 0), 1, false);
@@ -116,16 +119,17 @@ public class AprilTagAlign extends Command {
 
   @Override
   public boolean isFinished() {
-    return (tagArea <= AprilTags.maxDist && tagArea >= AprilTags.minDist) && rotationController.atSetpoint()
+    return (tagArea >= AprilTags.maxDist && tagArea <= AprilTags.minDist)
+        && (tagYaw > -0.2 && tagYaw < 0.2)
     /* || currentMillis - startedMillis > maxCommandWaitTime.aprilTagAlignWaitTime */ ;
   }
 
   @Override
   public void end(boolean interrupted) {
     swerveSubsystem.lock();
-    if (stateInstance != null) {
+    /*  if (stateInstance != null) {
       stateInstance.MoveToState(NoteAutoStateMachine.States.Shoot);
-    }
+    } */
     if (!interrupted) {
       System.out.println("Ended Tag Align successfully");
     } else {

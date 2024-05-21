@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Vision.ObjectTrackingSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import java.time.Clock;
 
 public class DriveToNote extends Command {
 
@@ -20,12 +21,9 @@ public class DriveToNote extends Command {
 
   ShuffleboardSubsystem suffle = ShuffleboardSubsystem.getInstance();
 
-  /*  private long startedMillis;
+  private Clock currentTime = Clock.systemDefaultZone();
+  private long startedMillis;
   private long currentMillis;
-
-  private Command s_command;
-
-  private Pose2d initialPose2d; */
 
   private NoteAutoStateMachine stateInstance;
 
@@ -58,7 +56,9 @@ public class DriveToNote extends Command {
   }
 
   @Override
-  public void initialize() {}
+  public void initialize() {
+    startedMillis = currentTime.millis();
+  }
 
   @Override
   public void execute() {
@@ -91,7 +91,8 @@ public class DriveToNote extends Command {
   @Override
   public boolean isFinished() { // Only finish when both PID controllers have reached there setpoint
     return (rotationController.atSetpoint() && positionController.atSetpoint())
-        || !photonCam.hasTarget();
+        || !photonCam.hasTarget()
+        || currentMillis - startedMillis > 10000;
   }
 
   @Override

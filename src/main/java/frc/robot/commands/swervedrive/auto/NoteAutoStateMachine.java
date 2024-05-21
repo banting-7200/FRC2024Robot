@@ -28,7 +28,7 @@ public class NoteAutoStateMachine {
   private DriveToNote driveToNote;
   private AprilTagAlign aprilTagAlign;
   private Command shootCommand;
-  private Command armToShootPosition;
+  private Command botToShootPosition;
   private Command armToIntakePosition;
   private PrepForShoot prepForShoot;
   private SearchNote searchNote;
@@ -66,8 +66,11 @@ public class NoteAutoStateMachine {
             16, // 6
             false,
             this); // Make the tag id which ever tag we decide goes on the new target
-    armToShootPosition = new TuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.speakerArmAngle));
-    prepForShoot = new PrepForShoot(aprilTagAlign, armToShootPosition, this);
+    botToShootPosition =
+        aprilTagAlign
+            .andThen(new TuckArm(arm))
+            .andThen(new MoveArmToPosition(arm, limelightDevice.calculateArmShootAngle()));
+    prepForShoot = new PrepForShoot(botToShootPosition, this);
 
     armToIntakePosition =
         new UntuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle, this));

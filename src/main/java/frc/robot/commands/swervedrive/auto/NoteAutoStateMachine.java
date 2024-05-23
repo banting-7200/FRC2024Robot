@@ -69,7 +69,7 @@ public class NoteAutoStateMachine {
     botToShootPosition =
         aprilTagAlign
             .andThen(new TuckArm(arm))
-            .andThen(new MoveArmToPosition(arm, limelightDevice.calculateArmShootAngle()));
+            .andThen(new MoveArmToPosition(arm, Arm.speakerArmAngle));
     prepForShoot = new PrepForShoot(botToShootPosition, this);
 
     armToIntakePosition =

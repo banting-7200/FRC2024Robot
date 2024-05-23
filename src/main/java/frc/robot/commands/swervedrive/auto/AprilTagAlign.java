@@ -52,7 +52,7 @@ public class AprilTagAlign extends Command {
     positionController = new PIDController(5, 0.001, 0);
     positionController.setSetpoint(targetArea);
 
-    rotationController = new PIDController(0.06, 0.0001, 0.01);
+    rotationController = new PIDController(0.06, 0.00008, 0.01);
     rotationController.setSetpoint(0);
 
     addRequirements(swerveSubsystem, limelightSubsystem);
@@ -106,7 +106,7 @@ public class AprilTagAlign extends Command {
       rotationAdjust = rotationController.calculate(tagYaw, 0);
       swerveSubsystem.drive(new Translation2d(-fowardAdjust, 0), rotationAdjust, false);
     } else {
-      swerveSubsystem.drive(new Translation2d(0, 0), 1, false);
+      swerveSubsystem.drive(new Translation2d(0, 0), 2, false);
     }
     shuffle.setTab("Debugging");
     shuffle.setNumber("Tag Area", tagArea);
@@ -126,7 +126,8 @@ public class AprilTagAlign extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    swerveSubsystem.lock();
+    // swerveSubsystem.lock();
+    swerveSubsystem.drive(new Translation2d(0, 0), 0, false);
     /*  if (stateInstance != null) {
       stateInstance.MoveToState(NoteAutoStateMachine.States.Shoot);
     } */

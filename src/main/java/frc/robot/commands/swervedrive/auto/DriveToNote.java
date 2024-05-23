@@ -34,7 +34,7 @@ public class DriveToNote extends Command {
     this.d_noteArea = d_noteArea;
 
     // Initialize PID controlers with P, I, and D values as well as a setpoint
-    positionController = new PIDController(0.03, 0.002, 0);
+    positionController = new PIDController(0.03, 0.002, 0.01);
     positionController.setSetpoint(d_noteArea);
 
     rotationController = new PIDController(0.025, 0.0003, 0);

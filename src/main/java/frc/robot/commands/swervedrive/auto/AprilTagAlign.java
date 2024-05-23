@@ -51,7 +51,7 @@ public class AprilTagAlign extends Command {
 
     this.onlyRotate = onlyRotate;
 
-    positionController = new PIDController(5, 0.001, 0);
+    positionController = new PIDController(4.7, 0.001, 0);
     positionController.setSetpoint(targetArea);
 
     rotationController = new PIDController(0.06, 0.00008, 0.01);

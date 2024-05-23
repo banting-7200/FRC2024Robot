@@ -1,6 +1,8 @@
 package frc.robot.commands.swervedrive.auto;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AprilTags;
@@ -126,8 +128,9 @@ public class AprilTagAlign extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    // swerveSubsystem.lock();
-    swerveSubsystem.drive(new Translation2d(0, 0), 0, false);
+    swerveSubsystem.setOdometry(new Pose2d(new Translation2d(0, 0), new Rotation2d(0)));
+    swerveSubsystem.lock();
+    // swerveSubsystem.drive(new Translation2d(0, 0), 0, false);
     /*  if (stateInstance != null) {
       stateInstance.MoveToState(NoteAutoStateMachine.States.Shoot);
     } */

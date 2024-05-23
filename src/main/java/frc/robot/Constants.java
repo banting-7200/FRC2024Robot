@@ -127,10 +127,10 @@ public final class Constants {
 
     public static final double tuckArmAngle = 24.505;
     public static final double intakeArmAngle = 20.8;
-    public static final double ampArmAngle = 31.3;
+    public static final double ampArmAngle = 32.04; // 31.3;
     public static final double liftArmAngle = 30.3;
     public static final double speakerArmAngle =
-        29.37; // 28.27;(regular speaker position. Subbed out for a value that is more accurate for
+        30.48; // 28.27;(regular speaker position. Subbed out for a value that is more accurate for
     // the auto speaker target)
 
     public static final int kMeasuredPosHorizontal =

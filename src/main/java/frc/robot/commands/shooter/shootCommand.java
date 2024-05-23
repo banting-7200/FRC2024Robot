@@ -5,6 +5,7 @@
 
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.copilotController;
@@ -14,6 +15,7 @@ import frc.robot.subsystems.ArmAndHead.ShooterSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem;
 import frc.robot.subsystems.Feedback.LightSubsystem.LightStates;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
+import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import java.time.Clock;
 import java.util.function.BooleanSupplier;
 import java.util.function.IntSupplier;
@@ -40,6 +42,7 @@ public class shootCommand extends Command {
   ShuffleboardSubsystem shuffle = ShuffleboardSubsystem.getInstance();
 
   private NoteAutoStateMachine stateInstance;
+  private SwerveSubsystem swerveSubsystem;
 
   public shootCommand(
       IntSupplier rpm,
@@ -65,8 +68,10 @@ public class shootCommand extends Command {
       ShooterSubsystem shooter,
       int waitTime,
       boolean isSpeakerShot,
+      SwerveSubsystem swerveSubsystem,
       NoteAutoStateMachine stateInstance) {
     this(() -> rpm, shooter, () -> waitTime, () -> isSpeakerShot);
+    this.swerveSubsystem = swerveSubsystem;
     this.stateInstance = stateInstance;
   }
 
@@ -95,6 +100,9 @@ public class shootCommand extends Command {
   public void execute() {
     currentMillis = currentTime.millis(); // record current time
     passedMillis = currentMillis - startedMillis;
+    if (swerveSubsystem != null) {
+      swerveSubsystem.drive(new Translation2d(0.0, 0.0), 0.0, false);
+    }
     if (isSpeakerShot.getAsBoolean()) {
       if (passedMillis < 100 // pullback
       ) { // until 100 millis pass
@@ -143,6 +151,7 @@ public class shootCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
+    swerveSubsystem.lock();
     shooter.stopShootMotor();
     shooter.stopIntakeMotor();
     System.out.println("Shooting Done");

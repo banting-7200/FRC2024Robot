@@ -30,7 +30,7 @@ public class NoteAutoStateMachine {
   private Command shootCommand;
   private Command botToShootPosition;
   private Command armToIntakePosition;
-  private PrepForShoot prepForShoot;
+  private Command prepForShoot;
   private SearchNote searchNote;
   private intakeNote intakeNote;
 
@@ -56,6 +56,7 @@ public class NoteAutoStateMachine {
             shooter,
             Shooter.speakerWaitTime,
             true,
+            swerveSubsystem,
             this); // The shoot rpm may need to be calibrated to our new target
 
     aprilTagAlign =
@@ -66,11 +67,12 @@ public class NoteAutoStateMachine {
             16, // 6
             false,
             this); // Make the tag id which ever tag we decide goes on the new target
-    botToShootPosition =
+
+    prepForShoot =
         aprilTagAlign
             .andThen(new TuckArm(arm))
-            .andThen(new MoveArmToPosition(arm, Arm.speakerArmAngle));
-    prepForShoot = new PrepForShoot(botToShootPosition, this);
+            .andThen(new MoveArmToPosition(arm, Arm.speakerArmAngle))
+            .finallyDo(() -> MoveToState(States.Shoot));
 
     armToIntakePosition =
         new UntuckArm(arm).andThen(new MoveArmToPosition(arm, Arm.intakeArmAngle, this));

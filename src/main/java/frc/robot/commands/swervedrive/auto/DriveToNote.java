@@ -34,10 +34,10 @@ public class DriveToNote extends Command {
     this.d_noteArea = d_noteArea;
 
     // Initialize PID controlers with P, I, and D values as well as a setpoint
-    positionController = new PIDController(0.045, 0.001, 0);
+    positionController = new PIDController(0.03, 0.002, 0);
     positionController.setSetpoint(d_noteArea);
 
-    rotationController = new PIDController(0.03, 0.0002, 0);
+    rotationController = new PIDController(0.025, 0.0003, 0);
 
     rotationController.setSetpoint(0);
     rotationController.setTolerance(2, 4);
@@ -56,6 +56,7 @@ public class DriveToNote extends Command {
 
   @Override
   public void initialize() {
+    System.out.println("Started drive to note");
     startedMillis = currentTime.millis();
   }
 
@@ -91,7 +92,7 @@ public class DriveToNote extends Command {
   public boolean isFinished() { // Only finish when both PID controllers have reached there setpoint
     return (rotationController.atSetpoint() && positionController.atSetpoint())
         || !photonCam.hasTarget()
-        || currentTime.millis() - startedMillis > 10000;
+        || currentTime.millis() - startedMillis > 7000;
   }
 
   @Override

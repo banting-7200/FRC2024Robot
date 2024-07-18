@@ -73,7 +73,7 @@ public final class Constants {
     public static final int unTuckWaitTime = 2000;
     public static final int intakeCommandWaitTime = 70000;
     public static final int shootCommandWaitTime = 10000;
-    public static final int aprilTagAlignWaitTime = 7000;
+    public static final int aprilTagAlignWaitTime = 3000;
     public static final int noteObjectAlignWaitTime = 7000;
   }
 
@@ -111,7 +111,7 @@ public final class Constants {
 
     public static final int currentLimit = 40;
 
-    public static final double stopRange = 0.3;
+    public static final double stopRange = 0.2;
     public static final double limelightStopRange = 0.03;
 
     public static final double encoderHardMax = 34;
@@ -125,7 +125,7 @@ public final class Constants {
         24; // Robot hard min 25 ticks, min must be further tuned later
     public static final double armGearRatio = 400;
 
-    public static final double tuckArmAngle = 24.505;
+    public static final double tuckArmAngle = 25; // 24.505
     public static final double intakeArmAngle = 20.8;
     public static final double ampArmAngle = 32.04; // 31.3;
     public static final double liftArmAngle = 30.3;

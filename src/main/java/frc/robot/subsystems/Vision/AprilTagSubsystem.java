@@ -160,11 +160,11 @@ public class AprilTagSubsystem extends SubsystemBase {
   public void refreshRelevantTags(
       boolean isRed) { // sets april tag ids depending on alliance from driverstation
     if (isRed) {
-      speakerMiddleTag = AprilTagID.redSpeakerMiddle;
+      speakerMiddleTag = 1;
       speakerSideTag = AprilTagID.redSpeakerSide;
       ampTag = AprilTagID.redAmp;
     } else {
-      speakerMiddleTag = AprilTagID.blueSpeakerMiddle;
+      speakerMiddleTag = 1;
       speakerSideTag = AprilTagID.blueSpeakerSide;
       ampTag = AprilTagID.blueAmp;
     }

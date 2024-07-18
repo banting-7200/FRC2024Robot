@@ -70,10 +70,9 @@ public class NoteObjectAlign extends Command {
 
   @Override
   public void execute() {
-
-    System.out.println("Current yaw: " + photonCam.getNoteYaw());
     double rotationAdjust = 0;
     if (photonCam.hasTarget()) {
+      System.out.println("Current yaw: " + photonCam.getNoteYaw());
       c_noteArea = photonCam.getNoteArea();
       rotationAdjust = rotationController.calculate(photonCam.getNoteYaw(), 0);
       swerveSubsystem.drive(

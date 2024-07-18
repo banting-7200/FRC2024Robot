@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AprilTags;
+import frc.robot.Constants.maxCommandWaitTime;
 import frc.robot.subsystems.Feedback.ShuffleboardSubsystem;
 import frc.robot.subsystems.Vision.AprilTagSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -108,6 +109,7 @@ public class AprilTagAlign extends Command {
       rotationAdjust = rotationController.calculate(tagYaw, 0);
       swerveSubsystem.drive(new Translation2d(-fowardAdjust, 0), rotationAdjust, false);
     } else {
+      startedMillis = currentMillis;
       swerveSubsystem.drive(new Translation2d(0, 0), 2, false);
     }
     shuffle.setTab("Debugging");
@@ -121,9 +123,10 @@ public class AprilTagAlign extends Command {
 
   @Override
   public boolean isFinished() {
-    return (tagArea >= AprilTags.maxDist && tagArea <= AprilTags.minDist)
-        && (tagYaw > -0.2 && tagYaw < 0.2)
-    /* || currentMillis - startedMillis > maxCommandWaitTime.aprilTagAlignWaitTime */ ;
+    return ((tagArea >= AprilTags.maxDist && tagArea <= AprilTags.minDist)
+            && (tagYaw > -0.2 && tagYaw < 0.2))
+        || (currentMillis - startedMillis > maxCommandWaitTime.aprilTagAlignWaitTime
+            && tagToAlign.getAsInt() == limelightSubsystem.getTagID());
   }
 
   @Override

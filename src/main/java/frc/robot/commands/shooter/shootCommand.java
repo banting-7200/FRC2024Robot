@@ -151,7 +151,9 @@ public class shootCommand extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    swerveSubsystem.lock();
+    if (swerveSubsystem != null) {
+      swerveSubsystem.lock();
+    }
     shooter.stopShootMotor();
     shooter.stopIntakeMotor();
     System.out.println("Shooting Done");

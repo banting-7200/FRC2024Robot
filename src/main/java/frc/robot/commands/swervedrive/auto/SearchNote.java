@@ -33,13 +33,13 @@ public class SearchNote extends Command {
 
   @Override
   public void initialize() {
-    System.out.println("Started Search for note Orbit");
+    System.out.println("Started Search for target Orbit");
   }
 
   @Override
   public void execute() {
-    System.out.println("Looking for note...");
-    swerveSubsystem.drive(new Translation2d(0, 0), 2, false);
+    System.out.println("Looking for target...");
+    swerveSubsystem.drive(new Translation2d(0, 0), 1, false);
   }
 
   @Override
@@ -58,14 +58,15 @@ public class SearchNote extends Command {
       stateInstance.MoveToState(NoteAutoStateMachine.States.Drive);
     }
     if (!interrupted) {
-      System.out.println("Successfully ended Search Note command");
+      System.out.println("Successfully ended Search target command");
     } else {
-      System.out.println("Failed at Search Note command");
+      System.out.println("Failed at Search target command");
     }
   }
 
   public void trackAprilTags(boolean searchForTags) {
     searchForAprilTag = searchForTags;
+  
   }
 
   public void trackAprilTags(boolean searchForTags, int tagToTrack) {

@@ -24,6 +24,8 @@ public class NoteAutoStateMachine {
     Shoot
   }
 
+  int tagToSearch = 1;
+
   // Instances of the commands the autos impliment
   private DriveToNote driveToNote;
   private AprilTagAlign aprilTagAlign;
@@ -47,7 +49,7 @@ public class NoteAutoStateMachine {
         new DriveToNote(
             swerveSubsystem,
             photonCamera,
-            28.50,
+            20.50, // 28.50 original value
             this); // See what the best note area is for our applications
 
     shootCommand =
@@ -64,7 +66,7 @@ public class NoteAutoStateMachine {
             swerveSubsystem,
             limelightDevice,
             0.50,
-            16, // 6
+            tagToSearch, // 6
             false,
             this); // Make the tag id which ever tag we decide goes on the new target
 
@@ -100,7 +102,7 @@ public class NoteAutoStateMachine {
         break;
 
       case PickUp:
-        searchNote.trackAprilTags(true, 16);
+        searchNote.trackAprilTags(true, tagToSearch);
         currentCommand = intakeNote;
         break;
 

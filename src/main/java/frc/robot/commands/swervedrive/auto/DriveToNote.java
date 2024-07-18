@@ -23,6 +23,7 @@ public class DriveToNote extends Command {
 
   private Clock currentTime = Clock.systemDefaultZone();
   private long startedMillis;
+  private boolean hasSeenNote = false;
 
   private NoteAutoStateMachine stateInstance;
 
@@ -34,7 +35,7 @@ public class DriveToNote extends Command {
     this.d_noteArea = d_noteArea;
 
     // Initialize PID controlers with P, I, and D values as well as a setpoint
-    positionController = new PIDController(0.03, 0.002, 0.01);
+    positionController = new PIDController(0.02, 0.006, 0.01);
     positionController.setSetpoint(d_noteArea);
 
     rotationController = new PIDController(0.025, 0.0003, 0);
@@ -66,6 +67,12 @@ public class DriveToNote extends Command {
     double rotationAdjust = 0;
 
     if (photonCam.hasTarget()) {
+
+      if (!hasSeenNote) {
+        startedMillis = currentTime.millis();
+        hasSeenNote = true;
+      }
+
       // System.out.println("Current yaw: " + photonCam.getNoteYaw());
       c_noteArea = photonCam.getNoteArea();
       fowardAdjust =
@@ -92,7 +99,7 @@ public class DriveToNote extends Command {
   public boolean isFinished() { // Only finish when both PID controllers have reached there setpoint
     return (rotationController.atSetpoint() && positionController.atSetpoint())
         || !photonCam.hasTarget()
-        || currentTime.millis() - startedMillis > 7000;
+        || (currentTime.millis() - startedMillis > 2000 && hasSeenNote);
   }
 
   @Override

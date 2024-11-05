@@ -7,6 +7,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
@@ -366,6 +367,12 @@ public class RobotContainer {
     System.out.println("is speaker shot: " + speakerShot);
   }
 
+  private DigitalInput creepSwitch = new DigitalInput(4);
+
+  void pollCreepSwitch() {
+    drivebase.setCreep(creepSwitch.get());
+  }
+
   private void configureBindings() {
 
     // SWERVE STUFF
@@ -377,7 +384,9 @@ public class RobotContainer {
     // This binds the creep toggling in swerve subsystem to this trigger
     Trigger t = new Trigger(creepBoolean);
     t.onTrue(new InstantCommand(() -> drivebase.setCreep(true))) // Set creep on
-        .onFalse(new InstantCommand(() -> drivebase.setCreep(false))); // Set creep off
+        .onFalse(
+            new InstantCommand(() -> drivebase.setCreep(false))
+                .andThen(new InstantCommand(() -> pollCreepSwitch()))); // Set creep off
 
     Trigger rumbleTrigger = new Trigger(hasNote);
     rumbleTrigger.onTrue(

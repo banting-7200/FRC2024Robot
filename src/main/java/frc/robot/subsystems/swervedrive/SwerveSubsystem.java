@@ -145,11 +145,10 @@ public class SwerveSubsystem extends SubsystemBase {
   public void setCreep(boolean doCreep) { // todo: move to constants
     if (doCreep) {
       speedMultiplier = Drivebase.creepSpeedMultiplier; // set creep speed
-      // swerveDrive.swerveController.setMaximumAngularVelocity(Drivebase.maxAngularVelocity
-      // * 0.7);
+      swerveDrive.swerveController.setMaximumAngularVelocity(Drivebase.maxAngularVelocity * 0.7);
     } else {
       speedMultiplier = 1; // set regular speed
-      // swerveDrive.swerveController.setMaximumAngularVelocity(Drivebase.maxAngularVelocity);
+      swerveDrive.swerveController.setMaximumAngularVelocity(Drivebase.maxAngularVelocity);
     }
   }
 
